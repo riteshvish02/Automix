@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2023",
     "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
+    // "ignoreDeprecations": "6.0"
     // "target": "ES2023",
     // "strict": true,
     // "esModuleInterop": true,
-    "ignoreDeprecations": "6.0"
+    // "ignoreDeprecations": false
   },
-  "include": ["src/**/*"]
+ "include": [
+  "src/**/*",
+  "@types"
+]
 }

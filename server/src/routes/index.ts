@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import exampleController from '../controllers/exampleController';
-
+import v1routes from "./v1";
 const router = Router();
 
-router.get('/example', exampleController.getExample);
+router.use('/v1', v1routes);
 
 export default router;
