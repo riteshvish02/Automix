@@ -4,10 +4,10 @@ import { google } from 'googleapis';
 import { prisma } from '../config/prisma';
 import { ErrorHandler } from '../utils/ErrorHandler';
 
-const getGoogleDocsAuthUrl = async (data: { }) => {
-    const client_id = process.env.GOOGLE_DOCS_CLIENT_ID!;
-    const client_secret = process.env.GOOGLE_DOCS_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI!;
+const getGoogleDriveAuthUrl = async (data: { }) => {
+    const client_id = process.env.GOOGLE_DRIVE_CLIENT_ID!;
+    const client_secret = process.env.GOOGLE_DRIVE_CLIENT_SECRET!;
+    const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
@@ -15,20 +15,20 @@ const getGoogleDocsAuthUrl = async (data: { }) => {
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: [
-            'https://www.googleapis.com/auth/documents',
-            'https://www.googleapis.com/auth/drive.file'
+            'https://www.googleapis.com/auth/drive.file',
+            'https://www.googleapis.com/auth/drive.metadata.readonly'
         ]
     });
     return { url: authUrl };
 };
 
-const googleDocsOAuthCallback = async (data: { code: string; userId: string }) => {
+const googleDriveOAuthCallback = async (data: { code: string; userId: string }) => {
     const { code, userId } = data;
     if (!userId) throw new ErrorHandler('Missing userId', 400);
     if (!code) throw new ErrorHandler('Missing code', 400);
-    const client_id = process.env.GOOGLE_DOCS_CLIENT_ID!;
-    const client_secret = process.env.GOOGLE_DOCS_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI!;
+    const client_id = process.env.GOOGLE_DRIVE_CLIENT_ID!;
+    const client_secret = process.env.GOOGLE_DRIVE_CLIENT_SECRET!;
+    const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
@@ -54,7 +54,7 @@ const googleDocsOAuthCallback = async (data: { code: string; userId: string }) =
     return { token: tokenRecord };
 };
 
-export default { getGoogleDocsAuthUrl, googleDocsOAuthCallback };
+export default { getGoogleDriveAuthUrl, googleDriveOAuthCallback };
 
 
 
