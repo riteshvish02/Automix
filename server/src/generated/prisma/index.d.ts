@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model Artifact
+ * 
+ */
+export type Artifact = $Result.DefaultSelection<Prisma.$ArtifactPayload>
+/**
  * Model User
  * 
  */
@@ -43,8 +48,8 @@ export type OAuthToken = $Result.DefaultSelection<Prisma.$OAuthTokenPayload>
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Artifacts
+ * const artifacts = await prisma.artifact.findMany()
  * ```
  *
  *
@@ -66,8 +71,8 @@ export class PrismaClient<
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more Artifacts
+   * const artifacts = await prisma.artifact.findMany()
    * ```
    *
    *
@@ -156,6 +161,16 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.artifact`: Exposes CRUD operations for the **Artifact** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Artifacts
+    * const artifacts = await prisma.artifact.findMany()
+    * ```
+    */
+  get artifact(): Prisma.ArtifactDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -628,6 +643,7 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    Artifact: 'Artifact',
     User: 'User',
     Conversation: 'Conversation',
     Message: 'Message',
@@ -647,10 +663,84 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "conversation" | "message" | "oAuthToken"
+      modelProps: "artifact" | "user" | "conversation" | "message" | "oAuthToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      Artifact: {
+        payload: Prisma.$ArtifactPayload<ExtArgs>
+        fields: Prisma.ArtifactFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ArtifactFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ArtifactFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>
+          }
+          findFirst: {
+            args: Prisma.ArtifactFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ArtifactFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>
+          }
+          findMany: {
+            args: Prisma.ArtifactFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>[]
+          }
+          create: {
+            args: Prisma.ArtifactCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>
+          }
+          createMany: {
+            args: Prisma.ArtifactCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ArtifactCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>[]
+          }
+          delete: {
+            args: Prisma.ArtifactDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>
+          }
+          update: {
+            args: Prisma.ArtifactUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>
+          }
+          deleteMany: {
+            args: Prisma.ArtifactDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ArtifactUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ArtifactUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>[]
+          }
+          upsert: {
+            args: Prisma.ArtifactUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArtifactPayload>
+          }
+          aggregate: {
+            args: Prisma.ArtifactAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateArtifact>
+          }
+          groupBy: {
+            args: Prisma.ArtifactGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ArtifactGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ArtifactCountArgs<ExtArgs>
+            result: $Utils.Optional<ArtifactCountAggregateOutputType> | number
+          }
+        }
+      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -1055,6 +1145,7 @@ export namespace Prisma {
     comments?: runtime.SqlCommenterPlugin[]
   }
   export type GlobalOmitConfig = {
+    artifact?: ArtifactOmit
     user?: UserOmit
     conversation?: ConversationOmit
     message?: MessageOmit
@@ -1141,11 +1232,13 @@ export namespace Prisma {
   export type UserCountOutputType = {
     conversations: number
     oauthTokens: number
+    artifacts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     conversations?: boolean | UserCountOutputTypeCountConversationsArgs
     oauthTokens?: boolean | UserCountOutputTypeCountOauthTokensArgs
+    artifacts?: boolean | UserCountOutputTypeCountArtifactsArgs
   }
 
   // Custom InputTypes
@@ -1171,6 +1264,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOauthTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OAuthTokenWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountArtifactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArtifactWhereInput
   }
 
 
@@ -1208,6 +1308,1139 @@ export namespace Prisma {
   /**
    * Models
    */
+
+  /**
+   * Model Artifact
+   */
+
+  export type AggregateArtifact = {
+    _count: ArtifactCountAggregateOutputType | null
+    _min: ArtifactMinAggregateOutputType | null
+    _max: ArtifactMaxAggregateOutputType | null
+  }
+
+  export type ArtifactMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: string | null
+    name: string | null
+    mimeType: string | null
+    storagePath: string | null
+    textContent: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ArtifactMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: string | null
+    name: string | null
+    mimeType: string | null
+    storagePath: string | null
+    textContent: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ArtifactCountAggregateOutputType = {
+    id: number
+    userId: number
+    type: number
+    name: number
+    mimeType: number
+    storagePath: number
+    textContent: number
+    jsonContent: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ArtifactMinAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    name?: true
+    mimeType?: true
+    storagePath?: true
+    textContent?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ArtifactMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    name?: true
+    mimeType?: true
+    storagePath?: true
+    textContent?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ArtifactCountAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    name?: true
+    mimeType?: true
+    storagePath?: true
+    textContent?: true
+    jsonContent?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ArtifactAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Artifact to aggregate.
+     */
+    where?: ArtifactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Artifacts to fetch.
+     */
+    orderBy?: ArtifactOrderByWithRelationInput | ArtifactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ArtifactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Artifacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Artifacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Artifacts
+    **/
+    _count?: true | ArtifactCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ArtifactMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ArtifactMaxAggregateInputType
+  }
+
+  export type GetArtifactAggregateType<T extends ArtifactAggregateArgs> = {
+        [P in keyof T & keyof AggregateArtifact]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateArtifact[P]>
+      : GetScalarType<T[P], AggregateArtifact[P]>
+  }
+
+
+
+
+  export type ArtifactGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArtifactWhereInput
+    orderBy?: ArtifactOrderByWithAggregationInput | ArtifactOrderByWithAggregationInput[]
+    by: ArtifactScalarFieldEnum[] | ArtifactScalarFieldEnum
+    having?: ArtifactScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ArtifactCountAggregateInputType | true
+    _min?: ArtifactMinAggregateInputType
+    _max?: ArtifactMaxAggregateInputType
+  }
+
+  export type ArtifactGroupByOutputType = {
+    id: string
+    userId: string
+    type: string
+    name: string | null
+    mimeType: string | null
+    storagePath: string | null
+    textContent: string | null
+    jsonContent: JsonValue | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ArtifactCountAggregateOutputType | null
+    _min: ArtifactMinAggregateOutputType | null
+    _max: ArtifactMaxAggregateOutputType | null
+  }
+
+  type GetArtifactGroupByPayload<T extends ArtifactGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ArtifactGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ArtifactGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ArtifactGroupByOutputType[P]>
+            : GetScalarType<T[P], ArtifactGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ArtifactSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    name?: boolean
+    mimeType?: boolean
+    storagePath?: boolean
+    textContent?: boolean
+    jsonContent?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["artifact"]>
+
+  export type ArtifactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    name?: boolean
+    mimeType?: boolean
+    storagePath?: boolean
+    textContent?: boolean
+    jsonContent?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["artifact"]>
+
+  export type ArtifactSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    name?: boolean
+    mimeType?: boolean
+    storagePath?: boolean
+    textContent?: boolean
+    jsonContent?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["artifact"]>
+
+  export type ArtifactSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    name?: boolean
+    mimeType?: boolean
+    storagePath?: boolean
+    textContent?: boolean
+    jsonContent?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ArtifactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "name" | "mimeType" | "storagePath" | "textContent" | "jsonContent" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["artifact"]>
+  export type ArtifactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ArtifactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ArtifactIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ArtifactPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Artifact"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      type: string
+      name: string | null
+      mimeType: string | null
+      storagePath: string | null
+      textContent: string | null
+      jsonContent: Prisma.JsonValue | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["artifact"]>
+    composites: {}
+  }
+
+  type ArtifactGetPayload<S extends boolean | null | undefined | ArtifactDefaultArgs> = $Result.GetResult<Prisma.$ArtifactPayload, S>
+
+  type ArtifactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ArtifactFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ArtifactCountAggregateInputType | true
+    }
+
+  export interface ArtifactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Artifact'], meta: { name: 'Artifact' } }
+    /**
+     * Find zero or one Artifact that matches the filter.
+     * @param {ArtifactFindUniqueArgs} args - Arguments to find a Artifact
+     * @example
+     * // Get one Artifact
+     * const artifact = await prisma.artifact.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ArtifactFindUniqueArgs>(args: SelectSubset<T, ArtifactFindUniqueArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Artifact that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ArtifactFindUniqueOrThrowArgs} args - Arguments to find a Artifact
+     * @example
+     * // Get one Artifact
+     * const artifact = await prisma.artifact.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ArtifactFindUniqueOrThrowArgs>(args: SelectSubset<T, ArtifactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Artifact that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactFindFirstArgs} args - Arguments to find a Artifact
+     * @example
+     * // Get one Artifact
+     * const artifact = await prisma.artifact.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ArtifactFindFirstArgs>(args?: SelectSubset<T, ArtifactFindFirstArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Artifact that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactFindFirstOrThrowArgs} args - Arguments to find a Artifact
+     * @example
+     * // Get one Artifact
+     * const artifact = await prisma.artifact.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ArtifactFindFirstOrThrowArgs>(args?: SelectSubset<T, ArtifactFindFirstOrThrowArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Artifacts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Artifacts
+     * const artifacts = await prisma.artifact.findMany()
+     * 
+     * // Get first 10 Artifacts
+     * const artifacts = await prisma.artifact.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const artifactWithIdOnly = await prisma.artifact.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ArtifactFindManyArgs>(args?: SelectSubset<T, ArtifactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Artifact.
+     * @param {ArtifactCreateArgs} args - Arguments to create a Artifact.
+     * @example
+     * // Create one Artifact
+     * const Artifact = await prisma.artifact.create({
+     *   data: {
+     *     // ... data to create a Artifact
+     *   }
+     * })
+     * 
+     */
+    create<T extends ArtifactCreateArgs>(args: SelectSubset<T, ArtifactCreateArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Artifacts.
+     * @param {ArtifactCreateManyArgs} args - Arguments to create many Artifacts.
+     * @example
+     * // Create many Artifacts
+     * const artifact = await prisma.artifact.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ArtifactCreateManyArgs>(args?: SelectSubset<T, ArtifactCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Artifacts and returns the data saved in the database.
+     * @param {ArtifactCreateManyAndReturnArgs} args - Arguments to create many Artifacts.
+     * @example
+     * // Create many Artifacts
+     * const artifact = await prisma.artifact.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Artifacts and only return the `id`
+     * const artifactWithIdOnly = await prisma.artifact.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ArtifactCreateManyAndReturnArgs>(args?: SelectSubset<T, ArtifactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Artifact.
+     * @param {ArtifactDeleteArgs} args - Arguments to delete one Artifact.
+     * @example
+     * // Delete one Artifact
+     * const Artifact = await prisma.artifact.delete({
+     *   where: {
+     *     // ... filter to delete one Artifact
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ArtifactDeleteArgs>(args: SelectSubset<T, ArtifactDeleteArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Artifact.
+     * @param {ArtifactUpdateArgs} args - Arguments to update one Artifact.
+     * @example
+     * // Update one Artifact
+     * const artifact = await prisma.artifact.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ArtifactUpdateArgs>(args: SelectSubset<T, ArtifactUpdateArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Artifacts.
+     * @param {ArtifactDeleteManyArgs} args - Arguments to filter Artifacts to delete.
+     * @example
+     * // Delete a few Artifacts
+     * const { count } = await prisma.artifact.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ArtifactDeleteManyArgs>(args?: SelectSubset<T, ArtifactDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Artifacts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Artifacts
+     * const artifact = await prisma.artifact.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ArtifactUpdateManyArgs>(args: SelectSubset<T, ArtifactUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Artifacts and returns the data updated in the database.
+     * @param {ArtifactUpdateManyAndReturnArgs} args - Arguments to update many Artifacts.
+     * @example
+     * // Update many Artifacts
+     * const artifact = await prisma.artifact.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Artifacts and only return the `id`
+     * const artifactWithIdOnly = await prisma.artifact.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ArtifactUpdateManyAndReturnArgs>(args: SelectSubset<T, ArtifactUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Artifact.
+     * @param {ArtifactUpsertArgs} args - Arguments to update or create a Artifact.
+     * @example
+     * // Update or create a Artifact
+     * const artifact = await prisma.artifact.upsert({
+     *   create: {
+     *     // ... data to create a Artifact
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Artifact we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ArtifactUpsertArgs>(args: SelectSubset<T, ArtifactUpsertArgs<ExtArgs>>): Prisma__ArtifactClient<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Artifacts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactCountArgs} args - Arguments to filter Artifacts to count.
+     * @example
+     * // Count the number of Artifacts
+     * const count = await prisma.artifact.count({
+     *   where: {
+     *     // ... the filter for the Artifacts we want to count
+     *   }
+     * })
+    **/
+    count<T extends ArtifactCountArgs>(
+      args?: Subset<T, ArtifactCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ArtifactCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Artifact.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ArtifactAggregateArgs>(args: Subset<T, ArtifactAggregateArgs>): Prisma.PrismaPromise<GetArtifactAggregateType<T>>
+
+    /**
+     * Group by Artifact.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArtifactGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ArtifactGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ArtifactGroupByArgs['orderBy'] }
+        : { orderBy?: ArtifactGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ArtifactGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetArtifactGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Artifact model
+   */
+  readonly fields: ArtifactFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Artifact.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ArtifactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Artifact model
+   */
+  interface ArtifactFieldRefs {
+    readonly id: FieldRef<"Artifact", 'String'>
+    readonly userId: FieldRef<"Artifact", 'String'>
+    readonly type: FieldRef<"Artifact", 'String'>
+    readonly name: FieldRef<"Artifact", 'String'>
+    readonly mimeType: FieldRef<"Artifact", 'String'>
+    readonly storagePath: FieldRef<"Artifact", 'String'>
+    readonly textContent: FieldRef<"Artifact", 'String'>
+    readonly jsonContent: FieldRef<"Artifact", 'Json'>
+    readonly metadata: FieldRef<"Artifact", 'Json'>
+    readonly createdAt: FieldRef<"Artifact", 'DateTime'>
+    readonly updatedAt: FieldRef<"Artifact", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Artifact findUnique
+   */
+  export type ArtifactFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * Filter, which Artifact to fetch.
+     */
+    where: ArtifactWhereUniqueInput
+  }
+
+  /**
+   * Artifact findUniqueOrThrow
+   */
+  export type ArtifactFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * Filter, which Artifact to fetch.
+     */
+    where: ArtifactWhereUniqueInput
+  }
+
+  /**
+   * Artifact findFirst
+   */
+  export type ArtifactFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * Filter, which Artifact to fetch.
+     */
+    where?: ArtifactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Artifacts to fetch.
+     */
+    orderBy?: ArtifactOrderByWithRelationInput | ArtifactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Artifacts.
+     */
+    cursor?: ArtifactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Artifacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Artifacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Artifacts.
+     */
+    distinct?: ArtifactScalarFieldEnum | ArtifactScalarFieldEnum[]
+  }
+
+  /**
+   * Artifact findFirstOrThrow
+   */
+  export type ArtifactFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * Filter, which Artifact to fetch.
+     */
+    where?: ArtifactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Artifacts to fetch.
+     */
+    orderBy?: ArtifactOrderByWithRelationInput | ArtifactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Artifacts.
+     */
+    cursor?: ArtifactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Artifacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Artifacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Artifacts.
+     */
+    distinct?: ArtifactScalarFieldEnum | ArtifactScalarFieldEnum[]
+  }
+
+  /**
+   * Artifact findMany
+   */
+  export type ArtifactFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * Filter, which Artifacts to fetch.
+     */
+    where?: ArtifactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Artifacts to fetch.
+     */
+    orderBy?: ArtifactOrderByWithRelationInput | ArtifactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Artifacts.
+     */
+    cursor?: ArtifactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Artifacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Artifacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Artifacts.
+     */
+    distinct?: ArtifactScalarFieldEnum | ArtifactScalarFieldEnum[]
+  }
+
+  /**
+   * Artifact create
+   */
+  export type ArtifactCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Artifact.
+     */
+    data: XOR<ArtifactCreateInput, ArtifactUncheckedCreateInput>
+  }
+
+  /**
+   * Artifact createMany
+   */
+  export type ArtifactCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Artifacts.
+     */
+    data: ArtifactCreateManyInput | ArtifactCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Artifact createManyAndReturn
+   */
+  export type ArtifactCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * The data used to create many Artifacts.
+     */
+    data: ArtifactCreateManyInput | ArtifactCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Artifact update
+   */
+  export type ArtifactUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Artifact.
+     */
+    data: XOR<ArtifactUpdateInput, ArtifactUncheckedUpdateInput>
+    /**
+     * Choose, which Artifact to update.
+     */
+    where: ArtifactWhereUniqueInput
+  }
+
+  /**
+   * Artifact updateMany
+   */
+  export type ArtifactUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Artifacts.
+     */
+    data: XOR<ArtifactUpdateManyMutationInput, ArtifactUncheckedUpdateManyInput>
+    /**
+     * Filter which Artifacts to update
+     */
+    where?: ArtifactWhereInput
+    /**
+     * Limit how many Artifacts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Artifact updateManyAndReturn
+   */
+  export type ArtifactUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * The data used to update Artifacts.
+     */
+    data: XOR<ArtifactUpdateManyMutationInput, ArtifactUncheckedUpdateManyInput>
+    /**
+     * Filter which Artifacts to update
+     */
+    where?: ArtifactWhereInput
+    /**
+     * Limit how many Artifacts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Artifact upsert
+   */
+  export type ArtifactUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Artifact to update in case it exists.
+     */
+    where: ArtifactWhereUniqueInput
+    /**
+     * In case the Artifact found by the `where` argument doesn't exist, create a new Artifact with this data.
+     */
+    create: XOR<ArtifactCreateInput, ArtifactUncheckedCreateInput>
+    /**
+     * In case the Artifact was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ArtifactUpdateInput, ArtifactUncheckedUpdateInput>
+  }
+
+  /**
+   * Artifact delete
+   */
+  export type ArtifactDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    /**
+     * Filter which Artifact to delete.
+     */
+    where: ArtifactWhereUniqueInput
+  }
+
+  /**
+   * Artifact deleteMany
+   */
+  export type ArtifactDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Artifacts to delete
+     */
+    where?: ArtifactWhereInput
+    /**
+     * Limit how many Artifacts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Artifact without action
+   */
+  export type ArtifactDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+  }
+
 
   /**
    * Model User
@@ -1383,6 +2616,7 @@ export namespace Prisma {
     password?: boolean
     conversations?: boolean | User$conversationsArgs<ExtArgs>
     oauthTokens?: boolean | User$oauthTokensArgs<ExtArgs>
+    artifacts?: boolean | User$artifactsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1417,6 +2651,7 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     conversations?: boolean | User$conversationsArgs<ExtArgs>
     oauthTokens?: boolean | User$oauthTokensArgs<ExtArgs>
+    artifacts?: boolean | User$artifactsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1427,6 +2662,7 @@ export namespace Prisma {
     objects: {
       conversations: Prisma.$ConversationPayload<ExtArgs>[]
       oauthTokens: Prisma.$OAuthTokenPayload<ExtArgs>[]
+      artifacts: Prisma.$ArtifactPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1831,6 +3067,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     conversations<T extends User$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, User$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     oauthTokens<T extends User$oauthTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$oauthTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    artifacts<T extends User$artifactsArgs<ExtArgs> = {}>(args?: Subset<T, User$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2304,6 +3541,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OAuthTokenScalarFieldEnum | OAuthTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.artifacts
+   */
+  export type User$artifactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Artifact
+     */
+    select?: ArtifactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Artifact
+     */
+    omit?: ArtifactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArtifactInclude<ExtArgs> | null
+    where?: ArtifactWhereInput
+    orderBy?: ArtifactOrderByWithRelationInput | ArtifactOrderByWithRelationInput[]
+    cursor?: ArtifactWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ArtifactScalarFieldEnum | ArtifactScalarFieldEnum[]
   }
 
   /**
@@ -5623,6 +6884,23 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const ArtifactScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    type: 'type',
+    name: 'name',
+    mimeType: 'mimeType',
+    storagePath: 'storagePath',
+    textContent: 'textContent',
+    jsonContent: 'jsonContent',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ArtifactScalarFieldEnum = (typeof ArtifactScalarFieldEnum)[keyof typeof ArtifactScalarFieldEnum]
+
+
   export const UserScalarFieldEnum: {
     id: 'id',
     email: 'email',
@@ -5681,12 +6959,29 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   export const NullsOrder: {
@@ -5713,6 +7008,20 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -5747,6 +7056,91 @@ export namespace Prisma {
    */
 
 
+  export type ArtifactWhereInput = {
+    AND?: ArtifactWhereInput | ArtifactWhereInput[]
+    OR?: ArtifactWhereInput[]
+    NOT?: ArtifactWhereInput | ArtifactWhereInput[]
+    id?: StringFilter<"Artifact"> | string
+    userId?: StringFilter<"Artifact"> | string
+    type?: StringFilter<"Artifact"> | string
+    name?: StringNullableFilter<"Artifact"> | string | null
+    mimeType?: StringNullableFilter<"Artifact"> | string | null
+    storagePath?: StringNullableFilter<"Artifact"> | string | null
+    textContent?: StringNullableFilter<"Artifact"> | string | null
+    jsonContent?: JsonNullableFilter<"Artifact">
+    metadata?: JsonNullableFilter<"Artifact">
+    createdAt?: DateTimeFilter<"Artifact"> | Date | string
+    updatedAt?: DateTimeFilter<"Artifact"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ArtifactOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    name?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    storagePath?: SortOrderInput | SortOrder
+    textContent?: SortOrderInput | SortOrder
+    jsonContent?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ArtifactWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ArtifactWhereInput | ArtifactWhereInput[]
+    OR?: ArtifactWhereInput[]
+    NOT?: ArtifactWhereInput | ArtifactWhereInput[]
+    userId?: StringFilter<"Artifact"> | string
+    type?: StringFilter<"Artifact"> | string
+    name?: StringNullableFilter<"Artifact"> | string | null
+    mimeType?: StringNullableFilter<"Artifact"> | string | null
+    storagePath?: StringNullableFilter<"Artifact"> | string | null
+    textContent?: StringNullableFilter<"Artifact"> | string | null
+    jsonContent?: JsonNullableFilter<"Artifact">
+    metadata?: JsonNullableFilter<"Artifact">
+    createdAt?: DateTimeFilter<"Artifact"> | Date | string
+    updatedAt?: DateTimeFilter<"Artifact"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ArtifactOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    name?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    storagePath?: SortOrderInput | SortOrder
+    textContent?: SortOrderInput | SortOrder
+    jsonContent?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ArtifactCountOrderByAggregateInput
+    _max?: ArtifactMaxOrderByAggregateInput
+    _min?: ArtifactMinOrderByAggregateInput
+  }
+
+  export type ArtifactScalarWhereWithAggregatesInput = {
+    AND?: ArtifactScalarWhereWithAggregatesInput | ArtifactScalarWhereWithAggregatesInput[]
+    OR?: ArtifactScalarWhereWithAggregatesInput[]
+    NOT?: ArtifactScalarWhereWithAggregatesInput | ArtifactScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Artifact"> | string
+    userId?: StringWithAggregatesFilter<"Artifact"> | string
+    type?: StringWithAggregatesFilter<"Artifact"> | string
+    name?: StringNullableWithAggregatesFilter<"Artifact"> | string | null
+    mimeType?: StringNullableWithAggregatesFilter<"Artifact"> | string | null
+    storagePath?: StringNullableWithAggregatesFilter<"Artifact"> | string | null
+    textContent?: StringNullableWithAggregatesFilter<"Artifact"> | string | null
+    jsonContent?: JsonNullableWithAggregatesFilter<"Artifact">
+    metadata?: JsonNullableWithAggregatesFilter<"Artifact">
+    createdAt?: DateTimeWithAggregatesFilter<"Artifact"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Artifact"> | Date | string
+  }
+
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -5759,6 +7153,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     conversations?: ConversationListRelationFilter
     oauthTokens?: OAuthTokenListRelationFilter
+    artifacts?: ArtifactListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -5770,6 +7165,7 @@ export namespace Prisma {
     password?: SortOrder
     conversations?: ConversationOrderByRelationAggregateInput
     oauthTokens?: OAuthTokenOrderByRelationAggregateInput
+    artifacts?: ArtifactOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -5784,6 +7180,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     conversations?: ConversationListRelationFilter
     oauthTokens?: OAuthTokenListRelationFilter
+    artifacts?: ArtifactListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -6004,6 +7401,103 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"OAuthToken"> | Date | string
   }
 
+  export type ArtifactCreateInput = {
+    id?: string
+    type: string
+    name?: string | null
+    mimeType?: string | null
+    storagePath?: string | null
+    textContent?: string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutArtifactsInput
+  }
+
+  export type ArtifactUncheckedCreateInput = {
+    id?: string
+    userId: string
+    type: string
+    name?: string | null
+    mimeType?: string | null
+    storagePath?: string | null
+    textContent?: string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArtifactUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutArtifactsNestedInput
+  }
+
+  export type ArtifactUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArtifactCreateManyInput = {
+    id?: string
+    userId: string
+    type: string
+    name?: string | null
+    mimeType?: string | null
+    storagePath?: string | null
+    textContent?: string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArtifactUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArtifactUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -6013,6 +7507,7 @@ export namespace Prisma {
     password: string
     conversations?: ConversationCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -6024,6 +7519,7 @@ export namespace Prisma {
     password: string
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -6035,6 +7531,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -6046,6 +7543,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -6294,6 +7792,44 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6303,6 +7839,130 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type ArtifactCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    name?: SortOrder
+    mimeType?: SortOrder
+    storagePath?: SortOrder
+    textContent?: SortOrder
+    jsonContent?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ArtifactMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    name?: SortOrder
+    mimeType?: SortOrder
+    storagePath?: SortOrder
+    textContent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ArtifactMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    name?: SortOrder
+    mimeType?: SortOrder
+    storagePath?: SortOrder
+    textContent?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type ConversationListRelationFilter = {
@@ -6317,11 +7977,21 @@ export namespace Prisma {
     none?: OAuthTokenWhereInput
   }
 
+  export type ArtifactListRelationFilter = {
+    every?: ArtifactWhereInput
+    some?: ArtifactWhereInput
+    none?: ArtifactWhereInput
+  }
+
   export type ConversationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type OAuthTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ArtifactOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6352,67 +8022,10 @@ export namespace Prisma {
     password?: SortOrder
   }
 
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
   export type MessageListRelationFilter = {
     every?: MessageWhereInput
     some?: MessageWhereInput
     none?: MessageWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type MessageOrderByRelationAggregateInput = {
@@ -6441,24 +8054,6 @@ export namespace Prisma {
     title?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type ConversationScalarRelationFilter = {
@@ -6559,6 +8154,32 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type UserCreateNestedOneWithoutArtifactsInput = {
+    create?: XOR<UserCreateWithoutArtifactsInput, UserUncheckedCreateWithoutArtifactsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutArtifactsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UserUpdateOneRequiredWithoutArtifactsNestedInput = {
+    create?: XOR<UserCreateWithoutArtifactsInput, UserUncheckedCreateWithoutArtifactsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutArtifactsInput
+    upsert?: UserUpsertWithoutArtifactsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutArtifactsInput, UserUpdateWithoutArtifactsInput>, UserUncheckedUpdateWithoutArtifactsInput>
+  }
+
   export type ConversationCreateNestedManyWithoutUserInput = {
     create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
@@ -6571,6 +8192,13 @@ export namespace Prisma {
     connectOrCreate?: OAuthTokenCreateOrConnectWithoutUserInput | OAuthTokenCreateOrConnectWithoutUserInput[]
     createMany?: OAuthTokenCreateManyUserInputEnvelope
     connect?: OAuthTokenWhereUniqueInput | OAuthTokenWhereUniqueInput[]
+  }
+
+  export type ArtifactCreateNestedManyWithoutUserInput = {
+    create?: XOR<ArtifactCreateWithoutUserInput, ArtifactUncheckedCreateWithoutUserInput> | ArtifactCreateWithoutUserInput[] | ArtifactUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ArtifactCreateOrConnectWithoutUserInput | ArtifactCreateOrConnectWithoutUserInput[]
+    createMany?: ArtifactCreateManyUserInputEnvelope
+    connect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
   }
 
   export type ConversationUncheckedCreateNestedManyWithoutUserInput = {
@@ -6587,12 +8215,11 @@ export namespace Prisma {
     connect?: OAuthTokenWhereUniqueInput | OAuthTokenWhereUniqueInput[]
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type ArtifactUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ArtifactCreateWithoutUserInput, ArtifactUncheckedCreateWithoutUserInput> | ArtifactCreateWithoutUserInput[] | ArtifactUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ArtifactCreateOrConnectWithoutUserInput | ArtifactCreateOrConnectWithoutUserInput[]
+    createMany?: ArtifactCreateManyUserInputEnvelope
+    connect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
   }
 
   export type ConversationUpdateManyWithoutUserNestedInput = {
@@ -6623,6 +8250,20 @@ export namespace Prisma {
     deleteMany?: OAuthTokenScalarWhereInput | OAuthTokenScalarWhereInput[]
   }
 
+  export type ArtifactUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ArtifactCreateWithoutUserInput, ArtifactUncheckedCreateWithoutUserInput> | ArtifactCreateWithoutUserInput[] | ArtifactUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ArtifactCreateOrConnectWithoutUserInput | ArtifactCreateOrConnectWithoutUserInput[]
+    upsert?: ArtifactUpsertWithWhereUniqueWithoutUserInput | ArtifactUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ArtifactCreateManyUserInputEnvelope
+    set?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    disconnect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    delete?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    connect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    update?: ArtifactUpdateWithWhereUniqueWithoutUserInput | ArtifactUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ArtifactUpdateManyWithWhereWithoutUserInput | ArtifactUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ArtifactScalarWhereInput | ArtifactScalarWhereInput[]
+  }
+
   export type ConversationUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
@@ -6651,6 +8292,20 @@ export namespace Prisma {
     deleteMany?: OAuthTokenScalarWhereInput | OAuthTokenScalarWhereInput[]
   }
 
+  export type ArtifactUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ArtifactCreateWithoutUserInput, ArtifactUncheckedCreateWithoutUserInput> | ArtifactCreateWithoutUserInput[] | ArtifactUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ArtifactCreateOrConnectWithoutUserInput | ArtifactCreateOrConnectWithoutUserInput[]
+    upsert?: ArtifactUpsertWithWhereUniqueWithoutUserInput | ArtifactUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ArtifactCreateManyUserInputEnvelope
+    set?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    disconnect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    delete?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    connect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+    update?: ArtifactUpdateWithWhereUniqueWithoutUserInput | ArtifactUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ArtifactUpdateManyWithWhereWithoutUserInput | ArtifactUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ArtifactScalarWhereInput | ArtifactScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutConversationsInput = {
     create?: XOR<UserCreateWithoutConversationsInput, UserUncheckedCreateWithoutConversationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutConversationsInput
@@ -6669,10 +8324,6 @@ export namespace Prisma {
     connectOrCreate?: MessageCreateOrConnectWithoutConversationInput | MessageCreateOrConnectWithoutConversationInput[]
     createMany?: MessageCreateManyConversationInputEnvelope
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type UserUpdateOneRequiredWithoutConversationsNestedInput = {
@@ -6757,6 +8408,20 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6796,34 +8461,6 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -6851,6 +8488,43 @@ export namespace Prisma {
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
@@ -6875,6 +8549,66 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type UserCreateWithoutArtifactsInput = {
+    id?: string
+    email: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    password: string
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+    oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutArtifactsInput = {
+    id?: string
+    email: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    password: string
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutArtifactsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutArtifactsInput, UserUncheckedCreateWithoutArtifactsInput>
+  }
+
+  export type UserUpsertWithoutArtifactsInput = {
+    update: XOR<UserUpdateWithoutArtifactsInput, UserUncheckedUpdateWithoutArtifactsInput>
+    create: XOR<UserCreateWithoutArtifactsInput, UserUncheckedCreateWithoutArtifactsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutArtifactsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutArtifactsInput, UserUncheckedUpdateWithoutArtifactsInput>
+  }
+
+  export type UserUpdateWithoutArtifactsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    password?: StringFieldUpdateOperationsInput | string
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+    oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutArtifactsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    password?: StringFieldUpdateOperationsInput | string
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationCreateWithoutUserInput = {
@@ -6930,6 +8664,42 @@ export namespace Prisma {
 
   export type OAuthTokenCreateManyUserInputEnvelope = {
     data: OAuthTokenCreateManyUserInput | OAuthTokenCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ArtifactCreateWithoutUserInput = {
+    id?: string
+    type: string
+    name?: string | null
+    mimeType?: string | null
+    storagePath?: string | null
+    textContent?: string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArtifactUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: string
+    name?: string | null
+    mimeType?: string | null
+    storagePath?: string | null
+    textContent?: string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArtifactCreateOrConnectWithoutUserInput = {
+    where: ArtifactWhereUniqueInput
+    create: XOR<ArtifactCreateWithoutUserInput, ArtifactUncheckedCreateWithoutUserInput>
+  }
+
+  export type ArtifactCreateManyUserInputEnvelope = {
+    data: ArtifactCreateManyUserInput | ArtifactCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -6990,6 +8760,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"OAuthToken"> | Date | string
   }
 
+  export type ArtifactUpsertWithWhereUniqueWithoutUserInput = {
+    where: ArtifactWhereUniqueInput
+    update: XOR<ArtifactUpdateWithoutUserInput, ArtifactUncheckedUpdateWithoutUserInput>
+    create: XOR<ArtifactCreateWithoutUserInput, ArtifactUncheckedCreateWithoutUserInput>
+  }
+
+  export type ArtifactUpdateWithWhereUniqueWithoutUserInput = {
+    where: ArtifactWhereUniqueInput
+    data: XOR<ArtifactUpdateWithoutUserInput, ArtifactUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ArtifactUpdateManyWithWhereWithoutUserInput = {
+    where: ArtifactScalarWhereInput
+    data: XOR<ArtifactUpdateManyMutationInput, ArtifactUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ArtifactScalarWhereInput = {
+    AND?: ArtifactScalarWhereInput | ArtifactScalarWhereInput[]
+    OR?: ArtifactScalarWhereInput[]
+    NOT?: ArtifactScalarWhereInput | ArtifactScalarWhereInput[]
+    id?: StringFilter<"Artifact"> | string
+    userId?: StringFilter<"Artifact"> | string
+    type?: StringFilter<"Artifact"> | string
+    name?: StringNullableFilter<"Artifact"> | string | null
+    mimeType?: StringNullableFilter<"Artifact"> | string | null
+    storagePath?: StringNullableFilter<"Artifact"> | string | null
+    textContent?: StringNullableFilter<"Artifact"> | string | null
+    jsonContent?: JsonNullableFilter<"Artifact">
+    metadata?: JsonNullableFilter<"Artifact">
+    createdAt?: DateTimeFilter<"Artifact"> | Date | string
+    updatedAt?: DateTimeFilter<"Artifact"> | Date | string
+  }
+
   export type UserCreateWithoutConversationsInput = {
     id?: string
     email: string
@@ -6998,6 +8801,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     password: string
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationsInput = {
@@ -7008,6 +8812,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     password: string
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationsInput = {
@@ -7062,6 +8867,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationsInput = {
@@ -7072,6 +8878,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -7159,6 +8966,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     password: string
     conversations?: ConversationCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOauthTokensInput = {
@@ -7169,6 +8977,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     password: string
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOauthTokensInput = {
@@ -7195,6 +9004,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOauthTokensInput = {
@@ -7205,6 +9015,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationCreateManyUserInput = {
@@ -7220,6 +9031,19 @@ export namespace Prisma {
     accessToken: string
     refreshToken?: string | null
     expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArtifactCreateManyUserInput = {
+    id?: string
+    type: string
+    name?: string | null
+    mimeType?: string | null
+    storagePath?: string | null
+    textContent?: string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7273,6 +9097,45 @@ export namespace Prisma {
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArtifactUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArtifactUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArtifactUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    jsonContent?: NullableJsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

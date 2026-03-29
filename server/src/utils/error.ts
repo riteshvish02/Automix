@@ -8,7 +8,7 @@ export const generatedError = (
     next: NextFunction
 ) => {
     const statusCode = err.statusCode || res.statusCode || 500;
-
+    console.log(err);
     const errorResponse: ErrorResponseType = {
         success: false,
         message: err.message || "Something went wrong",
