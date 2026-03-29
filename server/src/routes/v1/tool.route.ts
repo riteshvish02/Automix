@@ -14,4 +14,7 @@ router.get('/calendar/oauth', authMiddleware.checkAuth, toolController.getGoogle
 router.get('/calendar/oauth/callback', authMiddleware.checkAuth, toolController.googleCalendarOAuthCallback);
 router.post("/run", authMiddleware.checkAuth, runToolManually);
 
+router.get('/docs/oauth', authMiddleware.checkAuth, toolController.getGoogleDocsAuthUrl);
+router.get('/docs/oauth/callback', authMiddleware.checkAuth, toolController.googleDocsOAuthCallback);
+
 export default router;

@@ -1,5 +1,3 @@
-
-
 import { Request, Response } from 'express';
 import { catchAsyncError } from '../utils/catchAsync';
 import { successResponse } from '../utils';
@@ -19,7 +17,6 @@ const googleDriveOAuthCallback = catchAsyncError(async (req: Request, res: Respo
     successResponse.message = 'Google Drive connected!';
     return res.status(200).json(successResponse);
 });
-
 
 const getGoogleGmailAuthUrl = catchAsyncError(async (req: Request, res: Response) => {
     const response = await oauthService.getGoogleGmailAuthUrl({});
@@ -51,11 +48,28 @@ const googleCalendarOAuthCallback = catchAsyncError(async (req: Request, res: Re
     return res.status(200).json(successResponse);
 });
 
+const getGoogleDocsAuthUrl = catchAsyncError(async (req: Request, res: Response) => {
+    const response = await oauthService.getGoogleDocsAuthUrl({});
+    successResponse.data = response;
+    return res.status(200).json(successResponse);
+});
+
+const googleDocsOAuthCallback = catchAsyncError(async (req: Request, res: Response) => {
+    const code = req.query.code as string;
+    const userId = (req as any).user?.userId;
+    const response = await oauthService.googleDocsOAuthCallback({ code, userId });
+    successResponse.data = response;
+    successResponse.message = 'Google Docs connected!';
+    return res.status(200).json(successResponse);
+});
+
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
     getGoogleGmailAuthUrl,
     googleGmailOAuthCallback,
     getGoogleCalendarAuthUrl,
-    googleCalendarOAuthCallback
+    googleCalendarOAuthCallback,
+    getGoogleDocsAuthUrl,
+    googleDocsOAuthCallback
 };

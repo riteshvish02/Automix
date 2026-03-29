@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import {prisma} from "../../../config/prisma";
 import { ErrorHandler } from "../../../utils/ErrorHandler";
 
-type Provider = "gdrive" | "gmail" | "calendar";
+type Provider = "gdrive" | "gmail" | "calendar" | "gdocs" ;
 
 const getGoogleEnv = (provider: Provider) => {
   if (provider === "gdrive") {
@@ -26,6 +26,14 @@ const getGoogleEnv = (provider: Provider) => {
       clientId: process.env.GOOGLE_CALENDAR_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CALENDAR_CLIENT_SECRET!,
       redirectUri: process.env.GOOGLE_CALENDAR_REDIRECT_URI!,
+    };
+  }
+
+  if (provider === "gdocs") {
+    return {
+      clientId: process.env.GOOGLE_DOCS_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_DOCS_CLIENT_SECRET!,
+      redirectUri: process.env.GOOGLE_DOCS_REDIRECT_URI!,
     };
   }
 
