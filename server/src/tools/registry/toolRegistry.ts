@@ -1,3 +1,6 @@
+import { docsSearchDocuments } from "../implementations/docs/docs.searchDocuments";
+import { sheetsSearchSpreadsheets } from "../implementations/sheets/sheets.searchSpreadsheets";
+import { sheetsListSpreadsheets } from "../implementations/sheets/sheets.listSpreadsheets";
 import { sheetsCreateSpreadsheet } from "../implementations/sheets/sheets.createSpreadsheet";
 import { sheetsGetSpreadsheet } from "../implementations/sheets/sheets.getSpreadsheet";
 import { sheetsAppendRow } from "../implementations/sheets/sheets.appendRow";
@@ -301,7 +304,21 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
       });
     },
   },
-
+   docs_search_documents: {
+    name: "docs_search_documents",
+    description: "Search Google Docs documents in the user's Drive by name.",
+    inputSchema: {
+      query: { type: "string", description: "Search query for document name" },
+      pageSize: { type: "integer", description: "Maximum number of results", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return docsSearchDocuments({
+        userId: ctx.userId,
+        query: args.query,
+        pageSize: args.pageSize
+      });
+    },
+  },
   docs_update_document: {
     name: "docs_update_document",
     description: "Update a Google Doc document using batchUpdate requests.",
@@ -375,6 +392,36 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         spreadsheetId: args.spreadsheetId,
         range: args.range,
         values: args.values
+      });
+    },
+  },
+  sheets_list_spreadsheets: {
+    name: "sheets_list_spreadsheets",
+    description: "List all Google Sheets spreadsheets in the user's Drive.",
+    inputSchema: {
+      pageSize: { type: "integer", description: "Number of spreadsheets to return (default 10)", nullable: true },
+      pageToken: { type: "string", description: "Page token for pagination", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return sheetsListSpreadsheets({
+        userId: ctx.userId,
+        pageSize: args.pageSize,
+        pageToken: args.pageToken
+      });
+    },
+  },
+  sheets_search_spreadsheets: {
+    name: "sheets_search_spreadsheets",
+    description: "Search Google Sheets spreadsheets in the user's Drive by name.",
+    inputSchema: {
+      query: { type: "string", description: "Search query for spreadsheet name" },
+      pageSize: { type: "integer", description: "Maximum number of results", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return sheetsSearchSpreadsheets({
+        userId: ctx.userId,
+        query: args.query,
+        pageSize: args.pageSize
       });
     },
   },
