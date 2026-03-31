@@ -63,6 +63,21 @@ const googleDocsOAuthCallback = catchAsyncError(async (req: Request, res: Respon
     return res.status(200).json(successResponse);
 });
 
+const getGoogleSheetsAuthUrl = catchAsyncError(async (req: Request, res: Response) => {
+    const response = await oauthService.getGoogleSheetsAuthUrl({});
+    successResponse.data = response;
+    return res.status(200).json(successResponse);
+});
+
+const googleSheetsOAuthCallback = catchAsyncError(async (req: Request, res: Response) => {
+    const code = req.query.code as string;
+    const userId = (req as any).user?.userId;
+    const response = await oauthService.googleSheetsOAuthCallback({ code, userId });
+    successResponse.data = response;
+    successResponse.message = 'Google Sheets connected!';
+    return res.status(200).json(successResponse);
+});
+
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -71,5 +86,7 @@ export default {
     getGoogleCalendarAuthUrl,
     googleCalendarOAuthCallback,
     getGoogleDocsAuthUrl,
-    googleDocsOAuthCallback
+    googleDocsOAuthCallback,
+    getGoogleSheetsAuthUrl,
+    googleSheetsOAuthCallback
 };

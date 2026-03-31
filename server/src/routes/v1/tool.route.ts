@@ -12,9 +12,13 @@ router.get('/gmail/oauth/callback', authMiddleware.checkAuth, toolController.goo
 
 router.get('/calendar/oauth', authMiddleware.checkAuth, toolController.getGoogleCalendarAuthUrl);
 router.get('/calendar/oauth/callback', authMiddleware.checkAuth, toolController.googleCalendarOAuthCallback);
-router.post("/run", authMiddleware.checkAuth, runToolManually);
 
 router.get('/docs/oauth', authMiddleware.checkAuth, toolController.getGoogleDocsAuthUrl);
 router.get('/docs/oauth/callback', authMiddleware.checkAuth, toolController.googleDocsOAuthCallback);
+
+router.get('/sheets/oauth', authMiddleware.checkAuth, toolController.getGoogleSheetsAuthUrl);
+router.get('/sheets/oauth/callback', authMiddleware.checkAuth, toolController.googleSheetsOAuthCallback);
+
+router.post("/run", authMiddleware.checkAuth, runToolManually);
 
 export default router;

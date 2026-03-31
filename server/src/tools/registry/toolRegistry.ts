@@ -1,3 +1,6 @@
+import { sheetsCreateSpreadsheet } from "../implementations/sheets/sheets.createSpreadsheet";
+import { sheetsGetSpreadsheet } from "../implementations/sheets/sheets.getSpreadsheet";
+import { sheetsAppendRow } from "../implementations/sheets/sheets.appendRow";
 import { ToolDefinition } from "./toolTypes";
 import { driveSearchFiles } from "../implementations/drive/drive.searchFiles";
 import { driveDownloadFile } from "../implementations/drive/drive.downloadFile";
@@ -16,6 +19,7 @@ import { calendarCreateMeetEvent } from "../implementations/calendar/calendar.cr
 import { docsCreateDocument } from "../implementations/docs/docs.createDocument";
 import { docsGetDocument } from "../implementations/docs/docs.getDocument";
 import { docsUpdateDocument } from "../implementations/docs/docs.updateDocument";
+import { docsListDocuments } from "../implementations/docs/docs.listDocuments";
 
 export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     drive_create_file: {
@@ -310,6 +314,67 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         userId: ctx.userId,
         documentId: args.documentId,
         requests: args.requests
+      });
+    },
+  },
+
+  docs_list_documents: {
+    name: "docs_list_documents",
+    description: "List all Google Docs documents in the user's Drive.",
+    inputSchema: {
+      pageSize: { type: "integer", description: "Number of documents to return (default 10)", nullable: true },
+      pageToken: { type: "string", description: "Page token for pagination", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return docsListDocuments({
+        userId: ctx.userId,
+        pageSize: args.pageSize,
+        pageToken: args.pageToken
+      });
+    },
+  },
+   sheets_create_spreadsheet: {
+    name: "sheets_create_spreadsheet",
+    description: "Create a new Google Spreadsheet.",
+    inputSchema: {
+      title: { type: "string", description: "Title of the new spreadsheet" }
+    },
+    execute: async (args, ctx) => {
+      return sheetsCreateSpreadsheet({
+        userId: ctx.userId,
+        title: args.title
+      });
+    },
+  },
+
+  sheets_get_spreadsheet: {
+    name: "sheets_get_spreadsheet",
+    description: "Get a Google Spreadsheet by ID.",
+    inputSchema: {
+      spreadsheetId: { type: "string", description: "ID of the spreadsheet to fetch" }
+    },
+    execute: async (args, ctx) => {
+      return sheetsGetSpreadsheet({
+        userId: ctx.userId,
+        spreadsheetId: args.spreadsheetId
+      });
+    },
+  },
+
+  sheets_append_row: {
+    name: "sheets_append_row",
+    description: "Append a row to a Google Spreadsheet.",
+    inputSchema: {
+      spreadsheetId: { type: "string", description: "ID of the spreadsheet" },
+      range: { type: "string", description: "A1 notation of the range to append to (e.g. 'Sheet1!A1')" },
+      values: { type: "array", description: "2D array of values to append (rows/columns)", items: { type: "array" } }
+    },
+    execute: async (args, ctx) => {
+      return sheetsAppendRow({
+        userId: ctx.userId,
+        spreadsheetId: args.spreadsheetId,
+        range: args.range,
+        values: args.values
       });
     },
   },
