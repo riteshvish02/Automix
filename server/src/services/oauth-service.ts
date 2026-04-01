@@ -256,6 +256,112 @@ const googleSheetsOAuthCallback = async (data: { code: string; userId: string })
     return { token: tokenRecord };
 };
 
+const getSlackAuthUrl = async (data: { userId: string }) => {
+    const { userId } = data;
+    const client_id = process.env.SLACK_CLIENT_ID!;
+    const redirect_uri = process.env.SLACK_REDIRECT_URI!;
+
+    if (!userId) {
+        throw new ErrorHandler('Missing userId', 400);
+    }
+
+    if (!client_id || !redirect_uri) {
+        throw new ErrorHandler('Slack OAuth environment variables missing', 500);
+    }
+
+    const scope = [
+        'channels:read',
+        'channels:history',
+        'chat:write',
+        'chat:write.public',
+        'users:read',
+    ].join(',');
+
+    const authUrl = `https://slack.com/oauth/v2/authorize?client_id=${encodeURIComponent(client_id)}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${encodeURIComponent(userId)}`;
+    return { url: authUrl };
+};
+
+const slackOAuthCallback = async (data: { code: string; userId: string }) => {
+    const { code, userId } = data;
+    if (!userId) throw new ErrorHandler('Missing userId', 400);
+    if (!code) throw new ErrorHandler('Missing code', 400);
+
+    const client_id = process.env.SLACK_CLIENT_ID!;
+    const client_secret = process.env.SLACK_CLIENT_SECRET!;
+    const redirect_uri = process.env.SLACK_REDIRECT_URI!;
+
+    if (!client_id || !client_secret || !redirect_uri) {
+        throw new ErrorHandler('Slack OAuth environment variables missing', 500);
+    }
+
+    const response = await fetch('https://slack.com/api/oauth.v2.access', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            code,
+            client_id,
+            client_secret,
+            redirect_uri,
+        }).toString(),
+    });
+
+    const payload = await response.json() as {
+        ok: boolean;
+        error?: string;
+        access_token?: string;
+        refresh_token?: string;
+        expires_in?: number;
+        authed_user?: {
+            access_token?: string;
+            refresh_token?: string;
+            expires_in?: number;
+            id?: string;
+        };
+        team?: {
+            id?: string;
+            name?: string;
+        };
+    };
+
+    if (!payload.ok) {
+        throw new ErrorHandler(`Slack OAuth failed: ${payload.error || 'unknown_error'}`, 400);
+    }
+
+    // Use bot token first because requested scopes are defined in `scope`.
+    const accessToken = payload.access_token || payload.authed_user?.access_token;
+    if (!accessToken) {
+        throw new ErrorHandler('Slack OAuth did not return an access token', 400);
+    }
+
+    const refreshToken = payload.refresh_token || payload.authed_user?.refresh_token;
+    const expiresIn = payload.expires_in || payload.authed_user?.expires_in;
+    const expiresAt = expiresIn ? new Date(Date.now() + expiresIn * 1000) : null;
+
+    const tokenRecord = await prisma.oAuthToken.upsert({
+        where: { userId_provider: { userId, provider: 'slack' } },
+        update: {
+            accessToken,
+            refreshToken,
+            expiresAt,
+        },
+        create: {
+            userId,
+            provider: 'slack',
+            accessToken,
+            refreshToken,
+            expiresAt,
+        },
+    });
+
+    return {
+        token: tokenRecord,
+        team: payload.team,
+        slackUserId: payload.authed_user?.id,
+    };
+};
+
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -266,7 +372,9 @@ export default {
     getGoogleDocsAuthUrl,
     googleDocsOAuthCallback,
     getGoogleSheetsAuthUrl,
-    googleSheetsOAuthCallback
+    googleSheetsOAuthCallback,
+    getSlackAuthUrl,
+    slackOAuthCallback
 };
 
 

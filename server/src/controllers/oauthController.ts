@@ -78,6 +78,22 @@ const googleSheetsOAuthCallback = catchAsyncError(async (req: Request, res: Resp
     return res.status(200).json(successResponse);
 });
 
+const getSlackAuthUrl = catchAsyncError(async (req: Request, res: Response) => {
+    const userId = (req as any).user?.userId;
+    const response = await oauthService.getSlackAuthUrl({ userId });
+    successResponse.data = response;
+    return res.status(200).json(successResponse);
+});
+
+const slackOAuthCallback = catchAsyncError(async (req: Request, res: Response) => {
+    const code = req.query.code as string;
+    const userId = ((req as any).user?.userId || req.query.state) as string;
+    const response = await oauthService.slackOAuthCallback({ code, userId });
+    successResponse.data = response;
+    successResponse.message = 'Slack connected!';
+    return res.status(200).json(successResponse);
+});
+
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -88,5 +104,7 @@ export default {
     getGoogleDocsAuthUrl,
     googleDocsOAuthCallback,
     getGoogleSheetsAuthUrl,
-    googleSheetsOAuthCallback
+    googleSheetsOAuthCallback,
+    getSlackAuthUrl,
+    slackOAuthCallback
 };

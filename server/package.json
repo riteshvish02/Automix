@@ -23,6 +23,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@langchain/openai": "^1.4.1",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "@types/express": "^5.0.6",
@@ -32,10 +33,12 @@
     "express": "^5.2.1",
     "googleapis": "^171.4.0",
     "jsonwebtoken": "^9.0.3",
+    "langchain": "^1.2.39",
     "morgan": "^1.10.1",
     "openai": "^6.33.0",
     "pg": "^8.20.0",
     "prisma": "^7.5.0",
-    "winston": "^3.19.0"
+    "winston": "^3.19.0",
+    "zod": "^4.3.6"
   }
 }

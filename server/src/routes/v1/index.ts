@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import auth from './auth.route';
 import tool from './tool.route';
-import agent from '../agent.route';
+import agent from './agent.route';
 const router = Router();
 
 

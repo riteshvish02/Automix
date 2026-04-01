@@ -19,6 +19,9 @@ router.get('/docs/oauth/callback', authMiddleware.checkAuth, toolController.goog
 router.get('/sheets/oauth', authMiddleware.checkAuth, toolController.getGoogleSheetsAuthUrl);
 router.get('/sheets/oauth/callback', authMiddleware.checkAuth, toolController.googleSheetsOAuthCallback);
 
+router.get('/slack/oauth', authMiddleware.checkAuth, toolController.getSlackAuthUrl);
+router.get('/slack/oauth/callback', toolController.slackOAuthCallback);
+
 router.post("/run", authMiddleware.checkAuth, runToolManually);
 
 export default router;

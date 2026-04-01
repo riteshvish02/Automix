@@ -33,6 +33,9 @@ export const calendarListEvents = async ({
       description: event.description,
       location: event.location,
       htmlLink: event.htmlLink,
+      organizer: event.organizer,
+      creator: event.creator,
+      attendees: event.attendees,
     })) || [],
   };
 };

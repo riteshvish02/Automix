@@ -1,10 +1,10 @@
+import { ToolDefinition } from "./toolTypes";
 import { docsSearchDocuments } from "../implementations/docs/docs.searchDocuments";
 import { sheetsSearchSpreadsheets } from "../implementations/sheets/sheets.searchSpreadsheets";
 import { sheetsListSpreadsheets } from "../implementations/sheets/sheets.listSpreadsheets";
 import { sheetsCreateSpreadsheet } from "../implementations/sheets/sheets.createSpreadsheet";
 import { sheetsGetSpreadsheet } from "../implementations/sheets/sheets.getSpreadsheet";
 import { sheetsAppendRow } from "../implementations/sheets/sheets.appendRow";
-import { ToolDefinition } from "./toolTypes";
 import { driveSearchFiles } from "../implementations/drive/drive.searchFiles";
 import { driveDownloadFile } from "../implementations/drive/drive.downloadFile";
 import { gmailSendEmail } from "../implementations/gmail/gmail.sendEmail";
@@ -12,6 +12,7 @@ import { driveCreateFile } from "../implementations/drive/drive.createFile";
 import { driveGetFileContent } from "../implementations/drive/drive.getFileContent";
 import { gmailSearchEmails } from "../implementations/gmail/gmail.searchEmails";
 import { gmailReadEmail } from "../implementations/gmail/gmail.readEmail";
+import { gmailGetLatestEmail } from "../implementations/gmail/gmail.getLatestEmail";
 import { calendarUpdateEvent } from "../implementations/calendar/calendar.updateEvent";
 import { calendarDeleteEvent } from "../implementations/calendar/calendar.deleteEvent";
 import { calendarGetEvent } from "../implementations/calendar/calendar.getEvent";
@@ -23,6 +24,8 @@ import { docsCreateDocument } from "../implementations/docs/docs.createDocument"
 import { docsGetDocument } from "../implementations/docs/docs.getDocument";
 import { docsUpdateDocument } from "../implementations/docs/docs.updateDocument";
 import { docsListDocuments } from "../implementations/docs/docs.listDocuments";
+import { slackPostMessage } from "../implementations/slack/slack.postMessage";
+import { slackListChannels } from "../implementations/slack/slack.listChannels";
 
 export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     drive_create_file: {
@@ -69,13 +72,33 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
       description: "Search or list emails in Gmail",
       inputSchema: {
         query: { type: "string", description: "Gmail search query", nullable: true },
-        maxResults: { type: "integer", description: "Maximum number of results", nullable: true }
+        maxResults: { type: "integer", description: "Maximum number of results", nullable: true },
+        labelIds: { type: "array", items: { type: "string" }, description: "Optional Gmail label IDs filter (for example, INBOX)", nullable: true },
+        includeDetails: { type: "boolean", description: "If true, returns from/to/subject/date metadata for each result", nullable: true }
       },
       execute: async (args, ctx) => {
         return gmailSearchEmails({
           userId: ctx.userId,
           query: args.query,
           maxResults: args.maxResults,
+          labelIds: args.labelIds,
+          includeDetails: args.includeDetails,
+        });
+      },
+    },
+
+    gmail_get_latest_email: {
+      name: "gmail_get_latest_email",
+      description: "Get the latest email, optionally filtered by Gmail query and labels",
+      inputSchema: {
+        query: { type: "string", description: "Optional Gmail query filter, for example from:ceo@company.com newer_than:7d", nullable: true },
+        labelIds: { type: "array", items: { type: "string" }, description: "Optional Gmail label IDs filter (for example, INBOX)", nullable: true }
+      },
+      execute: async (args, ctx) => {
+        return gmailGetLatestEmail({
+          userId: ctx.userId,
+          query: args.query,
+          labelIds: args.labelIds,
         });
       },
     },
@@ -84,12 +107,14 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
       name: "gmail_read_email",
       description: "Read the content of a specific Gmail message",
       inputSchema: {
-        messageId: { type: "string", description: "ID of the Gmail message to read" }
+        messageId: { type: "string", description: "ID of the Gmail message to read", nullable: true },
+        id: { type: "string", description: "Alias for messageId", nullable: true }
       },
       execute: async (args, ctx) => {
         return gmailReadEmail({
           userId: ctx.userId,
           messageId: args.messageId,
+          id: args.id,
         });
       },
     },
@@ -324,7 +349,11 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     description: "Update a Google Doc document using batchUpdate requests.",
     inputSchema: {
       documentId: { type: "string", description: "ID of the document to update" },
-      requests: { type: "array", description: "Array of Google Docs API requests to apply" }
+      requests: {
+        type: "array",
+        description: "Array of Google Docs API request objects to apply",
+        items: { type: "object" }
+      }
     },
     execute: async (args, ctx) => {
       return docsUpdateDocument({
@@ -422,6 +451,36 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         userId: ctx.userId,
         query: args.query,
         pageSize: args.pageSize
+      });
+    },
+  },
+  slack_post_message: {
+    name: "slack_post_message",
+    description: "Send a message to a Slack channel.",
+    inputSchema: {
+      channel: { type: "string", description: "Slack channel ID, e.g. C1234567890" },
+      text: { type: "string", description: "Message text to send" }
+    },
+    execute: async (args, ctx) => {
+      return slackPostMessage({
+        userId: ctx.userId,
+        channel: args.channel,
+        text: args.text,
+      });
+    },
+  },
+  slack_list_channels: {
+    name: "slack_list_channels",
+    description: "List Slack channels available to the user.",
+    inputSchema: {
+      limit: { type: "integer", description: "Max channels to return (default 100)", nullable: true },
+      cursor: { type: "string", description: "Pagination cursor from previous response", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return slackListChannels({
+        userId: ctx.userId,
+        limit: args.limit,
+        cursor: args.cursor,
       });
     },
   },
