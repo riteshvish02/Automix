@@ -10,12 +10,13 @@ router.post(
   authMiddleware.checkAuth,
   catchAsyncError(async (req: Request, res: Response) => {
     const userId = (req as any).user?.userId as string;
-    const { prompt, maxSteps } = req.body || {};
+    const { prompt, maxSteps, includeTrace } = req.body || {};
 
     const result = await runWorkflowTestAgent({
       prompt,
       userId,
       maxSteps,
+      includeTrace,
     });
 
     return res.status(200).json({
