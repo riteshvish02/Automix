@@ -172,6 +172,71 @@ exports.Prisma.OAuthTokenScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WorkflowRunScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  conversationId: 'conversationId',
+  prompt: 'prompt',
+  status: 'status',
+  model: 'model',
+  maxSteps: 'maxSteps',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  finalAnswer: 'finalAnswer',
+  errorClass: 'errorClass',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkflowStepScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  stepId: 'stepId',
+  stepType: 'stepType',
+  status: 'status',
+  toolName: 'toolName',
+  input: 'input',
+  output: 'output',
+  errorClass: 'errorClass',
+  errorMessage: 'errorMessage',
+  retryCount: 'retryCount',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkflowEventScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  workflowStepId: 'workflowStepId',
+  eventType: 'eventType',
+  payload: 'payload',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WorkflowCheckpointScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  workflowStepId: 'workflowStepId',
+  sequence: 'sequence',
+  snapshot: 'snapshot',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RunMessageScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  role: 'role',
+  content: 'content',
+  toolName: 'toolName',
+  toolCallId: 'toolCallId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -179,6 +244,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -197,14 +266,40 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.WorkflowRunStatus = exports.$Enums.WorkflowRunStatus = {
+  planned: 'planned',
+  running: 'running',
+  success: 'success',
+  failed: 'failed',
+  cancelled: 'cancelled'
+};
 
+exports.WorkflowStepType = exports.$Enums.WorkflowStepType = {
+  plan: 'plan',
+  execute: 'execute',
+  validate: 'validate',
+  finalize: 'finalize'
+};
+
+exports.WorkflowStepStatus = exports.$Enums.WorkflowStepStatus = {
+  planned: 'planned',
+  running: 'running',
+  success: 'success',
+  failed: 'failed',
+  skipped: 'skipped'
+};
 
 exports.Prisma.ModelName = {
   Artifact: 'Artifact',
   User: 'User',
   Conversation: 'Conversation',
   Message: 'Message',
-  OAuthToken: 'OAuthToken'
+  OAuthToken: 'OAuthToken',
+  WorkflowRun: 'WorkflowRun',
+  WorkflowStep: 'WorkflowStep',
+  WorkflowEvent: 'WorkflowEvent',
+  WorkflowCheckpoint: 'WorkflowCheckpoint',
+  RunMessage: 'RunMessage'
 };
 
 /**
