@@ -3,7 +3,6 @@ import { ChatOpenAI } from "@langchain/openai";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { LANGCHAIN_TOOLS } from "./adapters/langchainTools";
 import { runWithAgentContext } from "./context/agentRunContext";
-import workflowRunService from "../services/workflow-run.service";
 
 type AgentRunInput = {
   prompt: string;
@@ -97,113 +96,29 @@ export const runWorkflowTestAgent = async ({
   const today = new Date();
   const currentDate = today.toISOString().slice(0, 10);
   const agent = getOrCreateAgent(modelName);
-  const run = await workflowRunService.createRun({
-    userId,
-    prompt,
-    model: modelName,
-    maxSteps,
-  });
-
-  await workflowRunService.updateRunStatus({
-    runId: run.id,
-    status: "running",
-  });
-
-  await workflowRunService.addEvent({
-    runId: run.id,
-    eventType: "run_started",
-    payload: { model: modelName, maxSteps },
-  });
-
-  await workflowRunService.addRunMessage({
-    runId: run.id,
-    role: "user",
-    content: prompt,
-  });
-
   const contextualPrompt = `[Context] Current date is ${currentDate}. Interpret relative dates like today/tomorrow from this date unless user explicitly gives another date.\n\nUser request: ${prompt}`;
 
-  try {
-    const result = await runWithAgentContext(
-      {
-        userId,
-        originalPrompt: prompt,
-        runId: run.id,
-        stepCounter: 0,
-      },
-      async () => {
-        return agent.invoke(
-          {
-            messages: [{ role: "user", content: contextualPrompt }],
-          },
-          {
-            recursionLimit: maxSteps,
-          }
-        );
-      }
-    );
+  const result = await runWithAgentContext(
+    {
+      userId,
+      originalPrompt: prompt,
+    },
+    async () => {
+      return agent.invoke(
+        {
+          messages: [{ role: "user", content: contextualPrompt }],
+        },
+        {
+          recursionLimit: maxSteps,
+        }
+      );
+    }
+  );
 
-    const answer = extractFinalText(result);
-    const finalizeStep = await workflowRunService.createStep({
-      runId: run.id,
-      stepId: "step-finalize",
-      stepType: "finalize",
-      input: { includeTrace },
-    });
-
-    await workflowRunService.addRunMessage({
-      runId: run.id,
-      role: "assistant",
-      content: answer || "",
-    });
-
-    await workflowRunService.completeStep({
-      stepDbId: finalizeStep.id,
-      runId: run.id,
-      output: { answerLength: answer.length },
-    });
-
-    await workflowRunService.updateRunStatus({
-      runId: run.id,
-      status: "success",
-      finalAnswer: answer,
-    });
-
-    await workflowRunService.addEvent({
-      runId: run.id,
-      workflowStepId: finalizeStep.id,
-      eventType: "run_completed",
-      payload: { hasAnswer: Boolean(answer) },
-    });
-
-    const steps = await workflowRunService.listRunSteps(run.id);
-
-    return {
-      runId: run.id,
-      status: "success",
-      answer,
-      result: includeTrace ? result : undefined,
-      model: modelName,
-      maxSteps,
-      steps,
-    };
-  } catch (error: any) {
-    await workflowRunService.updateRunStatus({
-      runId: run.id,
-      status: "failed",
-      errorClass: error?.name || "AGENT_RUNTIME_ERROR",
-      errorMessage: error?.message || "Agent execution failed",
-    });
-
-    await workflowRunService.addEvent({
-      runId: run.id,
-      eventType: "run_failed",
-      payload: {
-        errorClass: error?.name || "AGENT_RUNTIME_ERROR",
-        errorMessage: error?.message || "Agent execution failed",
-      },
-    });
-
-    throw error;
-  }
+  return {
+    answer: extractFinalText(result),
+    result: includeTrace ? result : undefined,
+    model: modelName,
+    maxSteps,
+  };
 };

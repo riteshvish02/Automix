@@ -2,8 +2,7 @@ import { tool } from "langchain";
 import * as z from "zod";
 import { TOOL_REGISTRY } from "../../tools/registry/toolRegistry";
 import { executeTool } from "../../tools/runtime/executeTool";
-import { getAgentContext, nextAgentStepId } from "../context/agentRunContext";
-import workflowRunService from "../../services/workflow-run.service";
+import { getAgentContext } from "../context/agentRunContext";
 
 const isCalendarCreateTool = (toolName: string) => {
   return toolName === "calendar_create_event" || toolName === "calendar_create_meet_event";
@@ -125,86 +124,19 @@ const buildToolSchema = (inputSchema: Record<string, any>) => {
 export const LANGCHAIN_TOOLS = Object.values(TOOL_REGISTRY).map((def) =>
   tool(
     async (args) => {
-      const { userId, originalPrompt, runId } = getAgentContext();
+      const { userId, originalPrompt } = getAgentContext();
 
       try {
         const normalizedArgs = isCalendarCreateTool(def.name)
           ? maybeNormalizeRelativeCalendarDates(args, originalPrompt)
           : args;
 
-        const step = await workflowRunService.createStep({
-          runId,
-          stepId: nextAgentStepId(),
-          stepType: "execute",
+        const result = await executeTool({
           toolName: def.name,
-          input: { args: normalizedArgs },
+          args: normalizedArgs,
+          userId,
         });
-
-        await workflowRunService.addEvent({
-          runId,
-          workflowStepId: step.id,
-          eventType: "tool_called",
-          payload: { toolName: def.name },
-        });
-
-        try {
-          const result = await executeTool({
-            toolName: def.name,
-            args: normalizedArgs,
-            userId,
-          });
-
-          await workflowRunService.completeStep({
-            stepDbId: step.id,
-            runId,
-            output: { result },
-          });
-
-          await workflowRunService.addEvent({
-            runId,
-            workflowStepId: step.id,
-            eventType: "tool_succeeded",
-            payload: { toolName: def.name },
-          });
-
-          await workflowRunService.addRunMessage({
-            runId,
-            role: "tool",
-            content: JSON.stringify(result),
-            toolName: def.name,
-          });
-
-          return JSON.stringify({ ok: true, result });
-        } catch (error: any) {
-          const errorMessage = error?.message || "Tool execution failed";
-
-          await workflowRunService.failStep({
-            stepDbId: step.id,
-            runId,
-            errorClass: error?.name || "TOOL_EXECUTION_ERROR",
-            errorMessage,
-            output: { args: normalizedArgs },
-          });
-
-          await workflowRunService.addEvent({
-            runId,
-            workflowStepId: step.id,
-            eventType: "tool_failed",
-            payload: {
-              toolName: def.name,
-              errorMessage,
-            },
-          });
-
-          await workflowRunService.addRunMessage({
-            runId,
-            role: "tool",
-            content: JSON.stringify({ ok: false, error: errorMessage }),
-            toolName: def.name,
-          });
-
-          return JSON.stringify({ ok: false, error: errorMessage });
-        }
+        return JSON.stringify({ ok: true, result });
       } catch (error: any) {
         return JSON.stringify({
           ok: false,
