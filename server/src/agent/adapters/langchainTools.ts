@@ -3,6 +3,9 @@ import * as z from "zod";
 import { TOOL_REGISTRY } from "../../tools/registry/toolRegistry";
 import { executeTool } from "../../tools/runtime/executeTool";
 import { getAgentContext } from "../context/agentRunContext";
+import metricsService from "../../services/metrics.service";
+import { withRetry } from "../../utils/retry";
+import conversationService from "../../services/conversation.service";
 
 const isCalendarCreateTool = (toolName: string) => {
   return toolName === "calendar_create_event" || toolName === "calendar_create_meet_event";
@@ -124,24 +127,77 @@ const buildToolSchema = (inputSchema: Record<string, any>) => {
 export const LANGCHAIN_TOOLS = Object.values(TOOL_REGISTRY).map((def) =>
   tool(
     async (args) => {
-      const { userId, originalPrompt } = getAgentContext();
+      const { userId, originalPrompt, conversationId } = getAgentContext();
+      const startTime = Date.now();
 
       try {
         const normalizedArgs = isCalendarCreateTool(def.name)
           ? maybeNormalizeRelativeCalendarDates(args, originalPrompt)
           : args;
 
-        const result = await executeTool({
-          toolName: def.name,
-          args: normalizedArgs,
+        // Execute with retry for transient errors
+        const result = await withRetry(
+          async () => {
+            return executeTool({
+              toolName: def.name,
+              args: normalizedArgs,
+              userId,
+            });
+          },
+          3,
+          (attempt, error, delay) => {
+            console.warn(
+              `[Retry] Tool ${def.name} attempt ${attempt} failed, retrying in ${delay}ms`,
+              error.message
+            );
+          }
+        );
+
+        // Track success metrics
+        const duration = Date.now() - startTime;
+        await metricsService.trackToolExecution({
           userId,
+          toolName: def.name,
+          success: true,
+          duration,
         });
+
+        // Save tool result to conversation
+        if (conversationId) {
+          await conversationService.saveMessage({
+            conversationId,
+            role: "tool",
+            content: JSON.stringify(result),
+            toolName: def.name,
+          });
+        }
+
         return JSON.stringify({ ok: true, result });
       } catch (error: any) {
-        return JSON.stringify({
-          ok: false,
-          error: error?.message || "Tool execution failed",
+        // Track failure metrics
+        const duration = Date.now() - startTime;
+        await metricsService.trackToolExecution({
+          userId,
+          toolName: def.name,
+          success: false,
+          duration,
+          errorType: error?.name || "UNKNOWN",
+          errorMessage: error?.message,
         });
+
+        const errorMsg = error?.message || "Tool execution failed";
+
+        // Save error to conversation
+        if (conversationId) {
+          await conversationService.saveMessage({
+            conversationId,
+            role: "tool",
+            content: JSON.stringify({ ok: false, error: errorMsg }),
+            toolName: def.name,
+          });
+        }
+
+        return JSON.stringify({ ok: false, error: errorMsg });
       }
     },
     {

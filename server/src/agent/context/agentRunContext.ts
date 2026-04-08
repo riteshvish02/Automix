@@ -4,6 +4,7 @@ import { ErrorHandler } from "../../utils/ErrorHandler";
 type AgentRunContextValue = {
   userId: string;
   originalPrompt: string;
+  conversationId?: string;
 };
 
 const agentRunContextStorage = new AsyncLocalStorage<AgentRunContextValue>();

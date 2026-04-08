@@ -63,6 +63,7 @@ const getGoogleGmailAuthUrl = async (data: { }) => {
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
+        prompt: 'consent',
         scope: [
             'https://www.googleapis.com/auth/gmail.readonly',
             'https://www.googleapis.com/auth/gmail.send',

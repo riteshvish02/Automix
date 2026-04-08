@@ -38,6 +38,16 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  * 
  */
 export type OAuthToken = $Result.DefaultSelection<Prisma.$OAuthTokenPayload>
+/**
+ * Model ToolMetric
+ * 
+ */
+export type ToolMetric = $Result.DefaultSelection<Prisma.$ToolMetricPayload>
+/**
+ * Model ConversationSummary
+ * 
+ */
+export type ConversationSummary = $Result.DefaultSelection<Prisma.$ConversationSummaryPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -209,6 +219,26 @@ export class PrismaClient<
     * ```
     */
   get oAuthToken(): Prisma.OAuthTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.toolMetric`: Exposes CRUD operations for the **ToolMetric** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ToolMetrics
+    * const toolMetrics = await prisma.toolMetric.findMany()
+    * ```
+    */
+  get toolMetric(): Prisma.ToolMetricDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.conversationSummary`: Exposes CRUD operations for the **ConversationSummary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ConversationSummaries
+    * const conversationSummaries = await prisma.conversationSummary.findMany()
+    * ```
+    */
+  get conversationSummary(): Prisma.ConversationSummaryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -647,7 +677,9 @@ export namespace Prisma {
     User: 'User',
     Conversation: 'Conversation',
     Message: 'Message',
-    OAuthToken: 'OAuthToken'
+    OAuthToken: 'OAuthToken',
+    ToolMetric: 'ToolMetric',
+    ConversationSummary: 'ConversationSummary'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -663,7 +695,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "artifact" | "user" | "conversation" | "message" | "oAuthToken"
+      modelProps: "artifact" | "user" | "conversation" | "message" | "oAuthToken" | "toolMetric" | "conversationSummary"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1037,6 +1069,154 @@ export namespace Prisma {
           }
         }
       }
+      ToolMetric: {
+        payload: Prisma.$ToolMetricPayload<ExtArgs>
+        fields: Prisma.ToolMetricFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ToolMetricFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ToolMetricFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>
+          }
+          findFirst: {
+            args: Prisma.ToolMetricFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ToolMetricFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>
+          }
+          findMany: {
+            args: Prisma.ToolMetricFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>[]
+          }
+          create: {
+            args: Prisma.ToolMetricCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>
+          }
+          createMany: {
+            args: Prisma.ToolMetricCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ToolMetricCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>[]
+          }
+          delete: {
+            args: Prisma.ToolMetricDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>
+          }
+          update: {
+            args: Prisma.ToolMetricUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>
+          }
+          deleteMany: {
+            args: Prisma.ToolMetricDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ToolMetricUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ToolMetricUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>[]
+          }
+          upsert: {
+            args: Prisma.ToolMetricUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ToolMetricPayload>
+          }
+          aggregate: {
+            args: Prisma.ToolMetricAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateToolMetric>
+          }
+          groupBy: {
+            args: Prisma.ToolMetricGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ToolMetricGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ToolMetricCountArgs<ExtArgs>
+            result: $Utils.Optional<ToolMetricCountAggregateOutputType> | number
+          }
+        }
+      }
+      ConversationSummary: {
+        payload: Prisma.$ConversationSummaryPayload<ExtArgs>
+        fields: Prisma.ConversationSummaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ConversationSummaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ConversationSummaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>
+          }
+          findFirst: {
+            args: Prisma.ConversationSummaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ConversationSummaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>
+          }
+          findMany: {
+            args: Prisma.ConversationSummaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>[]
+          }
+          create: {
+            args: Prisma.ConversationSummaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>
+          }
+          createMany: {
+            args: Prisma.ConversationSummaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ConversationSummaryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>[]
+          }
+          delete: {
+            args: Prisma.ConversationSummaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>
+          }
+          update: {
+            args: Prisma.ConversationSummaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.ConversationSummaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ConversationSummaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ConversationSummaryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>[]
+          }
+          upsert: {
+            args: Prisma.ConversationSummaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationSummaryPayload>
+          }
+          aggregate: {
+            args: Prisma.ConversationSummaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateConversationSummary>
+          }
+          groupBy: {
+            args: Prisma.ConversationSummaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ConversationSummaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ConversationSummaryCountArgs<ExtArgs>
+            result: $Utils.Optional<ConversationSummaryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1150,6 +1330,8 @@ export namespace Prisma {
     conversation?: ConversationOmit
     message?: MessageOmit
     oAuthToken?: OAuthTokenOmit
+    toolMetric?: ToolMetricOmit
+    conversationSummary?: ConversationSummaryOmit
   }
 
   /* Types for Logging */
@@ -1233,12 +1415,14 @@ export namespace Prisma {
     conversations: number
     oauthTokens: number
     artifacts: number
+    toolMetrics: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     conversations?: boolean | UserCountOutputTypeCountConversationsArgs
     oauthTokens?: boolean | UserCountOutputTypeCountOauthTokensArgs
     artifacts?: boolean | UserCountOutputTypeCountArtifactsArgs
+    toolMetrics?: boolean | UserCountOutputTypeCountToolMetricsArgs
   }
 
   // Custom InputTypes
@@ -1273,6 +1457,13 @@ export namespace Prisma {
     where?: ArtifactWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountToolMetricsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ToolMetricWhereInput
+  }
+
 
   /**
    * Count Type ConversationCountOutputType
@@ -1280,10 +1471,12 @@ export namespace Prisma {
 
   export type ConversationCountOutputType = {
     messages: number
+    summaries: number
   }
 
   export type ConversationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     messages?: boolean | ConversationCountOutputTypeCountMessagesArgs
+    summaries?: boolean | ConversationCountOutputTypeCountSummariesArgs
   }
 
   // Custom InputTypes
@@ -1302,6 +1495,13 @@ export namespace Prisma {
    */
   export type ConversationCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageWhereInput
+  }
+
+  /**
+   * ConversationCountOutputType without action
+   */
+  export type ConversationCountOutputTypeCountSummariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationSummaryWhereInput
   }
 
 
@@ -2617,6 +2817,7 @@ export namespace Prisma {
     conversations?: boolean | User$conversationsArgs<ExtArgs>
     oauthTokens?: boolean | User$oauthTokensArgs<ExtArgs>
     artifacts?: boolean | User$artifactsArgs<ExtArgs>
+    toolMetrics?: boolean | User$toolMetricsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2652,6 +2853,7 @@ export namespace Prisma {
     conversations?: boolean | User$conversationsArgs<ExtArgs>
     oauthTokens?: boolean | User$oauthTokensArgs<ExtArgs>
     artifacts?: boolean | User$artifactsArgs<ExtArgs>
+    toolMetrics?: boolean | User$toolMetricsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2663,6 +2865,7 @@ export namespace Prisma {
       conversations: Prisma.$ConversationPayload<ExtArgs>[]
       oauthTokens: Prisma.$OAuthTokenPayload<ExtArgs>[]
       artifacts: Prisma.$ArtifactPayload<ExtArgs>[]
+      toolMetrics: Prisma.$ToolMetricPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3068,6 +3271,7 @@ export namespace Prisma {
     conversations<T extends User$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, User$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     oauthTokens<T extends User$oauthTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$oauthTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     artifacts<T extends User$artifactsArgs<ExtArgs> = {}>(args?: Subset<T, User$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    toolMetrics<T extends User$toolMetricsArgs<ExtArgs> = {}>(args?: Subset<T, User$toolMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3568,6 +3772,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.toolMetrics
+   */
+  export type User$toolMetricsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    where?: ToolMetricWhereInput
+    orderBy?: ToolMetricOrderByWithRelationInput | ToolMetricOrderByWithRelationInput[]
+    cursor?: ToolMetricWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ToolMetricScalarFieldEnum | ToolMetricScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3600,6 +3828,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     title: string | null
+    summary: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3608,6 +3837,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     title: string | null
+    summary: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3616,6 +3846,7 @@ export namespace Prisma {
     id: number
     userId: number
     title: number
+    summary: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3626,6 +3857,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     title?: true
+    summary?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3634,6 +3866,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     title?: true
+    summary?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3642,6 +3875,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     title?: true
+    summary?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3723,6 +3957,7 @@ export namespace Prisma {
     id: string
     userId: string
     title: string | null
+    summary: string | null
     createdAt: Date
     updatedAt: Date
     _count: ConversationCountAggregateOutputType | null
@@ -3748,10 +3983,12 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
+    summaries?: boolean | Conversation$summariesArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["conversation"]>
 
@@ -3759,6 +3996,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3768,6 +4006,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3777,14 +4016,16 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
+  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "summary" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
   export type ConversationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
+    summaries?: boolean | Conversation$summariesArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ConversationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3799,11 +4040,13 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       messages: Prisma.$MessagePayload<ExtArgs>[]
+      summaries: Prisma.$ConversationSummaryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       title: string | null
+      summary: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["conversation"]>
@@ -4202,6 +4445,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     messages<T extends Conversation$messagesArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    summaries<T extends Conversation$summariesArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$summariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4234,6 +4478,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Conversation", 'String'>
     readonly userId: FieldRef<"Conversation", 'String'>
     readonly title: FieldRef<"Conversation", 'String'>
+    readonly summary: FieldRef<"Conversation", 'String'>
     readonly createdAt: FieldRef<"Conversation", 'DateTime'>
     readonly updatedAt: FieldRef<"Conversation", 'DateTime'>
   }
@@ -4658,6 +4903,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * Conversation.summaries
+   */
+  export type Conversation$summariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    where?: ConversationSummaryWhereInput
+    orderBy?: ConversationSummaryOrderByWithRelationInput | ConversationSummaryOrderByWithRelationInput[]
+    cursor?: ConversationSummaryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationSummaryScalarFieldEnum | ConversationSummaryScalarFieldEnum[]
   }
 
   /**
@@ -6871,6 +7140,2290 @@ export namespace Prisma {
 
 
   /**
+   * Model ToolMetric
+   */
+
+  export type AggregateToolMetric = {
+    _count: ToolMetricCountAggregateOutputType | null
+    _avg: ToolMetricAvgAggregateOutputType | null
+    _sum: ToolMetricSumAggregateOutputType | null
+    _min: ToolMetricMinAggregateOutputType | null
+    _max: ToolMetricMaxAggregateOutputType | null
+  }
+
+  export type ToolMetricAvgAggregateOutputType = {
+    successCount: number | null
+    failureCount: number | null
+    totalDuration: number | null
+    avgDuration: number | null
+  }
+
+  export type ToolMetricSumAggregateOutputType = {
+    successCount: number | null
+    failureCount: number | null
+    totalDuration: number | null
+    avgDuration: number | null
+  }
+
+  export type ToolMetricMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    toolName: string | null
+    successCount: number | null
+    failureCount: number | null
+    totalDuration: number | null
+    avgDuration: number | null
+    lastErrorType: string | null
+    lastErrorMsg: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ToolMetricMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    toolName: string | null
+    successCount: number | null
+    failureCount: number | null
+    totalDuration: number | null
+    avgDuration: number | null
+    lastErrorType: string | null
+    lastErrorMsg: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ToolMetricCountAggregateOutputType = {
+    id: number
+    userId: number
+    toolName: number
+    successCount: number
+    failureCount: number
+    totalDuration: number
+    avgDuration: number
+    lastErrorType: number
+    lastErrorMsg: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ToolMetricAvgAggregateInputType = {
+    successCount?: true
+    failureCount?: true
+    totalDuration?: true
+    avgDuration?: true
+  }
+
+  export type ToolMetricSumAggregateInputType = {
+    successCount?: true
+    failureCount?: true
+    totalDuration?: true
+    avgDuration?: true
+  }
+
+  export type ToolMetricMinAggregateInputType = {
+    id?: true
+    userId?: true
+    toolName?: true
+    successCount?: true
+    failureCount?: true
+    totalDuration?: true
+    avgDuration?: true
+    lastErrorType?: true
+    lastErrorMsg?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ToolMetricMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    toolName?: true
+    successCount?: true
+    failureCount?: true
+    totalDuration?: true
+    avgDuration?: true
+    lastErrorType?: true
+    lastErrorMsg?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ToolMetricCountAggregateInputType = {
+    id?: true
+    userId?: true
+    toolName?: true
+    successCount?: true
+    failureCount?: true
+    totalDuration?: true
+    avgDuration?: true
+    lastErrorType?: true
+    lastErrorMsg?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ToolMetricAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ToolMetric to aggregate.
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ToolMetrics to fetch.
+     */
+    orderBy?: ToolMetricOrderByWithRelationInput | ToolMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ToolMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ToolMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ToolMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ToolMetrics
+    **/
+    _count?: true | ToolMetricCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ToolMetricAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ToolMetricSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ToolMetricMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ToolMetricMaxAggregateInputType
+  }
+
+  export type GetToolMetricAggregateType<T extends ToolMetricAggregateArgs> = {
+        [P in keyof T & keyof AggregateToolMetric]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateToolMetric[P]>
+      : GetScalarType<T[P], AggregateToolMetric[P]>
+  }
+
+
+
+
+  export type ToolMetricGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ToolMetricWhereInput
+    orderBy?: ToolMetricOrderByWithAggregationInput | ToolMetricOrderByWithAggregationInput[]
+    by: ToolMetricScalarFieldEnum[] | ToolMetricScalarFieldEnum
+    having?: ToolMetricScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ToolMetricCountAggregateInputType | true
+    _avg?: ToolMetricAvgAggregateInputType
+    _sum?: ToolMetricSumAggregateInputType
+    _min?: ToolMetricMinAggregateInputType
+    _max?: ToolMetricMaxAggregateInputType
+  }
+
+  export type ToolMetricGroupByOutputType = {
+    id: string
+    userId: string
+    toolName: string
+    successCount: number
+    failureCount: number
+    totalDuration: number
+    avgDuration: number
+    lastErrorType: string | null
+    lastErrorMsg: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ToolMetricCountAggregateOutputType | null
+    _avg: ToolMetricAvgAggregateOutputType | null
+    _sum: ToolMetricSumAggregateOutputType | null
+    _min: ToolMetricMinAggregateOutputType | null
+    _max: ToolMetricMaxAggregateOutputType | null
+  }
+
+  type GetToolMetricGroupByPayload<T extends ToolMetricGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ToolMetricGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ToolMetricGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ToolMetricGroupByOutputType[P]>
+            : GetScalarType<T[P], ToolMetricGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ToolMetricSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    toolName?: boolean
+    successCount?: boolean
+    failureCount?: boolean
+    totalDuration?: boolean
+    avgDuration?: boolean
+    lastErrorType?: boolean
+    lastErrorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["toolMetric"]>
+
+  export type ToolMetricSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    toolName?: boolean
+    successCount?: boolean
+    failureCount?: boolean
+    totalDuration?: boolean
+    avgDuration?: boolean
+    lastErrorType?: boolean
+    lastErrorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["toolMetric"]>
+
+  export type ToolMetricSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    toolName?: boolean
+    successCount?: boolean
+    failureCount?: boolean
+    totalDuration?: boolean
+    avgDuration?: boolean
+    lastErrorType?: boolean
+    lastErrorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["toolMetric"]>
+
+  export type ToolMetricSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    toolName?: boolean
+    successCount?: boolean
+    failureCount?: boolean
+    totalDuration?: boolean
+    avgDuration?: boolean
+    lastErrorType?: boolean
+    lastErrorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ToolMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "toolName" | "successCount" | "failureCount" | "totalDuration" | "avgDuration" | "lastErrorType" | "lastErrorMsg" | "createdAt" | "updatedAt", ExtArgs["result"]["toolMetric"]>
+  export type ToolMetricInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ToolMetricIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ToolMetricIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ToolMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ToolMetric"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      toolName: string
+      successCount: number
+      failureCount: number
+      totalDuration: number
+      avgDuration: number
+      lastErrorType: string | null
+      lastErrorMsg: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["toolMetric"]>
+    composites: {}
+  }
+
+  type ToolMetricGetPayload<S extends boolean | null | undefined | ToolMetricDefaultArgs> = $Result.GetResult<Prisma.$ToolMetricPayload, S>
+
+  type ToolMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ToolMetricFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ToolMetricCountAggregateInputType | true
+    }
+
+  export interface ToolMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ToolMetric'], meta: { name: 'ToolMetric' } }
+    /**
+     * Find zero or one ToolMetric that matches the filter.
+     * @param {ToolMetricFindUniqueArgs} args - Arguments to find a ToolMetric
+     * @example
+     * // Get one ToolMetric
+     * const toolMetric = await prisma.toolMetric.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ToolMetricFindUniqueArgs>(args: SelectSubset<T, ToolMetricFindUniqueArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ToolMetric that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ToolMetricFindUniqueOrThrowArgs} args - Arguments to find a ToolMetric
+     * @example
+     * // Get one ToolMetric
+     * const toolMetric = await prisma.toolMetric.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ToolMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, ToolMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ToolMetric that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricFindFirstArgs} args - Arguments to find a ToolMetric
+     * @example
+     * // Get one ToolMetric
+     * const toolMetric = await prisma.toolMetric.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ToolMetricFindFirstArgs>(args?: SelectSubset<T, ToolMetricFindFirstArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ToolMetric that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricFindFirstOrThrowArgs} args - Arguments to find a ToolMetric
+     * @example
+     * // Get one ToolMetric
+     * const toolMetric = await prisma.toolMetric.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ToolMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, ToolMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ToolMetrics that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ToolMetrics
+     * const toolMetrics = await prisma.toolMetric.findMany()
+     * 
+     * // Get first 10 ToolMetrics
+     * const toolMetrics = await prisma.toolMetric.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const toolMetricWithIdOnly = await prisma.toolMetric.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ToolMetricFindManyArgs>(args?: SelectSubset<T, ToolMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ToolMetric.
+     * @param {ToolMetricCreateArgs} args - Arguments to create a ToolMetric.
+     * @example
+     * // Create one ToolMetric
+     * const ToolMetric = await prisma.toolMetric.create({
+     *   data: {
+     *     // ... data to create a ToolMetric
+     *   }
+     * })
+     * 
+     */
+    create<T extends ToolMetricCreateArgs>(args: SelectSubset<T, ToolMetricCreateArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ToolMetrics.
+     * @param {ToolMetricCreateManyArgs} args - Arguments to create many ToolMetrics.
+     * @example
+     * // Create many ToolMetrics
+     * const toolMetric = await prisma.toolMetric.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ToolMetricCreateManyArgs>(args?: SelectSubset<T, ToolMetricCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ToolMetrics and returns the data saved in the database.
+     * @param {ToolMetricCreateManyAndReturnArgs} args - Arguments to create many ToolMetrics.
+     * @example
+     * // Create many ToolMetrics
+     * const toolMetric = await prisma.toolMetric.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ToolMetrics and only return the `id`
+     * const toolMetricWithIdOnly = await prisma.toolMetric.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ToolMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, ToolMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ToolMetric.
+     * @param {ToolMetricDeleteArgs} args - Arguments to delete one ToolMetric.
+     * @example
+     * // Delete one ToolMetric
+     * const ToolMetric = await prisma.toolMetric.delete({
+     *   where: {
+     *     // ... filter to delete one ToolMetric
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ToolMetricDeleteArgs>(args: SelectSubset<T, ToolMetricDeleteArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ToolMetric.
+     * @param {ToolMetricUpdateArgs} args - Arguments to update one ToolMetric.
+     * @example
+     * // Update one ToolMetric
+     * const toolMetric = await prisma.toolMetric.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ToolMetricUpdateArgs>(args: SelectSubset<T, ToolMetricUpdateArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ToolMetrics.
+     * @param {ToolMetricDeleteManyArgs} args - Arguments to filter ToolMetrics to delete.
+     * @example
+     * // Delete a few ToolMetrics
+     * const { count } = await prisma.toolMetric.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ToolMetricDeleteManyArgs>(args?: SelectSubset<T, ToolMetricDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ToolMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ToolMetrics
+     * const toolMetric = await prisma.toolMetric.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ToolMetricUpdateManyArgs>(args: SelectSubset<T, ToolMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ToolMetrics and returns the data updated in the database.
+     * @param {ToolMetricUpdateManyAndReturnArgs} args - Arguments to update many ToolMetrics.
+     * @example
+     * // Update many ToolMetrics
+     * const toolMetric = await prisma.toolMetric.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ToolMetrics and only return the `id`
+     * const toolMetricWithIdOnly = await prisma.toolMetric.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ToolMetricUpdateManyAndReturnArgs>(args: SelectSubset<T, ToolMetricUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ToolMetric.
+     * @param {ToolMetricUpsertArgs} args - Arguments to update or create a ToolMetric.
+     * @example
+     * // Update or create a ToolMetric
+     * const toolMetric = await prisma.toolMetric.upsert({
+     *   create: {
+     *     // ... data to create a ToolMetric
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ToolMetric we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ToolMetricUpsertArgs>(args: SelectSubset<T, ToolMetricUpsertArgs<ExtArgs>>): Prisma__ToolMetricClient<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ToolMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricCountArgs} args - Arguments to filter ToolMetrics to count.
+     * @example
+     * // Count the number of ToolMetrics
+     * const count = await prisma.toolMetric.count({
+     *   where: {
+     *     // ... the filter for the ToolMetrics we want to count
+     *   }
+     * })
+    **/
+    count<T extends ToolMetricCountArgs>(
+      args?: Subset<T, ToolMetricCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ToolMetricCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ToolMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ToolMetricAggregateArgs>(args: Subset<T, ToolMetricAggregateArgs>): Prisma.PrismaPromise<GetToolMetricAggregateType<T>>
+
+    /**
+     * Group by ToolMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ToolMetricGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ToolMetricGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ToolMetricGroupByArgs['orderBy'] }
+        : { orderBy?: ToolMetricGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ToolMetricGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetToolMetricGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ToolMetric model
+   */
+  readonly fields: ToolMetricFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ToolMetric.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ToolMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ToolMetric model
+   */
+  interface ToolMetricFieldRefs {
+    readonly id: FieldRef<"ToolMetric", 'String'>
+    readonly userId: FieldRef<"ToolMetric", 'String'>
+    readonly toolName: FieldRef<"ToolMetric", 'String'>
+    readonly successCount: FieldRef<"ToolMetric", 'Int'>
+    readonly failureCount: FieldRef<"ToolMetric", 'Int'>
+    readonly totalDuration: FieldRef<"ToolMetric", 'Int'>
+    readonly avgDuration: FieldRef<"ToolMetric", 'Float'>
+    readonly lastErrorType: FieldRef<"ToolMetric", 'String'>
+    readonly lastErrorMsg: FieldRef<"ToolMetric", 'String'>
+    readonly createdAt: FieldRef<"ToolMetric", 'DateTime'>
+    readonly updatedAt: FieldRef<"ToolMetric", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ToolMetric findUnique
+   */
+  export type ToolMetricFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which ToolMetric to fetch.
+     */
+    where: ToolMetricWhereUniqueInput
+  }
+
+  /**
+   * ToolMetric findUniqueOrThrow
+   */
+  export type ToolMetricFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which ToolMetric to fetch.
+     */
+    where: ToolMetricWhereUniqueInput
+  }
+
+  /**
+   * ToolMetric findFirst
+   */
+  export type ToolMetricFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which ToolMetric to fetch.
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ToolMetrics to fetch.
+     */
+    orderBy?: ToolMetricOrderByWithRelationInput | ToolMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ToolMetrics.
+     */
+    cursor?: ToolMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ToolMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ToolMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ToolMetrics.
+     */
+    distinct?: ToolMetricScalarFieldEnum | ToolMetricScalarFieldEnum[]
+  }
+
+  /**
+   * ToolMetric findFirstOrThrow
+   */
+  export type ToolMetricFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which ToolMetric to fetch.
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ToolMetrics to fetch.
+     */
+    orderBy?: ToolMetricOrderByWithRelationInput | ToolMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ToolMetrics.
+     */
+    cursor?: ToolMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ToolMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ToolMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ToolMetrics.
+     */
+    distinct?: ToolMetricScalarFieldEnum | ToolMetricScalarFieldEnum[]
+  }
+
+  /**
+   * ToolMetric findMany
+   */
+  export type ToolMetricFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which ToolMetrics to fetch.
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ToolMetrics to fetch.
+     */
+    orderBy?: ToolMetricOrderByWithRelationInput | ToolMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ToolMetrics.
+     */
+    cursor?: ToolMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ToolMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ToolMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ToolMetrics.
+     */
+    distinct?: ToolMetricScalarFieldEnum | ToolMetricScalarFieldEnum[]
+  }
+
+  /**
+   * ToolMetric create
+   */
+  export type ToolMetricCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ToolMetric.
+     */
+    data: XOR<ToolMetricCreateInput, ToolMetricUncheckedCreateInput>
+  }
+
+  /**
+   * ToolMetric createMany
+   */
+  export type ToolMetricCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ToolMetrics.
+     */
+    data: ToolMetricCreateManyInput | ToolMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ToolMetric createManyAndReturn
+   */
+  export type ToolMetricCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * The data used to create many ToolMetrics.
+     */
+    data: ToolMetricCreateManyInput | ToolMetricCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ToolMetric update
+   */
+  export type ToolMetricUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ToolMetric.
+     */
+    data: XOR<ToolMetricUpdateInput, ToolMetricUncheckedUpdateInput>
+    /**
+     * Choose, which ToolMetric to update.
+     */
+    where: ToolMetricWhereUniqueInput
+  }
+
+  /**
+   * ToolMetric updateMany
+   */
+  export type ToolMetricUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ToolMetrics.
+     */
+    data: XOR<ToolMetricUpdateManyMutationInput, ToolMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which ToolMetrics to update
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * Limit how many ToolMetrics to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ToolMetric updateManyAndReturn
+   */
+  export type ToolMetricUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * The data used to update ToolMetrics.
+     */
+    data: XOR<ToolMetricUpdateManyMutationInput, ToolMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which ToolMetrics to update
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * Limit how many ToolMetrics to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ToolMetric upsert
+   */
+  export type ToolMetricUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ToolMetric to update in case it exists.
+     */
+    where: ToolMetricWhereUniqueInput
+    /**
+     * In case the ToolMetric found by the `where` argument doesn't exist, create a new ToolMetric with this data.
+     */
+    create: XOR<ToolMetricCreateInput, ToolMetricUncheckedCreateInput>
+    /**
+     * In case the ToolMetric was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ToolMetricUpdateInput, ToolMetricUncheckedUpdateInput>
+  }
+
+  /**
+   * ToolMetric delete
+   */
+  export type ToolMetricDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+    /**
+     * Filter which ToolMetric to delete.
+     */
+    where: ToolMetricWhereUniqueInput
+  }
+
+  /**
+   * ToolMetric deleteMany
+   */
+  export type ToolMetricDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ToolMetrics to delete
+     */
+    where?: ToolMetricWhereInput
+    /**
+     * Limit how many ToolMetrics to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ToolMetric without action
+   */
+  export type ToolMetricDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ToolMetric
+     */
+    select?: ToolMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ToolMetric
+     */
+    omit?: ToolMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolMetricInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ConversationSummary
+   */
+
+  export type AggregateConversationSummary = {
+    _count: ConversationSummaryCountAggregateOutputType | null
+    _avg: ConversationSummaryAvgAggregateOutputType | null
+    _sum: ConversationSummarySumAggregateOutputType | null
+    _min: ConversationSummaryMinAggregateOutputType | null
+    _max: ConversationSummaryMaxAggregateOutputType | null
+  }
+
+  export type ConversationSummaryAvgAggregateOutputType = {
+    messageCount: number | null
+  }
+
+  export type ConversationSummarySumAggregateOutputType = {
+    messageCount: number | null
+  }
+
+  export type ConversationSummaryMinAggregateOutputType = {
+    id: string | null
+    conversationId: string | null
+    summary: string | null
+    messageCount: number | null
+    createdAt: Date | null
+  }
+
+  export type ConversationSummaryMaxAggregateOutputType = {
+    id: string | null
+    conversationId: string | null
+    summary: string | null
+    messageCount: number | null
+    createdAt: Date | null
+  }
+
+  export type ConversationSummaryCountAggregateOutputType = {
+    id: number
+    conversationId: number
+    summary: number
+    messageCount: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ConversationSummaryAvgAggregateInputType = {
+    messageCount?: true
+  }
+
+  export type ConversationSummarySumAggregateInputType = {
+    messageCount?: true
+  }
+
+  export type ConversationSummaryMinAggregateInputType = {
+    id?: true
+    conversationId?: true
+    summary?: true
+    messageCount?: true
+    createdAt?: true
+  }
+
+  export type ConversationSummaryMaxAggregateInputType = {
+    id?: true
+    conversationId?: true
+    summary?: true
+    messageCount?: true
+    createdAt?: true
+  }
+
+  export type ConversationSummaryCountAggregateInputType = {
+    id?: true
+    conversationId?: true
+    summary?: true
+    messageCount?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ConversationSummaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConversationSummary to aggregate.
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationSummaries to fetch.
+     */
+    orderBy?: ConversationSummaryOrderByWithRelationInput | ConversationSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ConversationSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ConversationSummaries
+    **/
+    _count?: true | ConversationSummaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ConversationSummaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ConversationSummarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ConversationSummaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ConversationSummaryMaxAggregateInputType
+  }
+
+  export type GetConversationSummaryAggregateType<T extends ConversationSummaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateConversationSummary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConversationSummary[P]>
+      : GetScalarType<T[P], AggregateConversationSummary[P]>
+  }
+
+
+
+
+  export type ConversationSummaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationSummaryWhereInput
+    orderBy?: ConversationSummaryOrderByWithAggregationInput | ConversationSummaryOrderByWithAggregationInput[]
+    by: ConversationSummaryScalarFieldEnum[] | ConversationSummaryScalarFieldEnum
+    having?: ConversationSummaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ConversationSummaryCountAggregateInputType | true
+    _avg?: ConversationSummaryAvgAggregateInputType
+    _sum?: ConversationSummarySumAggregateInputType
+    _min?: ConversationSummaryMinAggregateInputType
+    _max?: ConversationSummaryMaxAggregateInputType
+  }
+
+  export type ConversationSummaryGroupByOutputType = {
+    id: string
+    conversationId: string
+    summary: string
+    messageCount: number
+    createdAt: Date
+    _count: ConversationSummaryCountAggregateOutputType | null
+    _avg: ConversationSummaryAvgAggregateOutputType | null
+    _sum: ConversationSummarySumAggregateOutputType | null
+    _min: ConversationSummaryMinAggregateOutputType | null
+    _max: ConversationSummaryMaxAggregateOutputType | null
+  }
+
+  type GetConversationSummaryGroupByPayload<T extends ConversationSummaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ConversationSummaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ConversationSummaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ConversationSummaryGroupByOutputType[P]>
+            : GetScalarType<T[P], ConversationSummaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ConversationSummarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    conversationId?: boolean
+    summary?: boolean
+    messageCount?: boolean
+    createdAt?: boolean
+    conversation?: boolean | ConversationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["conversationSummary"]>
+
+  export type ConversationSummarySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    conversationId?: boolean
+    summary?: boolean
+    messageCount?: boolean
+    createdAt?: boolean
+    conversation?: boolean | ConversationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["conversationSummary"]>
+
+  export type ConversationSummarySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    conversationId?: boolean
+    summary?: boolean
+    messageCount?: boolean
+    createdAt?: boolean
+    conversation?: boolean | ConversationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["conversationSummary"]>
+
+  export type ConversationSummarySelectScalar = {
+    id?: boolean
+    conversationId?: boolean
+    summary?: boolean
+    messageCount?: boolean
+    createdAt?: boolean
+  }
+
+  export type ConversationSummaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "summary" | "messageCount" | "createdAt", ExtArgs["result"]["conversationSummary"]>
+  export type ConversationSummaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversation?: boolean | ConversationDefaultArgs<ExtArgs>
+  }
+  export type ConversationSummaryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversation?: boolean | ConversationDefaultArgs<ExtArgs>
+  }
+  export type ConversationSummaryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversation?: boolean | ConversationDefaultArgs<ExtArgs>
+  }
+
+  export type $ConversationSummaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ConversationSummary"
+    objects: {
+      conversation: Prisma.$ConversationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      conversationId: string
+      summary: string
+      messageCount: number
+      createdAt: Date
+    }, ExtArgs["result"]["conversationSummary"]>
+    composites: {}
+  }
+
+  type ConversationSummaryGetPayload<S extends boolean | null | undefined | ConversationSummaryDefaultArgs> = $Result.GetResult<Prisma.$ConversationSummaryPayload, S>
+
+  type ConversationSummaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ConversationSummaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ConversationSummaryCountAggregateInputType | true
+    }
+
+  export interface ConversationSummaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ConversationSummary'], meta: { name: 'ConversationSummary' } }
+    /**
+     * Find zero or one ConversationSummary that matches the filter.
+     * @param {ConversationSummaryFindUniqueArgs} args - Arguments to find a ConversationSummary
+     * @example
+     * // Get one ConversationSummary
+     * const conversationSummary = await prisma.conversationSummary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ConversationSummaryFindUniqueArgs>(args: SelectSubset<T, ConversationSummaryFindUniqueArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ConversationSummary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ConversationSummaryFindUniqueOrThrowArgs} args - Arguments to find a ConversationSummary
+     * @example
+     * // Get one ConversationSummary
+     * const conversationSummary = await prisma.conversationSummary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ConversationSummaryFindUniqueOrThrowArgs>(args: SelectSubset<T, ConversationSummaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ConversationSummary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryFindFirstArgs} args - Arguments to find a ConversationSummary
+     * @example
+     * // Get one ConversationSummary
+     * const conversationSummary = await prisma.conversationSummary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ConversationSummaryFindFirstArgs>(args?: SelectSubset<T, ConversationSummaryFindFirstArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ConversationSummary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryFindFirstOrThrowArgs} args - Arguments to find a ConversationSummary
+     * @example
+     * // Get one ConversationSummary
+     * const conversationSummary = await prisma.conversationSummary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ConversationSummaryFindFirstOrThrowArgs>(args?: SelectSubset<T, ConversationSummaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ConversationSummaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ConversationSummaries
+     * const conversationSummaries = await prisma.conversationSummary.findMany()
+     * 
+     * // Get first 10 ConversationSummaries
+     * const conversationSummaries = await prisma.conversationSummary.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const conversationSummaryWithIdOnly = await prisma.conversationSummary.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ConversationSummaryFindManyArgs>(args?: SelectSubset<T, ConversationSummaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ConversationSummary.
+     * @param {ConversationSummaryCreateArgs} args - Arguments to create a ConversationSummary.
+     * @example
+     * // Create one ConversationSummary
+     * const ConversationSummary = await prisma.conversationSummary.create({
+     *   data: {
+     *     // ... data to create a ConversationSummary
+     *   }
+     * })
+     * 
+     */
+    create<T extends ConversationSummaryCreateArgs>(args: SelectSubset<T, ConversationSummaryCreateArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ConversationSummaries.
+     * @param {ConversationSummaryCreateManyArgs} args - Arguments to create many ConversationSummaries.
+     * @example
+     * // Create many ConversationSummaries
+     * const conversationSummary = await prisma.conversationSummary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ConversationSummaryCreateManyArgs>(args?: SelectSubset<T, ConversationSummaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ConversationSummaries and returns the data saved in the database.
+     * @param {ConversationSummaryCreateManyAndReturnArgs} args - Arguments to create many ConversationSummaries.
+     * @example
+     * // Create many ConversationSummaries
+     * const conversationSummary = await prisma.conversationSummary.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ConversationSummaries and only return the `id`
+     * const conversationSummaryWithIdOnly = await prisma.conversationSummary.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ConversationSummaryCreateManyAndReturnArgs>(args?: SelectSubset<T, ConversationSummaryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ConversationSummary.
+     * @param {ConversationSummaryDeleteArgs} args - Arguments to delete one ConversationSummary.
+     * @example
+     * // Delete one ConversationSummary
+     * const ConversationSummary = await prisma.conversationSummary.delete({
+     *   where: {
+     *     // ... filter to delete one ConversationSummary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ConversationSummaryDeleteArgs>(args: SelectSubset<T, ConversationSummaryDeleteArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ConversationSummary.
+     * @param {ConversationSummaryUpdateArgs} args - Arguments to update one ConversationSummary.
+     * @example
+     * // Update one ConversationSummary
+     * const conversationSummary = await prisma.conversationSummary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ConversationSummaryUpdateArgs>(args: SelectSubset<T, ConversationSummaryUpdateArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ConversationSummaries.
+     * @param {ConversationSummaryDeleteManyArgs} args - Arguments to filter ConversationSummaries to delete.
+     * @example
+     * // Delete a few ConversationSummaries
+     * const { count } = await prisma.conversationSummary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ConversationSummaryDeleteManyArgs>(args?: SelectSubset<T, ConversationSummaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ConversationSummaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ConversationSummaries
+     * const conversationSummary = await prisma.conversationSummary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ConversationSummaryUpdateManyArgs>(args: SelectSubset<T, ConversationSummaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ConversationSummaries and returns the data updated in the database.
+     * @param {ConversationSummaryUpdateManyAndReturnArgs} args - Arguments to update many ConversationSummaries.
+     * @example
+     * // Update many ConversationSummaries
+     * const conversationSummary = await prisma.conversationSummary.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ConversationSummaries and only return the `id`
+     * const conversationSummaryWithIdOnly = await prisma.conversationSummary.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ConversationSummaryUpdateManyAndReturnArgs>(args: SelectSubset<T, ConversationSummaryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ConversationSummary.
+     * @param {ConversationSummaryUpsertArgs} args - Arguments to update or create a ConversationSummary.
+     * @example
+     * // Update or create a ConversationSummary
+     * const conversationSummary = await prisma.conversationSummary.upsert({
+     *   create: {
+     *     // ... data to create a ConversationSummary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ConversationSummary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ConversationSummaryUpsertArgs>(args: SelectSubset<T, ConversationSummaryUpsertArgs<ExtArgs>>): Prisma__ConversationSummaryClient<$Result.GetResult<Prisma.$ConversationSummaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ConversationSummaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryCountArgs} args - Arguments to filter ConversationSummaries to count.
+     * @example
+     * // Count the number of ConversationSummaries
+     * const count = await prisma.conversationSummary.count({
+     *   where: {
+     *     // ... the filter for the ConversationSummaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends ConversationSummaryCountArgs>(
+      args?: Subset<T, ConversationSummaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ConversationSummaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ConversationSummary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ConversationSummaryAggregateArgs>(args: Subset<T, ConversationSummaryAggregateArgs>): Prisma.PrismaPromise<GetConversationSummaryAggregateType<T>>
+
+    /**
+     * Group by ConversationSummary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationSummaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ConversationSummaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ConversationSummaryGroupByArgs['orderBy'] }
+        : { orderBy?: ConversationSummaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ConversationSummaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConversationSummaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ConversationSummary model
+   */
+  readonly fields: ConversationSummaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ConversationSummary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ConversationSummaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    conversation<T extends ConversationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ConversationDefaultArgs<ExtArgs>>): Prisma__ConversationClient<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ConversationSummary model
+   */
+  interface ConversationSummaryFieldRefs {
+    readonly id: FieldRef<"ConversationSummary", 'String'>
+    readonly conversationId: FieldRef<"ConversationSummary", 'String'>
+    readonly summary: FieldRef<"ConversationSummary", 'String'>
+    readonly messageCount: FieldRef<"ConversationSummary", 'Int'>
+    readonly createdAt: FieldRef<"ConversationSummary", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ConversationSummary findUnique
+   */
+  export type ConversationSummaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationSummary to fetch.
+     */
+    where: ConversationSummaryWhereUniqueInput
+  }
+
+  /**
+   * ConversationSummary findUniqueOrThrow
+   */
+  export type ConversationSummaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationSummary to fetch.
+     */
+    where: ConversationSummaryWhereUniqueInput
+  }
+
+  /**
+   * ConversationSummary findFirst
+   */
+  export type ConversationSummaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationSummary to fetch.
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationSummaries to fetch.
+     */
+    orderBy?: ConversationSummaryOrderByWithRelationInput | ConversationSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConversationSummaries.
+     */
+    cursor?: ConversationSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConversationSummaries.
+     */
+    distinct?: ConversationSummaryScalarFieldEnum | ConversationSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * ConversationSummary findFirstOrThrow
+   */
+  export type ConversationSummaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationSummary to fetch.
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationSummaries to fetch.
+     */
+    orderBy?: ConversationSummaryOrderByWithRelationInput | ConversationSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConversationSummaries.
+     */
+    cursor?: ConversationSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConversationSummaries.
+     */
+    distinct?: ConversationSummaryScalarFieldEnum | ConversationSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * ConversationSummary findMany
+   */
+  export type ConversationSummaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationSummaries to fetch.
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationSummaries to fetch.
+     */
+    orderBy?: ConversationSummaryOrderByWithRelationInput | ConversationSummaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ConversationSummaries.
+     */
+    cursor?: ConversationSummaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationSummaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationSummaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConversationSummaries.
+     */
+    distinct?: ConversationSummaryScalarFieldEnum | ConversationSummaryScalarFieldEnum[]
+  }
+
+  /**
+   * ConversationSummary create
+   */
+  export type ConversationSummaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ConversationSummary.
+     */
+    data: XOR<ConversationSummaryCreateInput, ConversationSummaryUncheckedCreateInput>
+  }
+
+  /**
+   * ConversationSummary createMany
+   */
+  export type ConversationSummaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ConversationSummaries.
+     */
+    data: ConversationSummaryCreateManyInput | ConversationSummaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ConversationSummary createManyAndReturn
+   */
+  export type ConversationSummaryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * The data used to create many ConversationSummaries.
+     */
+    data: ConversationSummaryCreateManyInput | ConversationSummaryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ConversationSummary update
+   */
+  export type ConversationSummaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ConversationSummary.
+     */
+    data: XOR<ConversationSummaryUpdateInput, ConversationSummaryUncheckedUpdateInput>
+    /**
+     * Choose, which ConversationSummary to update.
+     */
+    where: ConversationSummaryWhereUniqueInput
+  }
+
+  /**
+   * ConversationSummary updateMany
+   */
+  export type ConversationSummaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ConversationSummaries.
+     */
+    data: XOR<ConversationSummaryUpdateManyMutationInput, ConversationSummaryUncheckedUpdateManyInput>
+    /**
+     * Filter which ConversationSummaries to update
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * Limit how many ConversationSummaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ConversationSummary updateManyAndReturn
+   */
+  export type ConversationSummaryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * The data used to update ConversationSummaries.
+     */
+    data: XOR<ConversationSummaryUpdateManyMutationInput, ConversationSummaryUncheckedUpdateManyInput>
+    /**
+     * Filter which ConversationSummaries to update
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * Limit how many ConversationSummaries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ConversationSummary upsert
+   */
+  export type ConversationSummaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ConversationSummary to update in case it exists.
+     */
+    where: ConversationSummaryWhereUniqueInput
+    /**
+     * In case the ConversationSummary found by the `where` argument doesn't exist, create a new ConversationSummary with this data.
+     */
+    create: XOR<ConversationSummaryCreateInput, ConversationSummaryUncheckedCreateInput>
+    /**
+     * In case the ConversationSummary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ConversationSummaryUpdateInput, ConversationSummaryUncheckedUpdateInput>
+  }
+
+  /**
+   * ConversationSummary delete
+   */
+  export type ConversationSummaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+    /**
+     * Filter which ConversationSummary to delete.
+     */
+    where: ConversationSummaryWhereUniqueInput
+  }
+
+  /**
+   * ConversationSummary deleteMany
+   */
+  export type ConversationSummaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConversationSummaries to delete
+     */
+    where?: ConversationSummaryWhereInput
+    /**
+     * Limit how many ConversationSummaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ConversationSummary without action
+   */
+  export type ConversationSummaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationSummary
+     */
+    select?: ConversationSummarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationSummary
+     */
+    omit?: ConversationSummaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationSummaryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6917,6 +9470,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     title: 'title',
+    summary: 'summary',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6949,6 +9503,34 @@ export namespace Prisma {
   };
 
   export type OAuthTokenScalarFieldEnum = (typeof OAuthTokenScalarFieldEnum)[keyof typeof OAuthTokenScalarFieldEnum]
+
+
+  export const ToolMetricScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    toolName: 'toolName',
+    successCount: 'successCount',
+    failureCount: 'failureCount',
+    totalDuration: 'totalDuration',
+    avgDuration: 'avgDuration',
+    lastErrorType: 'lastErrorType',
+    lastErrorMsg: 'lastErrorMsg',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ToolMetricScalarFieldEnum = (typeof ToolMetricScalarFieldEnum)[keyof typeof ToolMetricScalarFieldEnum]
+
+
+  export const ConversationSummaryScalarFieldEnum: {
+    id: 'id',
+    conversationId: 'conversationId',
+    summary: 'summary',
+    messageCount: 'messageCount',
+    createdAt: 'createdAt'
+  };
+
+  export type ConversationSummaryScalarFieldEnum = (typeof ConversationSummaryScalarFieldEnum)[keyof typeof ConversationSummaryScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -7050,6 +9632,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -7154,6 +9750,7 @@ export namespace Prisma {
     conversations?: ConversationListRelationFilter
     oauthTokens?: OAuthTokenListRelationFilter
     artifacts?: ArtifactListRelationFilter
+    toolMetrics?: ToolMetricListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -7166,6 +9763,7 @@ export namespace Prisma {
     conversations?: ConversationOrderByRelationAggregateInput
     oauthTokens?: OAuthTokenOrderByRelationAggregateInput
     artifacts?: ArtifactOrderByRelationAggregateInput
+    toolMetrics?: ToolMetricOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -7181,6 +9779,7 @@ export namespace Prisma {
     conversations?: ConversationListRelationFilter
     oauthTokens?: OAuthTokenListRelationFilter
     artifacts?: ArtifactListRelationFilter
+    toolMetrics?: ToolMetricListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -7214,20 +9813,24 @@ export namespace Prisma {
     id?: StringFilter<"Conversation"> | string
     userId?: StringFilter<"Conversation"> | string
     title?: StringNullableFilter<"Conversation"> | string | null
+    summary?: StringNullableFilter<"Conversation"> | string | null
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     messages?: MessageListRelationFilter
+    summaries?: ConversationSummaryListRelationFilter
   }
 
   export type ConversationOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrderInput | SortOrder
+    summary?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     messages?: MessageOrderByRelationAggregateInput
+    summaries?: ConversationSummaryOrderByRelationAggregateInput
   }
 
   export type ConversationWhereUniqueInput = Prisma.AtLeast<{
@@ -7237,16 +9840,19 @@ export namespace Prisma {
     NOT?: ConversationWhereInput | ConversationWhereInput[]
     userId?: StringFilter<"Conversation"> | string
     title?: StringNullableFilter<"Conversation"> | string | null
+    summary?: StringNullableFilter<"Conversation"> | string | null
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     messages?: MessageListRelationFilter
+    summaries?: ConversationSummaryListRelationFilter
   }, "id">
 
   export type ConversationOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrderInput | SortOrder
+    summary?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ConversationCountOrderByAggregateInput
@@ -7261,6 +9867,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Conversation"> | string
     userId?: StringWithAggregatesFilter<"Conversation"> | string
     title?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    summary?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   }
@@ -7401,6 +10008,151 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"OAuthToken"> | Date | string
   }
 
+  export type ToolMetricWhereInput = {
+    AND?: ToolMetricWhereInput | ToolMetricWhereInput[]
+    OR?: ToolMetricWhereInput[]
+    NOT?: ToolMetricWhereInput | ToolMetricWhereInput[]
+    id?: StringFilter<"ToolMetric"> | string
+    userId?: StringFilter<"ToolMetric"> | string
+    toolName?: StringFilter<"ToolMetric"> | string
+    successCount?: IntFilter<"ToolMetric"> | number
+    failureCount?: IntFilter<"ToolMetric"> | number
+    totalDuration?: IntFilter<"ToolMetric"> | number
+    avgDuration?: FloatFilter<"ToolMetric"> | number
+    lastErrorType?: StringNullableFilter<"ToolMetric"> | string | null
+    lastErrorMsg?: StringNullableFilter<"ToolMetric"> | string | null
+    createdAt?: DateTimeFilter<"ToolMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"ToolMetric"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ToolMetricOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    toolName?: SortOrder
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+    lastErrorType?: SortOrderInput | SortOrder
+    lastErrorMsg?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ToolMetricWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_toolName?: ToolMetricUserIdToolNameCompoundUniqueInput
+    AND?: ToolMetricWhereInput | ToolMetricWhereInput[]
+    OR?: ToolMetricWhereInput[]
+    NOT?: ToolMetricWhereInput | ToolMetricWhereInput[]
+    userId?: StringFilter<"ToolMetric"> | string
+    toolName?: StringFilter<"ToolMetric"> | string
+    successCount?: IntFilter<"ToolMetric"> | number
+    failureCount?: IntFilter<"ToolMetric"> | number
+    totalDuration?: IntFilter<"ToolMetric"> | number
+    avgDuration?: FloatFilter<"ToolMetric"> | number
+    lastErrorType?: StringNullableFilter<"ToolMetric"> | string | null
+    lastErrorMsg?: StringNullableFilter<"ToolMetric"> | string | null
+    createdAt?: DateTimeFilter<"ToolMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"ToolMetric"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_toolName">
+
+  export type ToolMetricOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    toolName?: SortOrder
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+    lastErrorType?: SortOrderInput | SortOrder
+    lastErrorMsg?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ToolMetricCountOrderByAggregateInput
+    _avg?: ToolMetricAvgOrderByAggregateInput
+    _max?: ToolMetricMaxOrderByAggregateInput
+    _min?: ToolMetricMinOrderByAggregateInput
+    _sum?: ToolMetricSumOrderByAggregateInput
+  }
+
+  export type ToolMetricScalarWhereWithAggregatesInput = {
+    AND?: ToolMetricScalarWhereWithAggregatesInput | ToolMetricScalarWhereWithAggregatesInput[]
+    OR?: ToolMetricScalarWhereWithAggregatesInput[]
+    NOT?: ToolMetricScalarWhereWithAggregatesInput | ToolMetricScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ToolMetric"> | string
+    userId?: StringWithAggregatesFilter<"ToolMetric"> | string
+    toolName?: StringWithAggregatesFilter<"ToolMetric"> | string
+    successCount?: IntWithAggregatesFilter<"ToolMetric"> | number
+    failureCount?: IntWithAggregatesFilter<"ToolMetric"> | number
+    totalDuration?: IntWithAggregatesFilter<"ToolMetric"> | number
+    avgDuration?: FloatWithAggregatesFilter<"ToolMetric"> | number
+    lastErrorType?: StringNullableWithAggregatesFilter<"ToolMetric"> | string | null
+    lastErrorMsg?: StringNullableWithAggregatesFilter<"ToolMetric"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ToolMetric"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ToolMetric"> | Date | string
+  }
+
+  export type ConversationSummaryWhereInput = {
+    AND?: ConversationSummaryWhereInput | ConversationSummaryWhereInput[]
+    OR?: ConversationSummaryWhereInput[]
+    NOT?: ConversationSummaryWhereInput | ConversationSummaryWhereInput[]
+    id?: StringFilter<"ConversationSummary"> | string
+    conversationId?: StringFilter<"ConversationSummary"> | string
+    summary?: StringFilter<"ConversationSummary"> | string
+    messageCount?: IntFilter<"ConversationSummary"> | number
+    createdAt?: DateTimeFilter<"ConversationSummary"> | Date | string
+    conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
+  }
+
+  export type ConversationSummaryOrderByWithRelationInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    summary?: SortOrder
+    messageCount?: SortOrder
+    createdAt?: SortOrder
+    conversation?: ConversationOrderByWithRelationInput
+  }
+
+  export type ConversationSummaryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ConversationSummaryWhereInput | ConversationSummaryWhereInput[]
+    OR?: ConversationSummaryWhereInput[]
+    NOT?: ConversationSummaryWhereInput | ConversationSummaryWhereInput[]
+    conversationId?: StringFilter<"ConversationSummary"> | string
+    summary?: StringFilter<"ConversationSummary"> | string
+    messageCount?: IntFilter<"ConversationSummary"> | number
+    createdAt?: DateTimeFilter<"ConversationSummary"> | Date | string
+    conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
+  }, "id">
+
+  export type ConversationSummaryOrderByWithAggregationInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    summary?: SortOrder
+    messageCount?: SortOrder
+    createdAt?: SortOrder
+    _count?: ConversationSummaryCountOrderByAggregateInput
+    _avg?: ConversationSummaryAvgOrderByAggregateInput
+    _max?: ConversationSummaryMaxOrderByAggregateInput
+    _min?: ConversationSummaryMinOrderByAggregateInput
+    _sum?: ConversationSummarySumOrderByAggregateInput
+  }
+
+  export type ConversationSummaryScalarWhereWithAggregatesInput = {
+    AND?: ConversationSummaryScalarWhereWithAggregatesInput | ConversationSummaryScalarWhereWithAggregatesInput[]
+    OR?: ConversationSummaryScalarWhereWithAggregatesInput[]
+    NOT?: ConversationSummaryScalarWhereWithAggregatesInput | ConversationSummaryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ConversationSummary"> | string
+    conversationId?: StringWithAggregatesFilter<"ConversationSummary"> | string
+    summary?: StringWithAggregatesFilter<"ConversationSummary"> | string
+    messageCount?: IntWithAggregatesFilter<"ConversationSummary"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ConversationSummary"> | Date | string
+  }
+
   export type ArtifactCreateInput = {
     id?: string
     type: string
@@ -7508,6 +10260,7 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -7520,6 +10273,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -7532,6 +10286,7 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -7544,6 +10299,7 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7576,43 +10332,52 @@ export namespace Prisma {
   export type ConversationCreateInput = {
     id?: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutConversationsInput
     messages?: MessageCreateNestedManyWithoutConversationInput
+    summaries?: ConversationSummaryCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateInput = {
     id?: string
     userId: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    summaries?: ConversationSummaryUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutConversationsNestedInput
     messages?: MessageUpdateManyWithoutConversationNestedInput
+    summaries?: ConversationSummaryUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    summaries?: ConversationSummaryUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationCreateManyInput = {
     id?: string
     userId: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7620,6 +10385,7 @@ export namespace Prisma {
   export type ConversationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7628,6 +10394,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7775,6 +10542,158 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ToolMetricCreateInput = {
+    id?: string
+    toolName: string
+    successCount?: number
+    failureCount?: number
+    totalDuration?: number
+    avgDuration?: number
+    lastErrorType?: string | null
+    lastErrorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutToolMetricsInput
+  }
+
+  export type ToolMetricUncheckedCreateInput = {
+    id?: string
+    userId: string
+    toolName: string
+    successCount?: number
+    failureCount?: number
+    totalDuration?: number
+    avgDuration?: number
+    lastErrorType?: string | null
+    lastErrorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ToolMetricUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutToolMetricsNestedInput
+  }
+
+  export type ToolMetricUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ToolMetricCreateManyInput = {
+    id?: string
+    userId: string
+    toolName: string
+    successCount?: number
+    failureCount?: number
+    totalDuration?: number
+    avgDuration?: number
+    lastErrorType?: string | null
+    lastErrorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ToolMetricUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ToolMetricUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConversationSummaryCreateInput = {
+    id?: string
+    summary: string
+    messageCount: number
+    createdAt?: Date | string
+    conversation: ConversationCreateNestedOneWithoutSummariesInput
+  }
+
+  export type ConversationSummaryUncheckedCreateInput = {
+    id?: string
+    conversationId: string
+    summary: string
+    messageCount: number
+    createdAt?: Date | string
+  }
+
+  export type ConversationSummaryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    conversation?: ConversationUpdateOneRequiredWithoutSummariesNestedInput
+  }
+
+  export type ConversationSummaryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConversationSummaryCreateManyInput = {
+    id?: string
+    conversationId: string
+    summary: string
+    messageCount: number
+    createdAt?: Date | string
+  }
+
+  export type ConversationSummaryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConversationSummaryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -7983,6 +10902,12 @@ export namespace Prisma {
     none?: ArtifactWhereInput
   }
 
+  export type ToolMetricListRelationFilter = {
+    every?: ToolMetricWhereInput
+    some?: ToolMetricWhereInput
+    none?: ToolMetricWhereInput
+  }
+
   export type ConversationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -7992,6 +10917,10 @@ export namespace Prisma {
   }
 
   export type ArtifactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ToolMetricOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8028,7 +10957,17 @@ export namespace Prisma {
     none?: MessageWhereInput
   }
 
+  export type ConversationSummaryListRelationFilter = {
+    every?: ConversationSummaryWhereInput
+    some?: ConversationSummaryWhereInput
+    none?: ConversationSummaryWhereInput
+  }
+
   export type MessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ConversationSummaryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8036,6 +10975,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8044,6 +10984,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8052,6 +10993,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8154,6 +11096,153 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type ToolMetricUserIdToolNameCompoundUniqueInput = {
+    userId: string
+    toolName: string
+  }
+
+  export type ToolMetricCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    toolName?: SortOrder
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+    lastErrorType?: SortOrder
+    lastErrorMsg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ToolMetricAvgOrderByAggregateInput = {
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+  }
+
+  export type ToolMetricMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    toolName?: SortOrder
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+    lastErrorType?: SortOrder
+    lastErrorMsg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ToolMetricMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    toolName?: SortOrder
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+    lastErrorType?: SortOrder
+    lastErrorMsg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ToolMetricSumOrderByAggregateInput = {
+    successCount?: SortOrder
+    failureCount?: SortOrder
+    totalDuration?: SortOrder
+    avgDuration?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ConversationSummaryCountOrderByAggregateInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    summary?: SortOrder
+    messageCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ConversationSummaryAvgOrderByAggregateInput = {
+    messageCount?: SortOrder
+  }
+
+  export type ConversationSummaryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    summary?: SortOrder
+    messageCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ConversationSummaryMinOrderByAggregateInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    summary?: SortOrder
+    messageCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ConversationSummarySumOrderByAggregateInput = {
+    messageCount?: SortOrder
+  }
+
   export type UserCreateNestedOneWithoutArtifactsInput = {
     create?: XOR<UserCreateWithoutArtifactsInput, UserUncheckedCreateWithoutArtifactsInput>
     connectOrCreate?: UserCreateOrConnectWithoutArtifactsInput
@@ -8201,6 +11290,13 @@ export namespace Prisma {
     connect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
   }
 
+  export type ToolMetricCreateNestedManyWithoutUserInput = {
+    create?: XOR<ToolMetricCreateWithoutUserInput, ToolMetricUncheckedCreateWithoutUserInput> | ToolMetricCreateWithoutUserInput[] | ToolMetricUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ToolMetricCreateOrConnectWithoutUserInput | ToolMetricCreateOrConnectWithoutUserInput[]
+    createMany?: ToolMetricCreateManyUserInputEnvelope
+    connect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+  }
+
   export type ConversationUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
@@ -8220,6 +11316,13 @@ export namespace Prisma {
     connectOrCreate?: ArtifactCreateOrConnectWithoutUserInput | ArtifactCreateOrConnectWithoutUserInput[]
     createMany?: ArtifactCreateManyUserInputEnvelope
     connect?: ArtifactWhereUniqueInput | ArtifactWhereUniqueInput[]
+  }
+
+  export type ToolMetricUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ToolMetricCreateWithoutUserInput, ToolMetricUncheckedCreateWithoutUserInput> | ToolMetricCreateWithoutUserInput[] | ToolMetricUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ToolMetricCreateOrConnectWithoutUserInput | ToolMetricCreateOrConnectWithoutUserInput[]
+    createMany?: ToolMetricCreateManyUserInputEnvelope
+    connect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
   }
 
   export type ConversationUpdateManyWithoutUserNestedInput = {
@@ -8264,6 +11367,20 @@ export namespace Prisma {
     deleteMany?: ArtifactScalarWhereInput | ArtifactScalarWhereInput[]
   }
 
+  export type ToolMetricUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ToolMetricCreateWithoutUserInput, ToolMetricUncheckedCreateWithoutUserInput> | ToolMetricCreateWithoutUserInput[] | ToolMetricUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ToolMetricCreateOrConnectWithoutUserInput | ToolMetricCreateOrConnectWithoutUserInput[]
+    upsert?: ToolMetricUpsertWithWhereUniqueWithoutUserInput | ToolMetricUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ToolMetricCreateManyUserInputEnvelope
+    set?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    disconnect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    delete?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    connect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    update?: ToolMetricUpdateWithWhereUniqueWithoutUserInput | ToolMetricUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ToolMetricUpdateManyWithWhereWithoutUserInput | ToolMetricUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ToolMetricScalarWhereInput | ToolMetricScalarWhereInput[]
+  }
+
   export type ConversationUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
@@ -8306,6 +11423,20 @@ export namespace Prisma {
     deleteMany?: ArtifactScalarWhereInput | ArtifactScalarWhereInput[]
   }
 
+  export type ToolMetricUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ToolMetricCreateWithoutUserInput, ToolMetricUncheckedCreateWithoutUserInput> | ToolMetricCreateWithoutUserInput[] | ToolMetricUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ToolMetricCreateOrConnectWithoutUserInput | ToolMetricCreateOrConnectWithoutUserInput[]
+    upsert?: ToolMetricUpsertWithWhereUniqueWithoutUserInput | ToolMetricUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ToolMetricCreateManyUserInputEnvelope
+    set?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    disconnect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    delete?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    connect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
+    update?: ToolMetricUpdateWithWhereUniqueWithoutUserInput | ToolMetricUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ToolMetricUpdateManyWithWhereWithoutUserInput | ToolMetricUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ToolMetricScalarWhereInput | ToolMetricScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutConversationsInput = {
     create?: XOR<UserCreateWithoutConversationsInput, UserUncheckedCreateWithoutConversationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutConversationsInput
@@ -8319,11 +11450,25 @@ export namespace Prisma {
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
   }
 
+  export type ConversationSummaryCreateNestedManyWithoutConversationInput = {
+    create?: XOR<ConversationSummaryCreateWithoutConversationInput, ConversationSummaryUncheckedCreateWithoutConversationInput> | ConversationSummaryCreateWithoutConversationInput[] | ConversationSummaryUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationSummaryCreateOrConnectWithoutConversationInput | ConversationSummaryCreateOrConnectWithoutConversationInput[]
+    createMany?: ConversationSummaryCreateManyConversationInputEnvelope
+    connect?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+  }
+
   export type MessageUncheckedCreateNestedManyWithoutConversationInput = {
     create?: XOR<MessageCreateWithoutConversationInput, MessageUncheckedCreateWithoutConversationInput> | MessageCreateWithoutConversationInput[] | MessageUncheckedCreateWithoutConversationInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutConversationInput | MessageCreateOrConnectWithoutConversationInput[]
     createMany?: MessageCreateManyConversationInputEnvelope
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type ConversationSummaryUncheckedCreateNestedManyWithoutConversationInput = {
+    create?: XOR<ConversationSummaryCreateWithoutConversationInput, ConversationSummaryUncheckedCreateWithoutConversationInput> | ConversationSummaryCreateWithoutConversationInput[] | ConversationSummaryUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationSummaryCreateOrConnectWithoutConversationInput | ConversationSummaryCreateOrConnectWithoutConversationInput[]
+    createMany?: ConversationSummaryCreateManyConversationInputEnvelope
+    connect?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutConversationsNestedInput = {
@@ -8348,6 +11493,20 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
+  export type ConversationSummaryUpdateManyWithoutConversationNestedInput = {
+    create?: XOR<ConversationSummaryCreateWithoutConversationInput, ConversationSummaryUncheckedCreateWithoutConversationInput> | ConversationSummaryCreateWithoutConversationInput[] | ConversationSummaryUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationSummaryCreateOrConnectWithoutConversationInput | ConversationSummaryCreateOrConnectWithoutConversationInput[]
+    upsert?: ConversationSummaryUpsertWithWhereUniqueWithoutConversationInput | ConversationSummaryUpsertWithWhereUniqueWithoutConversationInput[]
+    createMany?: ConversationSummaryCreateManyConversationInputEnvelope
+    set?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    disconnect?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    delete?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    connect?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    update?: ConversationSummaryUpdateWithWhereUniqueWithoutConversationInput | ConversationSummaryUpdateWithWhereUniqueWithoutConversationInput[]
+    updateMany?: ConversationSummaryUpdateManyWithWhereWithoutConversationInput | ConversationSummaryUpdateManyWithWhereWithoutConversationInput[]
+    deleteMany?: ConversationSummaryScalarWhereInput | ConversationSummaryScalarWhereInput[]
+  }
+
   export type MessageUncheckedUpdateManyWithoutConversationNestedInput = {
     create?: XOR<MessageCreateWithoutConversationInput, MessageUncheckedCreateWithoutConversationInput> | MessageCreateWithoutConversationInput[] | MessageUncheckedCreateWithoutConversationInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutConversationInput | MessageCreateOrConnectWithoutConversationInput[]
@@ -8360,6 +11519,20 @@ export namespace Prisma {
     update?: MessageUpdateWithWhereUniqueWithoutConversationInput | MessageUpdateWithWhereUniqueWithoutConversationInput[]
     updateMany?: MessageUpdateManyWithWhereWithoutConversationInput | MessageUpdateManyWithWhereWithoutConversationInput[]
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type ConversationSummaryUncheckedUpdateManyWithoutConversationNestedInput = {
+    create?: XOR<ConversationSummaryCreateWithoutConversationInput, ConversationSummaryUncheckedCreateWithoutConversationInput> | ConversationSummaryCreateWithoutConversationInput[] | ConversationSummaryUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationSummaryCreateOrConnectWithoutConversationInput | ConversationSummaryCreateOrConnectWithoutConversationInput[]
+    upsert?: ConversationSummaryUpsertWithWhereUniqueWithoutConversationInput | ConversationSummaryUpsertWithWhereUniqueWithoutConversationInput[]
+    createMany?: ConversationSummaryCreateManyConversationInputEnvelope
+    set?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    disconnect?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    delete?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    connect?: ConversationSummaryWhereUniqueInput | ConversationSummaryWhereUniqueInput[]
+    update?: ConversationSummaryUpdateWithWhereUniqueWithoutConversationInput | ConversationSummaryUpdateWithWhereUniqueWithoutConversationInput[]
+    updateMany?: ConversationSummaryUpdateManyWithWhereWithoutConversationInput | ConversationSummaryUpdateManyWithWhereWithoutConversationInput[]
+    deleteMany?: ConversationSummaryScalarWhereInput | ConversationSummaryScalarWhereInput[]
   }
 
   export type ConversationCreateNestedOneWithoutMessagesInput = {
@@ -8392,6 +11565,50 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutOauthTokensInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOauthTokensInput, UserUpdateWithoutOauthTokensInput>, UserUncheckedUpdateWithoutOauthTokensInput>
+  }
+
+  export type UserCreateNestedOneWithoutToolMetricsInput = {
+    create?: XOR<UserCreateWithoutToolMetricsInput, UserUncheckedCreateWithoutToolMetricsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutToolMetricsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutToolMetricsNestedInput = {
+    create?: XOR<UserCreateWithoutToolMetricsInput, UserUncheckedCreateWithoutToolMetricsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutToolMetricsInput
+    upsert?: UserUpsertWithoutToolMetricsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutToolMetricsInput, UserUpdateWithoutToolMetricsInput>, UserUncheckedUpdateWithoutToolMetricsInput>
+  }
+
+  export type ConversationCreateNestedOneWithoutSummariesInput = {
+    create?: XOR<ConversationCreateWithoutSummariesInput, ConversationUncheckedCreateWithoutSummariesInput>
+    connectOrCreate?: ConversationCreateOrConnectWithoutSummariesInput
+    connect?: ConversationWhereUniqueInput
+  }
+
+  export type ConversationUpdateOneRequiredWithoutSummariesNestedInput = {
+    create?: XOR<ConversationCreateWithoutSummariesInput, ConversationUncheckedCreateWithoutSummariesInput>
+    connectOrCreate?: ConversationCreateOrConnectWithoutSummariesInput
+    upsert?: ConversationUpsertWithoutSummariesInput
+    connect?: ConversationWhereUniqueInput
+    update?: XOR<XOR<ConversationUpdateToOneWithWhereWithoutSummariesInput, ConversationUpdateWithoutSummariesInput>, ConversationUncheckedUpdateWithoutSummariesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -8551,6 +11768,49 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutArtifactsInput = {
     id?: string
     email: string
@@ -8560,6 +11820,7 @@ export namespace Prisma {
     password: string
     conversations?: ConversationCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutArtifactsInput = {
@@ -8571,6 +11832,7 @@ export namespace Prisma {
     password: string
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutArtifactsInput = {
@@ -8598,6 +11860,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutArtifactsInput = {
@@ -8609,22 +11872,27 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationCreateWithoutUserInput = {
     id?: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageCreateNestedManyWithoutConversationInput
+    summaries?: ConversationSummaryCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateWithoutUserInput = {
     id?: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    summaries?: ConversationSummaryUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationCreateOrConnectWithoutUserInput = {
@@ -8703,6 +11971,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ToolMetricCreateWithoutUserInput = {
+    id?: string
+    toolName: string
+    successCount?: number
+    failureCount?: number
+    totalDuration?: number
+    avgDuration?: number
+    lastErrorType?: string | null
+    lastErrorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ToolMetricUncheckedCreateWithoutUserInput = {
+    id?: string
+    toolName: string
+    successCount?: number
+    failureCount?: number
+    totalDuration?: number
+    avgDuration?: number
+    lastErrorType?: string | null
+    lastErrorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ToolMetricCreateOrConnectWithoutUserInput = {
+    where: ToolMetricWhereUniqueInput
+    create: XOR<ToolMetricCreateWithoutUserInput, ToolMetricUncheckedCreateWithoutUserInput>
+  }
+
+  export type ToolMetricCreateManyUserInputEnvelope = {
+    data: ToolMetricCreateManyUserInput | ToolMetricCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ConversationUpsertWithWhereUniqueWithoutUserInput = {
     where: ConversationWhereUniqueInput
     update: XOR<ConversationUpdateWithoutUserInput, ConversationUncheckedUpdateWithoutUserInput>
@@ -8726,6 +12030,7 @@ export namespace Prisma {
     id?: StringFilter<"Conversation"> | string
     userId?: StringFilter<"Conversation"> | string
     title?: StringNullableFilter<"Conversation"> | string | null
+    summary?: StringNullableFilter<"Conversation"> | string | null
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
   }
@@ -8793,6 +12098,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Artifact"> | Date | string
   }
 
+  export type ToolMetricUpsertWithWhereUniqueWithoutUserInput = {
+    where: ToolMetricWhereUniqueInput
+    update: XOR<ToolMetricUpdateWithoutUserInput, ToolMetricUncheckedUpdateWithoutUserInput>
+    create: XOR<ToolMetricCreateWithoutUserInput, ToolMetricUncheckedCreateWithoutUserInput>
+  }
+
+  export type ToolMetricUpdateWithWhereUniqueWithoutUserInput = {
+    where: ToolMetricWhereUniqueInput
+    data: XOR<ToolMetricUpdateWithoutUserInput, ToolMetricUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ToolMetricUpdateManyWithWhereWithoutUserInput = {
+    where: ToolMetricScalarWhereInput
+    data: XOR<ToolMetricUpdateManyMutationInput, ToolMetricUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ToolMetricScalarWhereInput = {
+    AND?: ToolMetricScalarWhereInput | ToolMetricScalarWhereInput[]
+    OR?: ToolMetricScalarWhereInput[]
+    NOT?: ToolMetricScalarWhereInput | ToolMetricScalarWhereInput[]
+    id?: StringFilter<"ToolMetric"> | string
+    userId?: StringFilter<"ToolMetric"> | string
+    toolName?: StringFilter<"ToolMetric"> | string
+    successCount?: IntFilter<"ToolMetric"> | number
+    failureCount?: IntFilter<"ToolMetric"> | number
+    totalDuration?: IntFilter<"ToolMetric"> | number
+    avgDuration?: FloatFilter<"ToolMetric"> | number
+    lastErrorType?: StringNullableFilter<"ToolMetric"> | string | null
+    lastErrorMsg?: StringNullableFilter<"ToolMetric"> | string | null
+    createdAt?: DateTimeFilter<"ToolMetric"> | Date | string
+    updatedAt?: DateTimeFilter<"ToolMetric"> | Date | string
+  }
+
   export type UserCreateWithoutConversationsInput = {
     id?: string
     email: string
@@ -8802,6 +12140,7 @@ export namespace Prisma {
     password: string
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationsInput = {
@@ -8813,6 +12152,7 @@ export namespace Prisma {
     password: string
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationsInput = {
@@ -8848,6 +12188,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationSummaryCreateWithoutConversationInput = {
+    id?: string
+    summary: string
+    messageCount: number
+    createdAt?: Date | string
+  }
+
+  export type ConversationSummaryUncheckedCreateWithoutConversationInput = {
+    id?: string
+    summary: string
+    messageCount: number
+    createdAt?: Date | string
+  }
+
+  export type ConversationSummaryCreateOrConnectWithoutConversationInput = {
+    where: ConversationSummaryWhereUniqueInput
+    create: XOR<ConversationSummaryCreateWithoutConversationInput, ConversationSummaryUncheckedCreateWithoutConversationInput>
+  }
+
+  export type ConversationSummaryCreateManyConversationInputEnvelope = {
+    data: ConversationSummaryCreateManyConversationInput | ConversationSummaryCreateManyConversationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutConversationsInput = {
     update: XOR<UserUpdateWithoutConversationsInput, UserUncheckedUpdateWithoutConversationsInput>
     create: XOR<UserCreateWithoutConversationsInput, UserUncheckedCreateWithoutConversationsInput>
@@ -8868,6 +12232,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationsInput = {
@@ -8879,6 +12244,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -8910,20 +12276,51 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Message"> | Date | string
   }
 
+  export type ConversationSummaryUpsertWithWhereUniqueWithoutConversationInput = {
+    where: ConversationSummaryWhereUniqueInput
+    update: XOR<ConversationSummaryUpdateWithoutConversationInput, ConversationSummaryUncheckedUpdateWithoutConversationInput>
+    create: XOR<ConversationSummaryCreateWithoutConversationInput, ConversationSummaryUncheckedCreateWithoutConversationInput>
+  }
+
+  export type ConversationSummaryUpdateWithWhereUniqueWithoutConversationInput = {
+    where: ConversationSummaryWhereUniqueInput
+    data: XOR<ConversationSummaryUpdateWithoutConversationInput, ConversationSummaryUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type ConversationSummaryUpdateManyWithWhereWithoutConversationInput = {
+    where: ConversationSummaryScalarWhereInput
+    data: XOR<ConversationSummaryUpdateManyMutationInput, ConversationSummaryUncheckedUpdateManyWithoutConversationInput>
+  }
+
+  export type ConversationSummaryScalarWhereInput = {
+    AND?: ConversationSummaryScalarWhereInput | ConversationSummaryScalarWhereInput[]
+    OR?: ConversationSummaryScalarWhereInput[]
+    NOT?: ConversationSummaryScalarWhereInput | ConversationSummaryScalarWhereInput[]
+    id?: StringFilter<"ConversationSummary"> | string
+    conversationId?: StringFilter<"ConversationSummary"> | string
+    summary?: StringFilter<"ConversationSummary"> | string
+    messageCount?: IntFilter<"ConversationSummary"> | number
+    createdAt?: DateTimeFilter<"ConversationSummary"> | Date | string
+  }
+
   export type ConversationCreateWithoutMessagesInput = {
     id?: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutConversationsInput
+    summaries?: ConversationSummaryCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateWithoutMessagesInput = {
     id?: string
     userId: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    summaries?: ConversationSummaryUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationCreateOrConnectWithoutMessagesInput = {
@@ -8945,17 +12342,21 @@ export namespace Prisma {
   export type ConversationUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutConversationsNestedInput
+    summaries?: ConversationSummaryUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    summaries?: ConversationSummaryUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type UserCreateWithoutOauthTokensInput = {
@@ -8967,6 +12368,7 @@ export namespace Prisma {
     password: string
     conversations?: ConversationCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOauthTokensInput = {
@@ -8978,6 +12380,7 @@ export namespace Prisma {
     password: string
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
+    toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOauthTokensInput = {
@@ -9005,6 +12408,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOauthTokensInput = {
@@ -9016,11 +12420,133 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
+    toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutToolMetricsInput = {
+    id?: string
+    email: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    password: string
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+    oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutToolMetricsInput = {
+    id?: string
+    email: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    password: string
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
+    artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutToolMetricsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutToolMetricsInput, UserUncheckedCreateWithoutToolMetricsInput>
+  }
+
+  export type UserUpsertWithoutToolMetricsInput = {
+    update: XOR<UserUpdateWithoutToolMetricsInput, UserUncheckedUpdateWithoutToolMetricsInput>
+    create: XOR<UserCreateWithoutToolMetricsInput, UserUncheckedCreateWithoutToolMetricsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutToolMetricsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutToolMetricsInput, UserUncheckedUpdateWithoutToolMetricsInput>
+  }
+
+  export type UserUpdateWithoutToolMetricsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    password?: StringFieldUpdateOperationsInput | string
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+    oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutToolMetricsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    password?: StringFieldUpdateOperationsInput | string
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
+    artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ConversationCreateWithoutSummariesInput = {
+    id?: string
+    title?: string | null
+    summary?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutConversationsInput
+    messages?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutSummariesInput = {
+    id?: string
+    userId: string
+    title?: string | null
+    summary?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutSummariesInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutSummariesInput, ConversationUncheckedCreateWithoutSummariesInput>
+  }
+
+  export type ConversationUpsertWithoutSummariesInput = {
+    update: XOR<ConversationUpdateWithoutSummariesInput, ConversationUncheckedUpdateWithoutSummariesInput>
+    create: XOR<ConversationCreateWithoutSummariesInput, ConversationUncheckedCreateWithoutSummariesInput>
+    where?: ConversationWhereInput
+  }
+
+  export type ConversationUpdateToOneWithWhereWithoutSummariesInput = {
+    where?: ConversationWhereInput
+    data: XOR<ConversationUpdateWithoutSummariesInput, ConversationUncheckedUpdateWithoutSummariesInput>
+  }
+
+  export type ConversationUpdateWithoutSummariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutConversationsNestedInput
+    messages?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutSummariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationCreateManyUserInput = {
     id?: string
     title?: string | null
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9048,25 +12574,43 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ToolMetricCreateManyUserInput = {
+    id?: string
+    toolName: string
+    successCount?: number
+    failureCount?: number
+    totalDuration?: number
+    avgDuration?: number
+    lastErrorType?: string | null
+    lastErrorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ConversationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutConversationNestedInput
+    summaries?: ConversationSummaryUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    summaries?: ConversationSummaryUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9140,12 +12684,58 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ToolMetricUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ToolMetricUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ToolMetricUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    toolName?: StringFieldUpdateOperationsInput | string
+    successCount?: IntFieldUpdateOperationsInput | number
+    failureCount?: IntFieldUpdateOperationsInput | number
+    totalDuration?: IntFieldUpdateOperationsInput | number
+    avgDuration?: FloatFieldUpdateOperationsInput | number
+    lastErrorType?: NullableStringFieldUpdateOperationsInput | string | null
+    lastErrorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MessageCreateManyConversationInput = {
     id?: string
     role: string
     content: string
     toolCallId?: string | null
     toolName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ConversationSummaryCreateManyConversationInput = {
+    id?: string
+    summary: string
+    messageCount: number
     createdAt?: Date | string
   }
 
@@ -9173,6 +12763,27 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     toolCallId?: NullableStringFieldUpdateOperationsInput | string | null
     toolName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConversationSummaryUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConversationSummaryUncheckedUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ConversationSummaryUncheckedUpdateManyWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    messageCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

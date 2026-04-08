@@ -3,10 +3,13 @@ import { ChatOpenAI } from "@langchain/openai";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { LANGCHAIN_TOOLS } from "./adapters/langchainTools";
 import { runWithAgentContext } from "./context/agentRunContext";
+import conversationService from "../services/conversation.service";
+import { prisma } from "../config/prisma";
 
 type AgentRunInput = {
   prompt: string;
   userId: string;
+  conversationId?: string;
   maxSteps?: number;
   includeTrace?: boolean;
 };
@@ -77,6 +80,7 @@ const getOrCreateAgent = (modelName: string) => {
 export const runWorkflowTestAgent = async ({
   prompt,
   userId,
+  conversationId,
   maxSteps = 12,
   includeTrace = false,
 }: AgentRunInput) => {
@@ -92,16 +96,62 @@ export const runWorkflowTestAgent = async ({
     throw new ErrorHandler("userId is required", 400);
   }
 
+  // Create or use existing conversation
+  let convoId: string = conversationId || "";
+  if (!convoId) {
+    const newConversation = await (prisma as any).conversation.create({
+      data: {
+        userId,
+        title: prompt.substring(0, 100),
+      },
+    });
+    convoId = newConversation.id;
+  }
+
+  // Save user message to conversation
+  await conversationService.saveMessage({
+    conversationId: convoId,
+    role: "user",
+    content: prompt,
+  });
+
   const modelName = process.env.OPENAI_MODEL || "gpt-4.1-mini";
   const today = new Date();
   const currentDate = today.toISOString().slice(0, 10);
+
+  const contextWindow = await conversationService.buildContextWindow(convoId, 10);
+  const recentMessagesWithoutCurrentPrompt = contextWindow.recentMessages.filter(
+    (m: any, index: number, arr: any[]) => {
+      const isLast = index === arr.length - 1;
+      return !(isLast && m.role === "user" && m.content === prompt);
+    }
+  );
+
+  let contextualPrompt =
+    `[Context] Current date is ${currentDate}. ` +
+    "Interpret relative dates like today/tomorrow from this date unless user explicitly gives another date.";
+
+  if (contextWindow.summary) {
+    contextualPrompt += `\n\n[Conversation Summary]\n${contextWindow.summary}`;
+    contextualPrompt += `\n[Summarized Message Count]\n${contextWindow.totalHistoricalMessages}`;
+  }
+
+  if (recentMessagesWithoutCurrentPrompt.length > 0) {
+    const recentHistory = recentMessagesWithoutCurrentPrompt
+      .map((m: any) => `[${String(m.role).toUpperCase()}] ${m.content}`)
+      .join("\n");
+    contextualPrompt += `\n\n[Recent Messages]\n${recentHistory}`;
+  }
+
+  contextualPrompt += `\n\n[User Request]\n${prompt}`;
+
   const agent = getOrCreateAgent(modelName);
-  const contextualPrompt = `[Context] Current date is ${currentDate}. Interpret relative dates like today/tomorrow from this date unless user explicitly gives another date.\n\nUser request: ${prompt}`;
 
   const result = await runWithAgentContext(
     {
       userId,
       originalPrompt: prompt,
+      conversationId: convoId,
     },
     async () => {
       return agent.invoke(
@@ -115,10 +165,38 @@ export const runWorkflowTestAgent = async ({
     }
   );
 
+  const answer = extractFinalText(result);
+
+  // Save assistant response to conversation
+  await conversationService.saveMessage({
+    conversationId: convoId,
+    role: "assistant",
+    content: answer || "",
+  });
+
+  // Check if summary should be triggered (every 20 user+assistant messages)
+  const allMessages = await conversationService.getConversationMessages(convoId);
+  const shouldSummarize = allMessages.length > 0 && allMessages.length % 40 === 0;
+
+  if (shouldSummarize) {
+    // Simple summary: concatenate last 5 exchanges
+    const recentForSummary = await conversationService.getRecentMessages(convoId, 10);
+    const summaryText = recentForSummary
+      .map((m: any) => `${m.role}: ${m.content.substring(0, 200)}`)
+      .join("\n");
+
+    await conversationService.saveSummary({
+      conversationId: convoId,
+      summary: summaryText,
+      messageCount: allMessages.length,
+    });
+  }
+
   return {
-    answer: extractFinalText(result),
+    answer,
     result: includeTrace ? result : undefined,
     model: modelName,
-    maxSteps,
+    conversationId: convoId,
+    messageCount: allMessages.length,
   };
 };

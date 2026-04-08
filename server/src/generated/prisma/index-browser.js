@@ -147,6 +147,7 @@ exports.Prisma.ConversationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   title: 'title',
+  summary: 'summary',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -170,6 +171,28 @@ exports.Prisma.OAuthTokenScalarFieldEnum = {
   expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ToolMetricScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  toolName: 'toolName',
+  successCount: 'successCount',
+  failureCount: 'failureCount',
+  totalDuration: 'totalDuration',
+  avgDuration: 'avgDuration',
+  lastErrorType: 'lastErrorType',
+  lastErrorMsg: 'lastErrorMsg',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ConversationSummaryScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  summary: 'summary',
+  messageCount: 'messageCount',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -204,7 +227,9 @@ exports.Prisma.ModelName = {
   User: 'User',
   Conversation: 'Conversation',
   Message: 'Message',
-  OAuthToken: 'OAuthToken'
+  OAuthToken: 'OAuthToken',
+  ToolMetric: 'ToolMetric',
+  ConversationSummary: 'ConversationSummary'
 };
 
 /**
