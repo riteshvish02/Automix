@@ -94,6 +94,22 @@ const slackOAuthCallback = catchAsyncError(async (req: Request, res: Response) =
     return res.status(200).json(successResponse);
 });
 
+const getNotionAuthUrl = catchAsyncError(async (req: Request, res: Response) => {
+    const userId = (req as any).user?.userId;
+    const response = await oauthService.getNotionAuthUrl({ userId });
+    successResponse.data = response;
+    return res.status(200).json(successResponse);
+});
+
+const notionOAuthCallback = catchAsyncError(async (req: Request, res: Response) => {
+    const code = req.query.code as string;
+    const userId = ((req as any).user?.userId || req.query.state) as string;
+    const response = await oauthService.notionOAuthCallback({ code, userId });
+    successResponse.data = response;
+    successResponse.message = 'Notion connected!';
+    return res.status(200).json(successResponse);
+});
+
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -106,5 +122,7 @@ export default {
     getGoogleSheetsAuthUrl,
     googleSheetsOAuthCallback,
     getSlackAuthUrl,
-    slackOAuthCallback
+    slackOAuthCallback,
+    getNotionAuthUrl,
+    notionOAuthCallback
 };

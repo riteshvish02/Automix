@@ -22,6 +22,9 @@ router.get('/sheets/oauth/callback', authMiddleware.checkAuth, toolController.go
 router.get('/slack/oauth', authMiddleware.checkAuth, toolController.getSlackAuthUrl);
 router.get('/slack/oauth/callback', toolController.slackOAuthCallback);
 
+router.get('/notion/oauth', authMiddleware.checkAuth, toolController.getNotionAuthUrl);
+router.get('/notion/oauth/callback', toolController.notionOAuthCallback);
+
 router.post("/run", authMiddleware.checkAuth, runToolManually);
 
 export default router;

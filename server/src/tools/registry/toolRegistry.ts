@@ -26,6 +26,11 @@ import { docsUpdateDocument } from "../implementations/docs/docs.updateDocument"
 import { docsListDocuments } from "../implementations/docs/docs.listDocuments";
 import { slackPostMessage } from "../implementations/slack/slack.postMessage";
 import { slackListChannels } from "../implementations/slack/slack.listChannels";
+import { notionSearch } from "../implementations/notion/notion.search";
+import { notionGetPage } from "../implementations/notion/notion.getPage";
+import { notionCreatePage } from "../implementations/notion/notion.createPage";
+import { notionQueryDatabase } from "../implementations/notion/notion.queryDatabase";
+import { notionAppendBlockChildren } from "../implementations/notion/notion.appendBlockChildren";
 
 export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     drive_create_file: {
@@ -481,6 +486,101 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         userId: ctx.userId,
         limit: args.limit,
         cursor: args.cursor,
+      });
+    },
+  },
+  notion_search: {
+    name: "notion_search",
+    description: "Search Notion pages and databases visible to the authorized user.",
+    inputSchema: {
+      query: { type: "string", description: "Optional text query", nullable: true },
+      object: { type: "string", description: "Optional object filter: page or database", nullable: true },
+      pageSize: { type: "integer", description: "Maximum results to return", nullable: true },
+      startCursor: { type: "string", description: "Pagination cursor from previous response", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return notionSearch({
+        userId: ctx.userId,
+        query: args.query,
+        object: args.object,
+        pageSize: args.pageSize,
+        startCursor: args.startCursor,
+      });
+    },
+  },
+  notion_get_page: {
+    name: "notion_get_page",
+    description: "Get a Notion page by page ID or page name.",
+    inputSchema: {
+      pageId: { type: "string", description: "Notion page ID", nullable: true },
+      pageName: { type: "string", description: "Notion page name to resolve", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return notionGetPage({
+        userId: ctx.userId,
+        pageId: args.pageId,
+        pageName: args.pageName,
+      });
+    },
+  },
+  notion_create_page: {
+    name: "notion_create_page",
+    description: "Create a Notion page under a parent page/database using ID or name.",
+    inputSchema: {
+      title: { type: "string", description: "Title of the page" },
+      parentPageId: { type: "string", description: "Parent page ID (if creating page under page)", nullable: true },
+      parentDatabaseId: { type: "string", description: "Parent database ID (if creating record-like page)", nullable: true },
+      parentPageName: { type: "string", description: "Parent page name to resolve", nullable: true },
+      parentDatabaseName: { type: "string", description: "Parent database name to resolve", nullable: true },
+      titleProperty: { type: "string", description: "Database title property name (default: Name)", nullable: true },
+      content: { type: "string", description: "Optional initial paragraph content", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return notionCreatePage({
+        userId: ctx.userId,
+        title: args.title,
+        parentPageId: args.parentPageId,
+        parentDatabaseId: args.parentDatabaseId,
+        parentPageName: args.parentPageName,
+        parentDatabaseName: args.parentDatabaseName,
+        titleProperty: args.titleProperty,
+        content: args.content,
+      });
+    },
+  },
+  notion_query_database: {
+    name: "notion_query_database",
+    description: "Query pages from a Notion database using ID or database name.",
+    inputSchema: {
+      databaseId: { type: "string", description: "Notion database ID", nullable: true },
+      databaseName: { type: "string", description: "Notion database name to resolve", nullable: true },
+      pageSize: { type: "integer", description: "Maximum results to return", nullable: true },
+      startCursor: { type: "string", description: "Pagination cursor from previous response", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return notionQueryDatabase({
+        userId: ctx.userId,
+        databaseId: args.databaseId,
+        databaseName: args.databaseName,
+        pageSize: args.pageSize,
+        startCursor: args.startCursor,
+      });
+    },
+  },
+  notion_append_block_children: {
+    name: "notion_append_block_children",
+    description: "Append paragraph content to a Notion block/page using ID or page name.",
+    inputSchema: {
+      blockId: { type: "string", description: "Target block or page ID", nullable: true },
+      pageName: { type: "string", description: "Target page name to resolve", nullable: true },
+      content: { type: "string", description: "Paragraph content to append" }
+    },
+    execute: async (args, ctx) => {
+      return notionAppendBlockChildren({
+        userId: ctx.userId,
+        blockId: args.blockId,
+        pageName: args.pageName,
+        content: args.content,
       });
     },
   },

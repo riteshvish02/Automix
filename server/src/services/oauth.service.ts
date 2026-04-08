@@ -363,6 +363,96 @@ const slackOAuthCallback = async (data: { code: string; userId: string }) => {
     };
 };
 
+const getNotionAuthUrl = async (data: { userId: string }) => {
+    const { userId } = data;
+    const client_id = process.env.NOTION_CLIENT_ID!;
+    const redirect_uri = process.env.NOTION_REDIRECT_URI!;
+
+    if (!userId) {
+        throw new ErrorHandler('Missing userId', 400);
+    }
+
+    if (!client_id || !redirect_uri) {
+        throw new ErrorHandler('Notion OAuth environment variables missing', 500);
+    }
+
+    const authUrl = `https://api.notion.com/v1/oauth/authorize?owner=user&client_id=${encodeURIComponent(client_id)}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${encodeURIComponent(userId)}`;
+    return { url: authUrl };
+};
+
+const notionOAuthCallback = async (data: { code: string; userId: string }) => {
+    const { code, userId } = data;
+    if (!userId) throw new ErrorHandler('Missing userId', 400);
+    if (!code) throw new ErrorHandler('Missing code', 400);
+
+    const client_id = process.env.NOTION_CLIENT_ID!;
+    const client_secret = process.env.NOTION_CLIENT_SECRET!;
+    const redirect_uri = process.env.NOTION_REDIRECT_URI!;
+
+    if (!client_id || !client_secret || !redirect_uri) {
+        throw new ErrorHandler('Notion OAuth environment variables missing', 500);
+    }
+
+    const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
+
+    const response = await fetch('https://api.notion.com/v1/oauth/token', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Basic ${basicAuth}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri,
+        }),
+    });
+
+    const payload = await response.json() as {
+        access_token?: string;
+        refresh_token?: string;
+        expires_in?: number;
+        workspace_name?: string;
+        workspace_id?: string;
+        owner?: unknown;
+        bot_id?: string;
+        error?: string;
+    };
+
+    if (!response.ok || !payload.access_token) {
+        throw new ErrorHandler(`Notion OAuth failed: ${payload.error || 'unknown_error'}`, 400);
+    }
+
+    const expiresAt = payload.expires_in
+        ? new Date(Date.now() + payload.expires_in * 1000)
+        : null;
+
+    const tokenRecord = await prisma.oAuthToken.upsert({
+        where: { userId_provider: { userId, provider: 'notion' } },
+        update: {
+            accessToken: payload.access_token,
+            refreshToken: payload.refresh_token,
+            expiresAt,
+        },
+        create: {
+            userId,
+            provider: 'notion',
+            accessToken: payload.access_token,
+            refreshToken: payload.refresh_token,
+            expiresAt,
+        },
+    });
+
+    return {
+        token: tokenRecord,
+        workspace: {
+            id: payload.workspace_id,
+            name: payload.workspace_name,
+        },
+        botId: payload.bot_id,
+    };
+};
+
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -375,7 +465,9 @@ export default {
     getGoogleSheetsAuthUrl,
     googleSheetsOAuthCallback,
     getSlackAuthUrl,
-    slackOAuthCallback
+    slackOAuthCallback,
+    getNotionAuthUrl,
+    notionOAuthCallback
 };
 
 
