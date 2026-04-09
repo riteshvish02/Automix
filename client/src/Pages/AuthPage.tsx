@@ -39,33 +39,55 @@ export const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto flex min-h-screen max-w-6xl items-center p-6">
-        <div className="grid w-full gap-8 lg:grid-cols-2">
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
-            <p className="mb-3 inline-flex rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300">
-              NEXAFLOW
-            </p>
-            <h1 className="text-3xl font-bold leading-tight md:text-4xl">
-              Automate your workflows with connected tools.
-            </h1>
-            <p className="mt-4 max-w-xl text-slate-300">
-              Start by logging in, then connect providers from your dashboard.
-            </p>
-            <ul className="mt-8 space-y-2 text-sm text-slate-400">
-              <li>Secure JWT auth</li>
-              <li>Conversation-aware agent orchestration</li>
-              <li>Google, Slack, and Notion integrations</li>
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Gradient background effect */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-purple-500/10 blur-3xl"></div>
+      </div>
+
+      <div className="mx-auto flex min-h-screen max-w-6xl items-center px-4 py-6 sm:px-6 lg:px-8">
+        <div className="grid w-full gap-8 lg:gap-12 lg:grid-cols-2">
+          {/* Left Section - Info */}
+          <section className="space-y-6">
+            <div className="space-y-3">
+              <div className="inline-block">
+                <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/60 border border-white/20">
+                  Welcome Back
+                </span>
+              </div>
+              <h1 className="text-5xl font-bold text-white leading-tight">
+                Automate your workflows.
+              </h1>
+              <p className="text-lg text-white/60">
+                Connect your favorite tools and services to power intelligent workflows.
+              </p>
+            </div>
+
+            <ul className="space-y-3 text-sm text-white/70">
+              <li className="flex items-start gap-3">
+                <span className="text-blue-400 font-bold mt-1">✓</span>
+                <span>Secure JWT-based authentication</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-blue-400 font-bold mt-1">✓</span>
+                <span>AI-powered workflow automation</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-blue-400 font-bold mt-1">✓</span>
+                <span>Connect Google, Slack, Notion, and more</span>
+              </li>
             </ul>
           </section>
 
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
-            <div className="mb-6 inline-flex rounded-full bg-slate-800 p-1">
+          {/* Right Section - Auth Form */}
+          <section className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+            <div className="mb-6 flex gap-2 p-1 rounded-lg border border-white/10 bg-white/5">
               <button
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition ${
                   mode === "login"
-                    ? "bg-cyan-500 text-slate-950"
-                    : "text-slate-300 hover:text-white"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                    : "text-white/60 hover:text-white"
                 }`}
                 type="button"
                 onClick={() => setMode("login")}
@@ -73,10 +95,10 @@ export const AuthPage = () => {
                 Login
               </button>
               <button
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition ${
                   mode === "register"
-                    ? "bg-cyan-500 text-slate-950"
-                    : "text-slate-300 hover:text-white"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                    : "text-white/60 hover:text-white"
                 }`}
                 type="button"
                 onClick={() => setMode("register")}
@@ -88,21 +110,21 @@ export const AuthPage = () => {
             <form className="space-y-4" onSubmit={onSubmit}>
               {mode === "register" ? (
                 <label className="block space-y-2">
-                  <span className="text-sm font-medium text-slate-300">Name</span>
+                  <span className="text-sm font-semibold text-white/80">Name</span>
                   <input
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none ring-cyan-500 transition focus:ring-2"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 outline-none ring-blue-500 transition focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ritesh"
+                    placeholder="John Doe"
                     required
                   />
                 </label>
               ) : null}
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-slate-300">Email</span>
+                <span className="text-sm font-semibold text-white/80">Email</span>
                 <input
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none ring-cyan-500 transition focus:ring-2"
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 outline-none ring-blue-500 transition focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -112,27 +134,27 @@ export const AuthPage = () => {
               </label>
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-slate-300">Password</span>
+                <span className="text-sm font-semibold text-white/80">Password</span>
                 <input
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none ring-cyan-500 transition focus:ring-2"
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 outline-none ring-blue-500 transition focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="********"
+                  placeholder="••••••••"
                   required
                 />
               </label>
 
               <button
-                className="w-full rounded-xl bg-cyan-500 px-4 py-3 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 font-semibold text-white transition hover:from-blue-700 hover:to-blue-600 disabled:cursor-not-allowed disabled:opacity-70 shadow-lg shadow-blue-600/20"
                 type="submit"
                 disabled={loading}
               >
                 {loading
                   ? "Please wait..."
                   : mode === "login"
-                  ? "Login"
-                  : "Create account"}
+                  ? "Sign In"
+                  : "Create Account"}
               </button>
             </form>
           </section>

@@ -31,21 +31,34 @@ export const DashboardPage = () => {
   }, [location.pathname, location.search]);
 
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-8 shadow-2xl shadow-black/25">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">
-            NexaFlow Workspace
-          </p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-white md:text-5xl">
-            Connect your tools from one place.
+    <div className="min-h-screen bg-black text-white">
+      {/* Gradient background effect */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="absolute -bottom-40 right-1/4 w-80 h-80 rounded-full bg-purple-500/10 blur-3xl"></div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Hero Section */}
+        <div className="mb-12 space-y-3">
+          <div className="inline-block">
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/60 border border-white/20">
+              Workflow Automation
+            </span>
+          </div>
+          <h1 className="text-5xl font-bold text-white leading-tight sm:text-6xl">
+            Automate Everything.
+            <br />
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+              All in One Place.
+            </span>
           </h1>
-          <p className="mt-4 max-w-3xl text-sm text-slate-300 md:text-base">
-            This is your protected tool hub. Connect Google, Slack, and Notion so the agent
-            can act on your behalf.
+          <p className="text-lg text-white/60 max-w-2xl">
+            Connect your favorite tools and services to build powerful, intelligent workflows powered by AI.
           </p>
         </div>
 
+        {/* Tool Connect Panel */}
         <ToolConnectPanel />
       </div>
     </div>
