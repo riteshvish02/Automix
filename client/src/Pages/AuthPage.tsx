@@ -54,183 +54,204 @@ export function AuthPage() {
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      {/* Sophisticated multi-layer gradient background */}
+      {/* Premium multi-layer gradient background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-blue-600/20 blur-3xl opacity-80"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-purple-600/20 blur-3xl opacity-80"></div>
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl opacity-60"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] opacity-30"></div>
+        {/* Primary gradient - top left blue */}
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-blue-600/40 via-blue-600/20 to-transparent blur-3xl opacity-100 animate-pulse" style={{ animationDuration: '8s' }}></div>
+        
+        {/* Secondary gradient - bottom right purple */}
+        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-gradient-to-tl from-purple-600/40 via-purple-600/20 to-transparent blur-3xl opacity-100 animate-pulse" style={{ animationDuration: '10s' }}></div>
+        
+        {/* Accent gradient - right cyan */}
+        <div className="absolute top-1/2 -right-20 w-[500px] h-[500px] rounded-full bg-gradient-to-l from-cyan-500/30 to-transparent blur-3xl opacity-80"></div>
+
+        {/* Animated grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:80px_80px] opacity-30"></div>
       </div>
 
-      <div className="mx-auto flex min-h-screen max-w-7xl items-center px-4 py-6 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid w-full gap-12 lg:gap-16 lg:grid-cols-2 items-center">
-          {/* Left Section - Premium Info */}
-          <section className="space-y-8">
-            <div className="space-y-6">
-              <div className="inline-block">
-                <span className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white/70 border border-white/20 backdrop-blur">
-                  ◆ Get Started
+      <div className="mx-auto flex min-h-screen max-w-8xl items-center px-4 py-8 sm:px-6 lg:px-8 relative z-10">
+        <div className="w-full grid gap-16 lg:gap-20 lg:grid-cols-2 items-center">
+          {/* Left Section - Premium Hero */}
+          <section className="space-y-10 max-w-xl">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur">
+                <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300"></span>
+                <span className="text-xs font-bold uppercase tracking-[0.15em] text-white/70">
+                  Automation Powered
                 </span>
               </div>
-
-              <div className="space-y-4">
-                <h1 className="text-6xl md:text-7xl font-black text-white leading-tight">
-                  Workflow
+              
+              <div className="space-y-6">
+                <h1 className="text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight">
+                  Automate
                   <br />
                   <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">
-                    Automation
+                    Everything
                   </span>
                 </h1>
-
-                <p className="text-lg text-white/70 max-w-xl leading-relaxed font-medium">
-                  Seamlessly connect your tools and automate your workflow with AI-powered intelligence. Start your journey today.
+                
+                <p className="text-xl text-white/70 leading-relaxed max-w-md font-medium">
+                  Connect your favorite tools, automate workflows with AI intelligence, and focus on growth.
                 </p>
               </div>
             </div>
 
-            {/* Feature List */}
-            <div className="space-y-4">
-              <div className="flex items-start gap-4 group">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full border border-green-400/50 bg-green-400/10 flex items-center justify-center mt-1 group-hover:bg-green-400/20 transition-colors">
-                  <span className="text-sm text-green-300 font-bold">✓</span>
+            {/* Premium Feature List */}
+            <div className="space-y-5 pt-4">
+              <div className="flex items-start gap-4 group cursor-default">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-center justify-center h-11 w-11 rounded-lg border border-green-500/50 bg-gradient-to-br from-green-500/20 to-green-500/10 group-hover:border-green-400/80 group-hover:bg-green-500/30 transition-all duration-300">
+                    <svg className="h-6 w-6 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Secure Authentication</h3>
-                  <p className="text-sm text-white/60 mt-1">JWT-based security with enterprise-grade protection</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 group">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full border border-blue-400/50 bg-blue-400/10 flex items-center justify-center mt-1 group-hover:bg-blue-400/20 transition-colors">
-                  <span className="text-sm text-blue-300 font-bold">⚡</span>
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Real-time Sync</h3>
-                  <p className="text-sm text-white/60 mt-1">Instant synchronization across all connected platforms</p>
+                <div className="flex-1">
+                  <h3 className="text-base font-bold text-white">Bank-Level Security</h3>
+                  <p className="text-sm text-white/60 mt-1.5 leading-relaxed">JWT-based encryption with enterprise-grade row-level security</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 group">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full border border-purple-400/50 bg-purple-400/10 flex items-center justify-center mt-1 group-hover:bg-purple-400/20 transition-colors">
-                  <span className="text-sm text-purple-300 font-bold">🚀</span>
+              <div className="flex items-start gap-4 group cursor-default">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-center justify-center h-11 w-11 rounded-lg border border-blue-500/50 bg-gradient-to-br from-blue-500/20 to-blue-500/10 group-hover:border-blue-400/80 group-hover:bg-blue-500/30 transition-all duration-300">
+                    <svg className="h-6 w-6 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">AI-Powered</h3>
-                  <p className="text-sm text-white/60 mt-1">Intelligent automation with machine learning capabilities</p>
+                <div className="flex-1">
+                  <h3 className="text-base font-bold text-white">Instant Sync</h3>
+                  <p className="text-sm text-white/60 mt-1.5 leading-relaxed">Real-time data synchronization across all connected platforms</p>
                 </div>
               </div>
-            </div>
 
-            {/* Trust Badge */}
-            <div className="border-t border-white/10 pt-6">
-              <p className="text-xs text-white/50 font-medium uppercase tracking-widest mb-4">TRUSTED BY</p>
-              <p className="text-sm text-white/70 font-medium">Join thousands of teams automating their workflows</p>
+              <div className="flex items-start gap-4 group cursor-default">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-center justify-center h-11 w-11 rounded-lg border border-purple-500/50 bg-gradient-to-br from-purple-500/20 to-purple-500/10 group-hover:border-purple-400/80 group-hover:bg-purple-500/30 transition-all duration-300">
+                    <svg className="h-6 w-6 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5a4 4 0 100-8 4 4 0 000 8z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-base font-bold text-white">AI-Powered Workflows</h3>
+                  <p className="text-sm text-white/60 mt-1.5 leading-relaxed">Intelligent automation with machine learning and natural language</p>
+                </div>
+              </div>
             </div>
           </section>
 
-          {/* Right Section - Premium Auth Form */}
-          <section className="rounded-3xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 p-8 sm:p-10 backdrop-blur-xl shadow-2xl shadow-black/40">
-            {/* Tab Navigation */}
-            <div className="mb-8 flex gap-3 p-1 rounded-xl border border-white/15 bg-white/5">
-              <button
-                className={`flex-1 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all ${
-                  mode === "login"
-                    ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/30"
-                    : "text-white/60 hover:text-white hover:bg-white/5"
-                }`}
-                type="button"
-                onClick={() => setMode("login")}
-              >
-                Sign In
-              </button>
-              <button
-                className={`flex-1 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all ${
-                  mode === "register"
-                    ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/30"
-                    : "text-white/60 hover:text-white hover:bg-white/5"
-                }`}
-                type="button"
-                onClick={() => setMode("register")}
-              >
-                Register
-              </button>
-            </div>
+          {/* Right Section - Premium Auth Card */}
+          <section className="relative">
+            {/* Animated background glow */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/30 to-purple-600/30 rounded-3xl blur-3xl opacity-60 group-hover:opacity-100 transition duration-1000"></div>
+            
+            {/* Card */}
+            <div className="relative rounded-3xl border border-white/20 bg-gradient-to-br from-white/12 to-white/8 p-10 backdrop-blur-2xl overflow-hidden">
+              {/* Accent line */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
 
-            {/* Form Title */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white">
-                {mode === "login" ? "Welcome Back" : "Create Account"}
-              </h2>
-              <p className="text-sm text-white/60 mt-2">
-                {mode === "login"
-                  ? "Sign in to access your workspace"
-                  : "Join us and start automating today"}
-              </p>
-            </div>
+              {/* Tab Navigation */}
+              <div className="mb-10 flex gap-2 p-1.5 rounded-xl border border-white/15 bg-white/8">
+                <button
+                  className={`flex-1 rounded-lg px-5 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
+                    mode === "login"
+                      ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-xl shadow-blue-600/50"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                  type="button"
+                  onClick={() => setMode("login")}
+                >
+                  Sign In
+                </button>
+                <button
+                  className={`flex-1 rounded-lg px-5 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
+                    mode === "register"
+                      ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-xl shadow-blue-600/50"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                  type="button"
+                  onClick={() => setMode("register")}
+                >
+                  Register
+                </button>
+              </div>
 
-            {/* Auth Form */}
-            <form className="space-y-4" onSubmit={onSubmit}>
-              {mode === "register" ? (
-                <label className="block space-y-2">
-                  <span className="text-sm font-bold text-white/90 uppercase tracking-wide">Full Name</span>
+              {/* Form Title */}
+              <div className="mb-8 space-y-2">
+                <h2 className="text-3xl font-black text-white">
+                  {mode === "login" ? "Welcome Back" : "Join the Platform"}
+                </h2>
+                <p className="text-sm text-white/60 leading-relaxed">
+                  {mode === "login"
+                    ? "Sign in to your workspace and manage all integrations"
+                    : "Create your account and start automating in minutes"}
+                </p>
+              </div>
+
+              {/* Form */}
+              <form className="space-y-5" onSubmit={onSubmit}>
+                {mode === "register" && (
+                  <div className="space-y-2.5">
+                    <label className="block text-xs font-bold text-white/80 uppercase tracking-wider">Full Name</label>
+                    <input
+                      className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all duration-200 focus:bg-white/10 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 backdrop-blur"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="John Doe"
+                      required
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-2.5">
+                  <label className="block text-xs font-bold text-white/80 uppercase tracking-wider">Email</label>
                   <input
-                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all focus:bg-white/10 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="John Doe"
+                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all duration-200 focus:bg-white/10 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 backdrop-blur"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
                     required
                   />
-                </label>
-              ) : null}
+                </div>
 
-              <label className="block space-y-2">
-                <span className="text-sm font-bold text-white/90 uppercase tracking-wide">Email Address</span>
-                <input
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all focus:bg-white/10 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  required
-                />
-              </label>
+                <div className="space-y-2.5">
+                  <label className="block text-xs font-bold text-white/80 uppercase tracking-wider">Password</label>
+                  <input
+                    className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all duration-200 focus:bg-white/10 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 backdrop-blur"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
 
-              <label className="block space-y-2">
-                <span className="text-sm font-bold text-white/90 uppercase tracking-wide">Password</span>
-                <input
-                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all focus:bg-white/10 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </label>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full mt-6 rounded-lg bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 text-white font-bold py-4 text-sm uppercase tracking-wider shadow-xl shadow-blue-600/40 hover:shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {isLoading
+                    ? mode === "login"
+                      ? "Signing In..."
+                      : "Creating Account..."
+                    : mode === "login"
+                    ? "Sign In"
+                    : "Create Account"}
+                </button>
+              </form>
 
-              <Button
-                variant="default"
-                size="lg"
-                type="submit"
-                disabled={isLoading}
-                className="w-full mt-6"
-              >
-                {isLoading
-                  ? mode === "login"
-                    ? "Signing In..."
-                    : "Creating Account..."
-                  : mode === "login"
-                  ? "Sign In"
-                  : "Create Account"}
-              </Button>
-            </form>
-
-            {/* Footer */}
-            <div className="mt-6 pt-6 border-t border-white/10">
-              <p className="text-xs text-white/50 text-center">
-                {mode === "login"
-                  ? "Don't have an account? Switch to Register above"
-                  : "Already have an account? Switch to Sign In above"}
-              </p>
+              {/* Footer */}
+              <div className="mt-8 pt-8 border-t border-white/10">
+                <p className="text-xs text-white/50 text-center font-medium">
+                  {mode === "login"
+                    ? "Don't have an account? Click Register"
+                    : "Already have an account? Click Sign In"}
+                </p>
+              </div>
             </div>
           </section>
         </div>
