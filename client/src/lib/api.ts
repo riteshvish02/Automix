@@ -41,4 +41,105 @@ export const api = {
   ) => request(`/tool/${provider}/oauth`, "GET", undefined, token),
   getOAuthConnections: (token: string) =>
     request("/tool/oauth-tokens", "GET", undefined, token),
+  
+  // Chat & Conversation APIs
+  getConversations: (token: string) =>
+    request("/conversations", "GET", undefined, token),
+  getConversation: (conversationId: string, token: string) =>
+    request(`/conversations/${conversationId}`, "GET", undefined, token),
+  getConversationMessages: (conversationId: string, token: string) =>
+    request(`/conversations/${conversationId}/messages`, "GET", undefined, token),
+  queryAgent: (
+    prompt: string,
+    token: string,
+    conversationId?: string,
+    maxSteps?: number,
+    includeTrace?: boolean
+  ) =>
+    request("/agent/query", "POST", {
+      prompt,
+      conversationId,
+      maxSteps,
+      includeTrace,
+    }, token),
+  
+  // Streaming agent query with token-by-token streaming
+  queryAgentStream: (
+    prompt: string,
+    token: string,
+    conversationId?: string,
+    onToken?: (token: string) => void,
+    onComplete?: (data: any) => void,
+    onError?: (error: string) => void
+  ) => {
+    return {
+      send: async () => {
+        return fetch(`${API_BASE_URL}/agent/query-stream`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            prompt,
+            conversationId,
+          }),
+        }).then(async response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const reader = response.body?.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          
+          if (!reader) return;
+          
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split("\n");
+              buffer = lines[lines.length - 1];
+              
+              for (let i = 0; i < lines.length - 1; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                if (line.startsWith("event: ")) {
+                  const eventType = line.slice(7);
+                  if (eventType === "complete") {
+                    const dataLine = lines[i + 1]?.trim();
+                    if (dataLine?.startsWith("data: ")) {
+                      const data = JSON.parse(dataLine.slice(6));
+                      onComplete?.(data);
+                    }
+                  } else if (eventType === "error") {
+                    const dataLine = lines[i + 1]?.trim();
+                    if (dataLine?.startsWith("data: ")) {
+                      const data = JSON.parse(dataLine.slice(6));
+                      onError?.(data.error || "Unknown error");
+                    }
+                  }
+                } else if (line.startsWith("data: ")) {
+                  try {
+                    const data = JSON.parse(line.slice(6));
+                    if (data.token) {
+                      onToken?.(data.token);
+                    }
+                  } catch (e) {
+                    // Ignore parse errors for incomplete JSON
+                  }
+                }
+              }
+            }
+          } finally {
+            reader.cancel();
+          }
+        });
+      }
+    };
+  },
 };

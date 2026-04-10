@@ -40,6 +40,9 @@
     "openai": "^6.33.0",
     "pg": "^8.20.0",
     "prisma": "^7.5.0",
+    "react-markdown": "^10.1.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
     "winston": "^3.19.0",
     "zod": "^4.3.6"
   }

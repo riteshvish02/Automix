@@ -73,7 +73,9 @@ export const listConversations = async (
     skip: offset,
     include: {
       messages: {
-        select: { id: true },
+        orderBy: { createdAt: "asc" },
+        take: 1,
+        select: { content: true },
       },
       summaries: {
         orderBy: { createdAt: "desc" },
@@ -88,6 +90,7 @@ export const listConversations = async (
     id: conv.id,
     title: conv.title || "Untitled",
     messageCount: conv.messages.length,
+    firstMessage: conv.messages[0]?.content || null,
     summary: conv.summaries[0]?.summary || conv.summary || null,
     createdAt: conv.createdAt,
     updatedAt: conv.updatedAt,

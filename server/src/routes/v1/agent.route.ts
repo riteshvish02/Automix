@@ -27,4 +27,28 @@ router.post(
   })
 );
 
+// Temporary compatibility endpoint: behaves like /query (non-streaming)
+router.post(
+  "/query-stream",
+  authMiddleware.checkAuth,
+  catchAsyncError(async (req: Request, res: Response) => {
+    const userId = (req as any).user?.userId as string;
+    const { prompt, conversationId, maxSteps, includeTrace } = req.body || {};
+
+    const result = await runWorkflowTestAgent({
+      prompt,
+      userId,
+      conversationId,
+      maxSteps,
+      includeTrace,
+    });
+
+    return res.status(200).json({
+      success: true,
+      result,
+      streaming: false,
+    });
+  })
+);
+
 export default router;
