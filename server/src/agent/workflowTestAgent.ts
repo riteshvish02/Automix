@@ -81,7 +81,7 @@ export const runWorkflowTestAgent = async ({
   prompt,
   userId,
   conversationId,
-  maxSteps = 12,
+  maxSteps = 20,
   includeTrace = false,
 }: AgentRunInput) => {
   if (!process.env.OPENAI_API_KEY) {

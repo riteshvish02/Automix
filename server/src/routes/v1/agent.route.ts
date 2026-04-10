@@ -19,6 +19,7 @@ router.post(
       maxSteps,
       includeTrace,
     });
+    console.log("WorkflowTestAgent result:", result);
 
     return res.status(200).json({
       success: true,

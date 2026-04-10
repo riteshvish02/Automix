@@ -47,8 +47,8 @@ export const api = {
     request("/conversations", "GET", undefined, token),
   getConversation: (conversationId: string, token: string) =>
     request(`/conversations/${conversationId}`, "GET", undefined, token),
-  getConversationMessages: (conversationId: string, token: string) =>
-    request(`/conversations/${conversationId}/messages`, "GET", undefined, token),
+  getConversationMessages: (conversationId: string, token: string, limit: number = 1000, offset: number = 0) =>
+    request(`/conversations/${conversationId}/messages?limit=${limit}&offset=${offset}`, "GET", undefined, token),
   queryAgent: (
     prompt: string,
     token: string,

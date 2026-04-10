@@ -161,7 +161,7 @@ export const ChatPage = () => {
     if (!token || !currentConversation) return;
     const fetchMessages = async () => {
       try {
-        const response = (await api.getConversationMessages(currentConversation.id, token)) as Record<string, unknown>;
+        const response = (await api.getConversationMessages(currentConversation.id, token, 1000)) as Record<string, unknown>;
         const data = (response.data || {}) as Record<string, unknown>;
         const msgs = Array.isArray(data.messages) ? (data.messages as Message[]) : [];
         setMessages(
@@ -199,7 +199,7 @@ export const ChatPage = () => {
         setConversations(convs);
         if (convs.length > 0) {
           setCurrentConversation(convs[0]);
-          const msgResponse = (await api.getConversationMessages(convs[0].id, token)) as Record<string, unknown>;
+          const msgResponse = (await api.getConversationMessages(convs[0].id, token, 1000)) as Record<string, unknown>;
           const msgData = (msgResponse.data || {}) as Record<string, unknown>;
           const msgs = Array.isArray(msgData.messages) ? (msgData.messages as Message[]) : [];
           setMessages(
@@ -229,7 +229,7 @@ export const ChatPage = () => {
 
     try {
       await api.queryAgent(currentInput, token, currentConversation.id);
-      const msgResponse = (await api.getConversationMessages(currentConversation.id, token)) as Record<string, unknown>;
+      const msgResponse = (await api.getConversationMessages(currentConversation.id, token, 1000)) as Record<string, unknown>;
       const msgData = (msgResponse.data || {}) as Record<string, unknown>;
       const updatedMsgs = Array.isArray(msgData.messages) ? (msgData.messages as Message[]) : [];
       setMessages(
