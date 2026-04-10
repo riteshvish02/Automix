@@ -4,7 +4,7 @@ import {ErrorHandler } from '../utils/ErrorHandler';
 import { verifyToken } from '../utils/jwt';
 
 const checkAuth = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-    // console.log(req.headers);
+    console.log(req.headers);
     const authHeader = req.headers['authorization'];
     
     if (!authHeader) {

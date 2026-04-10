@@ -3,32 +3,17 @@ import { google } from 'googleapis';
 import { prisma } from '../config/prisma';
 import { ErrorHandler } from '../utils/ErrorHandler';
 
-const PROVIDER_CATALOG: Array<{ key: string; label: string; dbProviders: string[] }> = [
-    { key: 'gmail', label: 'Gmail', dbProviders: ['gmail'] },
-    { key: 'calendar', label: 'Calendar', dbProviders: ['calendar'] },
-    { key: 'docs', label: 'Docs', dbProviders: ['gdocs'] },
-    { key: 'sheets', label: 'Sheets', dbProviders: ['gsheets'] },
-    { key: 'drive', label: 'Drive', dbProviders: ['gdrive'] },
-    { key: 'slack', label: 'Slack', dbProviders: ['slack'] },
-    { key: 'notion', label: 'Notion', dbProviders: ['notion'] },
-];
-
-const getGoogleDriveAuthUrl = async (data: { userId: string }) => {
-    const { userId } = data;
+const getGoogleDriveAuthUrl = async (data: { }) => {
     const client_id = process.env.GOOGLE_DRIVE_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_DRIVE_CLIENT_SECRET!;
     const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         prompt: 'consent',
-        state: userId,
         scope: [
             'https://www.googleapis.com/auth/drive'
         ]
@@ -68,22 +53,17 @@ const googleDriveOAuthCallback = async (data: { code: string; userId: string }) 
     return { token: tokenRecord };
 };
 
-const getGoogleGmailAuthUrl = async (data: { userId: string }) => {
-    const { userId } = data;
+const getGoogleGmailAuthUrl = async (data: { }) => {
     const client_id = process.env.GOOGLE_GMAIL_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_GMAIL_CLIENT_SECRET!;
     const redirect_uri = process.env.GOOGLE_GMAIL_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Gmail OAuth2 environment variables missing', 500);
     }
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         prompt: 'consent',
-        state: userId,
         scope: [
             'https://www.googleapis.com/auth/gmail.readonly',
             'https://www.googleapis.com/auth/gmail.send',
@@ -126,22 +106,17 @@ const googleGmailOAuthCallback = async (data: { code: string; userId: string }) 
     return { token: tokenRecord };
 };
 
-const getGoogleCalendarAuthUrl = async (data: { userId: string }) => {
-    const { userId } = data;
+const getGoogleCalendarAuthUrl = async (data: { }) => {
     const client_id = process.env.GOOGLE_CALENDAR_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_CALENDAR_CLIENT_SECRET!;
     const redirect_uri = process.env.GOOGLE_CALENDAR_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         prompt: 'consent',
-        state: userId,
         scope: [
             'https://www.googleapis.com/auth/calendar'
         ]
@@ -181,22 +156,17 @@ const googleCalendarOAuthCallback = async (data: { code: string; userId: string 
     return { token: tokenRecord };
 };
 
-const getGoogleDocsAuthUrl = async (data: { userId: string }) => {
-    const { userId } = data;
+const getGoogleDocsAuthUrl = async (data: { }) => {
     const client_id = process.env.GOOGLE_DOCS_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_DOCS_CLIENT_SECRET!;
     const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Docs OAuth2 environment variables missing', 500);
     }
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         prompt: 'consent',
-        state: userId,
         scope: [
             'https://www.googleapis.com/auth/documents'
         ]
@@ -237,22 +207,17 @@ const googleDocsOAuthCallback = async (data: { code: string; userId: string }) =
 };
 
 // --- Google Sheets OAuth ---
-const getGoogleSheetsAuthUrl = async (data: { userId: string }) => {
-    const { userId } = data;
+const getGoogleSheetsAuthUrl = async (data: { }) => {
     const client_id = process.env.GOOGLE_SHEETS_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_SHEETS_CLIENT_SECRET!;
     const redirect_uri = process.env.GOOGLE_SHEETS_REDIRECT_URI!;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Sheets OAuth2 environment variables missing', 500);
     }
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         prompt: 'consent',
-        state: userId,
         scope: [
             'https://www.googleapis.com/auth/spreadsheets'
         ]
@@ -488,44 +453,6 @@ const notionOAuthCallback = async (data: { code: string; userId: string }) => {
     };
 };
 
-const getOAuthConnections = async (data: { userId: string }) => {
-    const { userId } = data;
-
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
-
-    const tokens = await prisma.oAuthToken.findMany({
-        where: { userId },
-        orderBy: { updatedAt: 'desc' },
-    });
-
-    const now = Date.now();
-    const providers = PROVIDER_CATALOG.map((provider) => {
-        const token = tokens.find((item) => provider.dbProviders.includes(item.provider));
-        const expiresAt = token?.expiresAt || null;
-        const isExpired = expiresAt ? expiresAt.getTime() <= now : false;
-
-        return {
-            key: provider.key,
-            label: provider.label,
-            connected: Boolean(token?.accessToken),
-            providerInDb: token?.provider || null,
-            isExpired,
-            expiresAt: expiresAt ? expiresAt.toISOString() : null,
-            updatedAt: token?.updatedAt ? token.updatedAt.toISOString() : null,
-        };
-    });
-
-    const connectedCount = providers.filter((provider) => provider.connected).length;
-
-    return {
-        providers,
-        connectedCount,
-        totalProviders: providers.length,
-    };
-};
-
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -540,8 +467,7 @@ export default {
     getSlackAuthUrl,
     slackOAuthCallback,
     getNotionAuthUrl,
-    notionOAuthCallback,
-    getOAuthConnections
+    notionOAuthCallback
 };
 
 
