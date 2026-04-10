@@ -3,16 +3,6 @@ import { google } from 'googleapis';
 import { prisma } from '../config/prisma';
 import { ErrorHandler } from '../utils/ErrorHandler';
 
-const PROVIDER_CATALOG: Array<{ key: string; label: string; dbProviders: string[] }> = [
-    { key: 'gmail', label: 'Gmail', dbProviders: ['gmail'] },
-    { key: 'calendar', label: 'Calendar', dbProviders: ['calendar'] },
-    { key: 'docs', label: 'Docs', dbProviders: ['gdocs'] },
-    { key: 'sheets', label: 'Sheets', dbProviders: ['gsheets'] },
-    { key: 'drive', label: 'Drive', dbProviders: ['gdrive'] },
-    { key: 'slack', label: 'Slack', dbProviders: ['slack'] },
-    { key: 'notion', label: 'Notion', dbProviders: ['notion'] },
-];
-
 const getGoogleDriveAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.GOOGLE_DRIVE_CLIENT_ID!;
@@ -488,44 +478,6 @@ const notionOAuthCallback = async (data: { code: string; userId: string }) => {
     };
 };
 
-const getOAuthConnections = async (data: { userId: string }) => {
-    const { userId } = data;
-
-    if (!userId) {
-        throw new ErrorHandler('Missing userId', 400);
-    }
-
-    const tokens = await prisma.oAuthToken.findMany({
-        where: { userId },
-        orderBy: { updatedAt: 'desc' },
-    });
-
-    const now = Date.now();
-    const providers = PROVIDER_CATALOG.map((provider) => {
-        const token = tokens.find((item) => provider.dbProviders.includes(item.provider));
-        const expiresAt = token?.expiresAt || null;
-        const isExpired = expiresAt ? expiresAt.getTime() <= now : false;
-
-        return {
-            key: provider.key,
-            label: provider.label,
-            connected: Boolean(token?.accessToken),
-            providerInDb: token?.provider || null,
-            isExpired,
-            expiresAt: expiresAt ? expiresAt.toISOString() : null,
-            updatedAt: token?.updatedAt ? token.updatedAt.toISOString() : null,
-        };
-    });
-
-    const connectedCount = providers.filter((provider) => provider.connected).length;
-
-    return {
-        providers,
-        connectedCount,
-        totalProviders: providers.length,
-    };
-};
-
 export default {
     getGoogleDriveAuthUrl,
     googleDriveOAuthCallback,
@@ -540,8 +492,7 @@ export default {
     getSlackAuthUrl,
     slackOAuthCallback,
     getNotionAuthUrl,
-    notionOAuthCallback,
-    getOAuthConnections
+    notionOAuthCallback
 };
 
 

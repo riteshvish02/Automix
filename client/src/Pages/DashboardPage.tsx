@@ -31,69 +31,21 @@ export const DashboardPage = () => {
   }, [location.pathname, location.search]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden">
-      {/* Sophisticated gradient background with multiple layers */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {/* Primary gradient accent */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-blue-600/15 blur-3xl opacity-70"></div>
-        
-        {/* Secondary gradient accent */}
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-purple-600/15 blur-3xl opacity-70"></div>
-        
-        {/* Tertiary accent for depth */}
-        <div className="absolute top-1/3 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl opacity-50"></div>
-        
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] opacity-20"></div>
-      </div>
-
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 relative z-10">
-        {/* Elevated Hero Section */}
-        <div className="mb-16 space-y-6">
-          <div className="inline-block">
-            <span className="rounded-full bg-muted px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-muted-foreground border border-border">
-              ◆ Automation Platform
-            </span>
-          </div>
-          
-          <div className="space-y-4 max-w-4xl">
-            <h1 className="text-6xl md:text-7xl font-black text-foreground leading-tight tracking-tight">
-              Automate Your
-              <br />
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">
-                Entire Workflow
-              </span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed font-medium">
-              Connect all your tools in one unified platform. Orchestrate powerful workflows with AI and say goodbye to manual processes.
-            </p>
-          </div>
-
-          {/* Stats/Features */}
-          <div className="flex flex-wrap gap-6 pt-4">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-6 h-6 rounded-full border border-green-400/50 bg-green-400/10">
-                <span className="text-xs text-green-300 font-bold">✓</span>
-              </div>
-              <span className="text-sm text-muted-foreground font-medium">7+ Integrations</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-6 h-6 rounded-full border border-blue-400/50 bg-blue-400/10">
-                <span className="text-xs text-blue-300 font-bold">⚡</span>
-              </div>
-              <span className="text-sm text-muted-foreground font-medium">Real-time Sync</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-6 h-6 rounded-full border border-purple-400/50 bg-purple-400/10">
-                <span className="text-xs text-purple-300 font-bold">🔒</span>
-              </div>
-              <span className="text-sm text-muted-foreground font-medium">Enterprise Security</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-6 rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-8 shadow-2xl shadow-black/25">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">
+            NexaFlow Workspace
+          </p>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-white md:text-5xl">
+            Connect your tools from one place.
+          </h1>
+          <p className="mt-4 max-w-3xl text-sm text-slate-300 md:text-base">
+            This is your protected tool hub. Connect Google, Slack, and Notion so the agent
+            can act on your behalf.
+          </p>
         </div>
 
-        {/* Tool Connect Panel */}
         <ToolConnectPanel />
       </div>
     </div>
