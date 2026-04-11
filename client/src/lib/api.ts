@@ -142,16 +142,4 @@ export const api = {
       }
     };
   },
-
-  // WhatsApp APIs
-  getWhatsappConnect: (token: string) =>
-    request("/tool/whatsapp/connect", "GET", undefined, token),
-  getWhatsappStatus: (token: string) =>
-    request("/tool/whatsapp/status", "GET", undefined, token),
-  sendWhatsappMessage: (token: string, phoneNumber: string, message: string) =>
-    request("/tool/whatsapp/send", "POST", { phoneNumber, message }, token),
-  getWhatsappChats: (token: string) =>
-    request("/tool/whatsapp/chats", "GET", undefined, token),
-  disconnectWhatsapp: (token: string) =>
-    request("/tool/whatsapp/disconnect", "POST", {}, token),
 };

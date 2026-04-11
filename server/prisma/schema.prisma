@@ -41,7 +41,6 @@ model User {
   oauthTokens           OAuthToken[]
   artifacts             Artifact[]
   toolMetrics           ToolMetric[]
-  whatsappCredentials   WhatsAppCredentials?
 }
 
 model Conversation {
@@ -110,19 +109,4 @@ model ConversationSummary {
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@index([conversationId, createdAt])
-}
-
-model WhatsAppCredentials {
-  id               String    @id @default(cuid())
-  userId           String    @unique
-  phoneNumber      String?
-  authState        Json      // Baileys auth state (creds.json serialized)
-  isConnected      Boolean   @default(false)
-  connectionQR      String?   // Latest QR code data
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, isConnected])
 }

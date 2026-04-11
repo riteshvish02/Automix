@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {toolController, whatsappController} from '../../controllers';
+import {toolController} from '../../controllers';
 import  {authMiddleware } from '../../middlewares';
 import { runToolManually } from '../check';
 const  router = Router();
@@ -26,13 +26,6 @@ router.get('/notion/oauth', authMiddleware.checkAuth, toolController.getNotionAu
 router.get('/notion/oauth/callback', toolController.notionOAuthCallback);
 
 router.get('/oauth-tokens', authMiddleware.checkAuth, toolController.getOAuthConnections);
-
-// WhatsApp routes
-router.get('/whatsapp/connect', authMiddleware.checkAuth, whatsappController.initiateWhatsAppConnect);
-router.get('/whatsapp/status', authMiddleware.checkAuth, whatsappController.getWhatsAppStatus);
-router.post('/whatsapp/send', authMiddleware.checkAuth, whatsappController.sendWhatsAppMsg);
-router.get('/whatsapp/chats', authMiddleware.checkAuth, whatsappController.getWhatsAppChats);
-router.post('/whatsapp/disconnect', authMiddleware.checkAuth, whatsappController.disconnectWhatsApp);
 
 router.post("/run", authMiddleware.checkAuth, runToolManually);
 

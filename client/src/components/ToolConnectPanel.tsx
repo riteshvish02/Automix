@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../lib/api";
 import { useAuth } from "../hooks/useAuth";
-import { WhatsAppQRModal } from "./WhatsAppQRModal";
 
-type ProviderKey = "gmail" | "calendar" | "docs" | "sheets" | "drive" | "slack" | "notion" | "whatsapp";
+type ProviderKey = "gmail" | "calendar" | "docs" | "sheets" | "drive" | "slack" | "notion";
 
 type ProviderConnection = {
   connected: boolean;
@@ -12,7 +11,7 @@ type ProviderConnection = {
   updatedAt: string | null;
 };
 
-const DEFAULT_CONNECTIONS: Record<Exclude<ProviderKey, "whatsapp">, ProviderConnection> = {
+const DEFAULT_CONNECTIONS: Record<ProviderKey, ProviderConnection> = {
   gmail: { connected: false, isExpired: false, updatedAt: null },
   calendar: { connected: false, isExpired: false, updatedAt: null },
   docs: { connected: false, isExpired: false, updatedAt: null },
@@ -77,12 +76,6 @@ const ToolIcons: Record<ProviderKey, React.ReactNode> = {
       <path d="M7 8h10M7 12h8M7 16h6" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
-  whatsapp: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <path d="M17.5 2h-11C4.57 2 3 3.57 3 5.5v13C3 20.43 4.57 22 6.5 22h11c1.93 0 3.5-1.57 3.5-3.5v-13C21 3.57 19.43 2 17.5 2zm0 15h-11v-13h11v13z" fill="#25D366" />
-      <path d="M12 6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6zm0 10c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" stroke="white" strokeWidth="1" fill="white" />
-    </svg>
-  ),
 };
 
 const PROVIDERS: Array<{
@@ -109,18 +102,16 @@ const Spinner = ({ className = "" }: { className?: string }) => (
 
 export const ToolConnectPanel = () => {
   const { token, user } = useAuth();
-  const [loadingProvider, setLoadingProvider] = useState<Exclude<ProviderKey, "whatsapp"> | "whatsapp" | null>(null);
+  const [loadingProvider, setLoadingProvider] = useState<ProviderKey | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [connections, setConnections] = useState<Record<Exclude<ProviderKey, "whatsapp">, ProviderConnection>>(DEFAULT_CONNECTIONS);
-  const [whatsappConnected, setWhatsappConnected] = useState(false);
-  const [whatsappQROpen, setWhatsappQROpen] = useState(false);
+  const [connections, setConnections] = useState<Record<ProviderKey, ProviderConnection>>(DEFAULT_CONNECTIONS);
 
   const connectedCount = useMemo(
-    () => Object.values(connections).filter((c) => c.connected).length+ (whatsappConnected ? 1 : 0),
-    [connections, whatsappConnected]
+    () => Object.values(connections).filter((c) => c.connected).length,
+    [connections]
   );
 
-  const totalTools = PROVIDERS.length + 1; // +1 for WhatsApp
+  const totalTools = PROVIDERS.length;
 
   const fetchConnections = async (silent = false) => {
     if (!token) return;
@@ -136,7 +127,7 @@ export const ToolConnectPanel = () => {
 
       const nextConnections = { ...DEFAULT_CONNECTIONS };
       for (const provider of providers) {
-        const key = provider.key as Exclude<ProviderKey, "whatsapp">;
+        const key = provider.key as ProviderKey;
         if (!nextConnections[key]) continue;
         nextConnections[key] = {
           connected: Boolean(provider.connected),
@@ -145,16 +136,6 @@ export const ToolConnectPanel = () => {
         };
       }
       setConnections(nextConnections);
-
-      // Fetch WhatsApp status
-      try {
-        const waResponse = (await api.getWhatsappStatus(token)) as Record<string, unknown>;
-        const waData = (waResponse.data || {}) as Record<string, unknown>;
-        setWhatsappConnected(Boolean(waData.isConnected));
-      } catch (error) {
-        console.error('Failed to fetch WhatsApp status:', error);
-        setWhatsappConnected(false);
-      }
     } catch (error) {
       if (!silent) toast.error(error instanceof Error ? error.message : "Failed to load tool connections");
     } finally {
@@ -172,14 +153,9 @@ export const ToolConnectPanel = () => {
   const connectProvider = async (provider: ProviderKey) => {
     if (!token) { toast.error("Please log in first."); return; }
     
-    // WhatsApp is handled separately via modal, not OAuth
-    if (provider === "whatsapp") {
-      return;
-    }
-    
-    setLoadingProvider(provider as Exclude<ProviderKey, "whatsapp">);
+    setLoadingProvider(provider);
     try {
-      const response = (await api.getOAuthUrl(provider as Exclude<ProviderKey, "whatsapp">, token)) as Record<string, unknown>;
+      const response = (await api.getOAuthUrl(provider, token)) as Record<string, unknown>;
       const data = (response.data || {}) as Record<string, unknown>;
       const url = data.url as string | undefined;
       if (!url) { toast.error(`No OAuth URL returned for ${provider}.`); return; }
@@ -290,69 +266,7 @@ export const ToolConnectPanel = () => {
             </button>
           );
         })}
-
-        {/* WhatsApp Tool - Special Case */}
-        <button
-          type="button"
-          onClick={() => setWhatsappQROpen(true)}
-          disabled={loadingProvider !== null || !token}
-          className={`group relative flex items-start gap-4 rounded-2xl border p-5 text-left transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-            whatsappConnected
-              ? "border-neutral-700/60 bg-[#1e1e1e] hover:border-neutral-600"
-              : "border-neutral-800/60 bg-[#1a1a1a] hover:border-neutral-700 hover:bg-[#1e1e1e]"
-          }`}
-        >
-          {/* Icon */}
-          <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 bg-green-500/15 group-hover:bg-green-500/20">
-            {ToolIcons.whatsapp}
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="text-[15px] font-medium text-neutral-100">WhatsApp</h3>
-              {whatsappConnected && (
-                <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
-            </div>
-            <p className="text-[13px] text-neutral-500 mt-0.5">Send and receive messages</p>
-            <div className="mt-2.5">
-              <span className={`inline-flex items-center gap-1.5 text-[12px] font-medium ${
-                whatsappConnected ? "text-emerald-400/80" : "text-neutral-500"
-              }`}>
-                {whatsappConnected ? "Connected · Scan again" : "Connect"}
-              </span>
-            </div>
-          </div>
-
-          {/* Arrow */}
-          <svg
-            className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 transition-colors flex-shrink-0 mt-1"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
       </div>
-
-      {/* WhatsApp QR Modal */}
-      {token && (
-        <WhatsAppQRModal
-          isOpen={whatsappQROpen}
-          onClose={() => {
-            setWhatsappQROpen(false);
-            void fetchConnections(false);
-          }}
-          token={token}
-        />
-      )}
 
       {/* Signed in */}
       <div className="mt-6 flex items-center gap-3 px-1">
