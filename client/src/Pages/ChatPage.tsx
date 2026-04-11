@@ -8,17 +8,11 @@ import { api } from "../lib/api";
 import { useAuth } from "../hooks/useAuth";
 import {
   IconNewChat,
-  IconSearch,
-  IconImage,
-  IconApps,
-  IconFolder,
   IconSend,
   IconLogout,
   IconBack,
   IconSpinner,
   IconChat,
-  IconAttach,
-  IconShare,
 } from "../components/chat/ChatIcons";
 
 interface Message {
@@ -122,7 +116,7 @@ export const ChatPage = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [conversationsLoading, setConversationsLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -255,20 +249,6 @@ export const ChatPage = () => {
       e.preventDefault();
       handleSendMessage(e);
     }
-  };
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-    if (diffMins < 1) return "just now";
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
   };
 
   if (!token) {

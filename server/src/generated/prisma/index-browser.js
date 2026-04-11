@@ -195,6 +195,17 @@ exports.Prisma.ConversationSummaryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.WhatsAppCredentialsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  phoneNumber: 'phoneNumber',
+  authState: 'authState',
+  isConnected: 'isConnected',
+  connectionQR: 'connectionQR',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -202,6 +213,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -229,7 +244,8 @@ exports.Prisma.ModelName = {
   Message: 'Message',
   OAuthToken: 'OAuthToken',
   ToolMetric: 'ToolMetric',
-  ConversationSummary: 'ConversationSummary'
+  ConversationSummary: 'ConversationSummary',
+  WhatsAppCredentials: 'WhatsAppCredentials'
 };
 
 /**
