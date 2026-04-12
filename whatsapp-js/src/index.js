@@ -33,18 +33,6 @@ function createEmptyContactRecord(jid) {
   };
 }
 
-function createEmptyChatRecord(jid) {
-  return {
-    jid,
-    name: jid.includes('@') ? jid.split('@')[0] : jid,
-    unreadCount: 0,
-    isGroup: jid.includes('-') || jid.endsWith('@g.us'),
-    lastMessage: null,
-    sources: new Set(),
-    lastSeenAt: new Date().toISOString(),
-  };
-}
-
 function upsertContact(session, { jid, name, unreadCount, isGroup, source = 'unknown' }, options = {}) {
   const { persist = true } = options;
 
@@ -84,38 +72,6 @@ function upsertContact(session, { jid, name, unreadCount, isGroup, source = 'unk
       console.error('[Mongo] Failed to save contact:', error?.message || error);
     });
   }
-}
-
-function upsertChat(session, { jid, name, unreadCount, isGroup, lastMessage, source = 'unknown' }) {
-  if (!jid) {
-    return;
-  }
-
-  if (!session.chatIndex) {
-    session.chatIndex = new Map();
-  }
-
-  const existing = session.chatIndex.get(jid) || createEmptyChatRecord(jid);
-
-  if (name) {
-    existing.name = String(name).trim();
-  }
-
-  if (typeof unreadCount === 'number') {
-    existing.unreadCount = unreadCount;
-  }
-
-  if (typeof isGroup === 'boolean') {
-    existing.isGroup = isGroup;
-  }
-
-  if (lastMessage) {
-    existing.lastMessage = lastMessage;
-  }
-
-  existing.sources.add(source);
-  existing.lastSeenAt = new Date().toISOString();
-  session.chatIndex.set(jid, existing);
 }
 
 function hydrateSessionContacts(session) {
@@ -173,25 +129,6 @@ function seedContactIndexFromChats(session) {
   }
 }
 
-function seedChatIndexFromChats(session) {
-  if (!session?.sock) {
-    return;
-  }
-
-  const chats = getChatsArray(session.sock);
-  for (const chat of chats) {
-    const jid = chat.id || '';
-    upsertChat(session, {
-      jid,
-      name: chat.name || chat.notify || chat.subject || '',
-      unreadCount: Number(chat.unreadCount || 0),
-      isGroup: jid.includes('-') || jid.endsWith('@g.us'),
-      lastMessage: chat.lastMessage || null,
-      source: 'chat',
-    });
-  }
-}
-
 function serializeContactRecord(item) {
   const names = Array.from(item.names || []);
   const displayName = names.find((value) => value && value.length > 0) || item.short;
@@ -223,51 +160,71 @@ function getKnownContacts(session) {
   return contacts;
 }
 
-function getSearchScore(candidate, query, digitsQuery) {
-  const normalize = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  const tokenize = (value) =>
-    String(value || '')
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .map((token) => token.trim())
-      .filter(Boolean);
+function getRecentChats(session, options = {}) {
+  const { limit = 20, includeGroups = true, includeEmpty = false } = options;
+  const safeLimit = Math.min(Math.max(Number(limit || 20), 1), 200);
+  const contacts = getKnownContacts(session);
+  const contactByJid = new Map(contacts.map((contact) => [contact.jid, contact]));
+  const incomingEntries = Array.from(session?.incomingMessages?.entries?.() || []);
 
-  const name = normalize(candidate.name);
-  const jid = normalize(candidate.jid);
-  const short = normalize(candidate.short);
-  const cleanQuery = normalize(query);
-  const cleanDigitsQuery = normalize(digitsQuery);
-  const nameTokens = tokenize(candidate.name);
+  const result = incomingEntries
+    .map(([jid, messages]) => {
+      const list = Array.isArray(messages) ? messages : [];
+      const last = list[list.length - 1] || null;
+      const contact = contactByJid.get(jid) || null;
+      const isGroup = Boolean(contact?.isGroup || jid.includes('-') || jid.endsWith('@g.us'));
 
-  if (cleanDigitsQuery && short === cleanDigitsQuery) {
-    return 100;
+      return {
+        jid,
+        name: contact?.name || contact?.short || jid.split('@')[0] || jid,
+        short: contact?.short || (jid.includes('@') ? jid.split('@')[0] : jid),
+        isGroup,
+        unreadCount: Number(contact?.unreadCount || 0),
+        messageCount: list.length,
+        lastMessageId: last?.messageId || null,
+        lastMessageText: String(last?.text || ''),
+        lastMessageFromMe: Boolean(last?.fromMe),
+        lastMessageAt: last?.timestamp ? new Date(last.timestamp).toISOString() : null,
+      };
+    })
+    .filter((item) => includeGroups || !item.isGroup);
+
+  if (includeEmpty) {
+    for (const contact of contacts) {
+      if (!includeGroups && contact.isGroup) {
+        continue;
+      }
+
+      if (result.some((item) => item.jid === contact.jid)) {
+        continue;
+      }
+
+      result.push({
+        jid: contact.jid,
+        name: contact.name || contact.short || contact.jid,
+        short: contact.short,
+        isGroup: Boolean(contact.isGroup),
+        unreadCount: Number(contact.unreadCount || 0),
+        messageCount: 0,
+        lastMessageId: null,
+        lastMessageText: '',
+        lastMessageFromMe: false,
+        lastMessageAt: null,
+      });
+    }
   }
 
-  if (cleanDigitsQuery && short.includes(cleanDigitsQuery)) {
-    return 92;
-  }
+  result.sort((a, b) => {
+    const aTs = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+    const bTs = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+    if (aTs !== bTs) {
+      return bTs - aTs;
+    }
 
-  if (name === cleanQuery || short === cleanQuery) {
-    return 95;
-  }
+    return String(a.name || a.short || a.jid).localeCompare(String(b.name || b.short || b.jid));
+  });
 
-  if (nameTokens.some((token) => token === cleanQuery)) {
-    return 90;
-  }
-
-  if (name.startsWith(cleanQuery) || short.startsWith(cleanQuery)) {
-    return 85;
-  }
-
-  if (nameTokens.some((token) => token.startsWith(cleanQuery))) {
-    return 80;
-  }
-
-  if (jid.includes(cleanQuery) || name.includes(cleanQuery) || short.includes(cleanQuery)) {
-    return 70;
-  }
-
-  return 0;
+  return result.slice(0, safeLimit);
 }
 
 function getMessageText(msg) {
@@ -286,16 +243,6 @@ function getMessageText(msg) {
     content.listResponseMessage?.title ||
     ''
   );
-}
-
-function getMessageType(msg) {
-  const content = msg?.message;
-  if (!content || typeof content !== 'object') {
-    return 'unknown';
-  }
-
-  const keys = Object.keys(content);
-  return keys.length > 0 ? keys[0] : 'unknown';
 }
 
 function normalizeMessageTimestamp(input) {
@@ -320,38 +267,36 @@ function normalizeMessageTimestamp(input) {
   return Date.now();
 }
 
-function cacheMessage(session, message) {
-  if (!session?.messageCache || !message?.jid || !message?.messageId) {
+function cacheIncomingMessage(session, message) {
+  if (!session?.incomingMessages || !message?.jid || !message?.messageId) {
     return;
   }
 
   const jid = String(message.jid);
-  const existing = session.messageCache.get(jid) || [];
-  const foundIndex = existing.findIndex((item) => item.messageId === message.messageId);
+  const list = session.incomingMessages.get(jid) || [];
+  const exists = list.some((item) => item.messageId === String(message.messageId));
 
-  const normalized = {
+  if (exists) {
+    return;
+  }
+
+  list.push({
     messageId: String(message.messageId),
     jid,
     senderJid: String(message.senderJid || ''),
     participantJid: String(message.participantJid || ''),
     fromMe: Boolean(message.fromMe),
     text: String(message.text || ''),
-    messageType: String(message.messageType || 'unknown'),
     timestamp: normalizeMessageTimestamp(message.timestamp),
-  };
+    capturedAt: new Date().toISOString(),
+  });
 
-  if (foundIndex >= 0) {
-    existing[foundIndex] = normalized;
-  } else {
-    existing.push(normalized);
+  list.sort((a, b) => a.timestamp - b.timestamp);
+  if (list.length > 500) {
+    list.splice(0, list.length - 500);
   }
 
-  existing.sort((a, b) => a.timestamp - b.timestamp);
-  if (existing.length > 500) {
-    existing.splice(0, existing.length - 500);
-  }
-
-  session.messageCache.set(jid, existing);
+  session.incomingMessages.set(jid, list);
 }
 
 function buildSessionSnapshot(session) {
@@ -395,8 +340,7 @@ function getSession(sessionId = 'default') {
       qrTimeoutId: null,
       authDir: `${AUTH_ROOT}/${sessionId}`,
       contactIndex: new Map(),
-      chatIndex: new Map(),
-      messageCache: new Map(),
+      incomingMessages: new Map(),
       contactsHydrated: false,
       contactsHydrating: false,
     });
@@ -459,53 +403,6 @@ function resolveJid(input) {
   }
 
   return `${digits}@s.whatsapp.net`;
-}
-
-function resolveTargetJid(session, input) {
-  const value = String(input || '').trim();
-  if (!value) {
-    return null;
-  }
-
-  if (value.includes('@s.whatsapp.net') || value.includes('@g.us') || value.includes('@broadcast')) {
-    return value;
-  }
-
-  const digits = normalizePhoneNumber(value);
-  if (!digits) {
-    return resolveJid(value);
-  }
-
-  const contacts = getKnownContacts(session);
-  const exactMatch = contacts.find((contact) => contact.short === digits || contact.jid === `${digits}@s.whatsapp.net`);
-  if (exactMatch) {
-    return exactMatch.jid;
-  }
-
-  const suffixMatch = contacts.find((contact) => contact.short.endsWith(digits) || contact.jid.includes(digits));
-  if (suffixMatch) {
-    return suffixMatch.jid;
-  }
-
-  return resolveJid(value);
-}
-
-function buildLastMessageFromChat(chat, jid) {
-  const lastMessage = chat?.lastMessage;
-  if (!lastMessage?.key?.id) {
-    return null;
-  }
-
-  return {
-    messageId: String(lastMessage.key.id),
-    jid,
-    senderJid: String(lastMessage.key.participant || lastMessage.key.remoteJid || jid || ''),
-    participantJid: String(lastMessage.key.participant || ''),
-    fromMe: Boolean(lastMessage.key.fromMe),
-    text: getMessageText(lastMessage) || '',
-    messageType: getMessageType(lastMessage),
-    timestamp: normalizeMessageTimestamp(lastMessage.messageTimestamp),
-  };
 }
 
 function getChatsArray(sock) {
@@ -684,14 +581,6 @@ async function createSocket(session) {
         isGroup: jid.includes('-') || jid.endsWith('@g.us'),
         source: 'chats.upsert',
       });
-      upsertChat(session, {
-        jid,
-        name: displayName,
-        unreadCount: Number(chat.unreadCount || 0),
-        isGroup: jid.includes('-') || jid.endsWith('@g.us'),
-        lastMessage: chat.lastMessage || null,
-        source: 'chats.upsert',
-      });
     }
 
     logSession(session.sessionId, 'chats:upsert', { count: chats?.length || 0 });
@@ -707,14 +596,6 @@ async function createSocket(session) {
           name: displayName,
           unreadCount: typeof update.unreadCount === 'number' ? update.unreadCount : undefined,
           isGroup: jid.includes('-') || jid.endsWith('@g.us'),
-          source: 'chats.update',
-        });
-        upsertChat(session, {
-          jid,
-          name: displayName,
-          unreadCount: typeof update.unreadCount === 'number' ? update.unreadCount : undefined,
-          isGroup: jid.includes('-') || jid.endsWith('@g.us'),
-          lastMessage: update.lastMessage || null,
           source: 'chats.update',
         });
       }
@@ -764,14 +645,6 @@ async function createSocket(session) {
         isGroup: jid.includes('-') || jid.endsWith('@g.us'),
         source: 'history.chats',
       });
-      upsertChat(session, {
-        jid,
-        name: displayName,
-        unreadCount: Number(chat.unreadCount || 0),
-        isGroup: jid.includes('-') || jid.endsWith('@g.us'),
-        lastMessage: chat.lastMessage || null,
-        source: 'history.chats',
-      });
     }
 
     for (const msg of historyMessages) {
@@ -781,24 +654,18 @@ async function createSocket(session) {
         continue;
       }
 
-      const senderJid = msg?.key?.participant || remoteJid;
-      const text = getMessageText(msg);
-      const messageType = getMessageType(msg);
-
-      cacheMessage(session, {
-        jid: remoteJid,
+      cacheIncomingMessage(session, {
         messageId,
-        senderJid,
+        jid: remoteJid,
+        senderJid: msg?.key?.participant || remoteJid,
         participantJid: msg?.key?.participant || '',
         fromMe: Boolean(msg?.key?.fromMe),
-        text: text || '',
-        messageType,
+        text: getMessageText(msg) || '',
         timestamp: msg?.messageTimestamp,
       });
     }
 
     seedContactIndexFromChats(session);
-    seedChatIndexFromChats(session);
 
     logSession(session.sessionId, 'history:set', {
       contacts: historyContacts.length,
@@ -935,7 +802,6 @@ async function createSocket(session) {
 
       setTimeout(() => {
         seedContactIndexFromChats(session);
-        seedChatIndexFromChats(session);
         logSession(session.sessionId, 'connection:seededContactIndex', {
           indexSize: session.contactIndex ? session.contactIndex.size : 0,
         });
@@ -987,27 +853,21 @@ async function createSocket(session) {
   });
 
   sock.ev.on('messages.upsert', (payload) => {
-    if (payload.type !== 'notify') {
-      return;
-    }
-
     for (const msg of payload.messages) {
       const remoteJid = msg.key.remoteJid || 'unknown';
       const senderJid = msg.key.participant || remoteJid;
       const pushName = msg.pushName || '';
       const text = getMessageText(msg) || '[media]';
-      const messageType = getMessageType(msg);
       console.log(`[WhatsApp] ${remoteJid}: ${text}`);
 
-      if (remoteJid !== 'unknown' && msg?.key?.id) {
-        cacheMessage(session, {
-          jid: remoteJid,
+      if (msg?.key?.id && remoteJid !== 'unknown') {
+        cacheIncomingMessage(session, {
           messageId: msg.key.id,
+          jid: remoteJid,
           senderJid,
           participantJid: msg.key.participant || '',
           fromMe: Boolean(msg.key.fromMe),
           text: text === '[media]' ? '' : text,
-          messageType,
           timestamp: msg.messageTimestamp,
         });
       }
@@ -1210,19 +1070,6 @@ app.post('/send', async (req, res) => {
 
   const response = await session.sock.sendMessage(jid, { text: String(message) });
 
-  if (response?.key?.id) {
-    cacheMessage(session, {
-      jid,
-      messageId: response.key.id,
-      senderJid: session.sock.user?.id || '',
-      participantJid: '',
-      fromMe: true,
-      text: String(message),
-      messageType: 'conversation',
-      timestamp: Date.now(),
-    });
-  }
-
   logSession(sessionId, 'api:send:success', {
     jid,
     messageId: response?.key?.id || null,
@@ -1234,425 +1081,6 @@ app.post('/send', async (req, res) => {
   });
 });
 
-app.post('/send/media', async (req, res) => {
-  const {
-    sessionId = 'default',
-    to,
-    type = 'image',
-    url,
-    caption = '',
-    fileName = 'file',
-    mimetype,
-  } = req.body || {};
-
-  const session = getSession(sessionId);
-
-  logSession(sessionId, 'api:sendMedia', {
-    to,
-    type,
-    hasUrl: Boolean(url),
-    connected: session.connected,
-  });
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(to);
-  if (!jid) {
-    return res.status(400).json({ success: false, error: 'Invalid recipient (to)' });
-  }
-
-  if (!url) {
-    return res.status(400).json({ success: false, error: 'url is required' });
-  }
-
-  let content;
-  if (type === 'video') {
-    content = { video: { url: String(url) }, caption: String(caption || '') };
-  } else if (type === 'document') {
-    content = {
-      document: { url: String(url) },
-      fileName: String(fileName || 'file'),
-      mimetype: mimetype ? String(mimetype) : undefined,
-      caption: String(caption || ''),
-    };
-  } else {
-    content = { image: { url: String(url) }, caption: String(caption || '') };
-  }
-
-  try {
-    const response = await session.sock.sendMessage(jid, content);
-    logSession(sessionId, 'api:sendMedia:success', { jid, type, messageId: response?.key?.id || null });
-    return res.json({ success: true, messageId: response?.key?.id || null });
-  } catch (error) {
-    logSession(sessionId, 'api:sendMedia:error', { message: error instanceof Error ? error.message : 'unknown error' });
-    return res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Failed to send media' });
-  }
-});
-
-app.post('/send/location', async (req, res) => {
-  const { sessionId = 'default', to, latitude, longitude, name, address } = req.body || {};
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(to);
-  if (!jid) {
-    return res.status(400).json({ success: false, error: 'Invalid recipient (to)' });
-  }
-
-  if (typeof latitude !== 'number' || typeof longitude !== 'number') {
-    return res.status(400).json({ success: false, error: 'latitude and longitude must be numbers' });
-  }
-
-  const response = await session.sock.sendMessage(jid, {
-    location: {
-      degreesLatitude: latitude,
-      degreesLongitude: longitude,
-      name: name ? String(name) : undefined,
-      address: address ? String(address) : undefined,
-    },
-  });
-
-  return res.json({ success: true, messageId: response?.key?.id || null });
-});
-
-app.post('/send/contact', async (req, res) => {
-  const { sessionId = 'default', to, displayName, waid, phone, org = '' } = req.body || {};
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(to);
-  const cleanWaid = normalizePhoneNumber(waid || phone);
-
-  if (!jid) {
-    return res.status(400).json({ success: false, error: 'Invalid recipient (to)' });
-  }
-
-  if (!displayName || !cleanWaid) {
-    return res.status(400).json({ success: false, error: 'displayName and waid/phone are required' });
-  }
-
-  const vcard = [
-    'BEGIN:VCARD',
-    'VERSION:3.0',
-    `FN:${displayName}`,
-    org ? `ORG:${org};` : '',
-    `TEL;type=CELL;type=VOICE;waid=${cleanWaid}:+${cleanWaid}`,
-    'END:VCARD',
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  const response = await session.sock.sendMessage(jid, {
-    contacts: {
-      displayName: String(displayName),
-      contacts: [{ vcard }],
-    },
-  });
-
-  return res.json({ success: true, messageId: response?.key?.id || null });
-});
-
-app.get('/profile', async (req, res) => {
-  const sessionId = String(req.query.sessionId || 'default');
-  const jid = resolveJid(req.query.jid || req.query.phoneNumber || '');
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  if (!jid) {
-    return res.status(400).json({ success: false, error: 'jid or phoneNumber is required' });
-  }
-
-  try {
-    const [existsInfo] = await session.sock.onWhatsApp(jid);
-    const status = await session.sock.fetchStatus(jid).catch(() => null);
-    const profilePictureUrl = await session.sock.profilePictureUrl(jid, 'image').catch(() => null);
-
-    return res.json({
-      success: true,
-      jid,
-      exists: Boolean(existsInfo?.exists),
-      resolvedJid: existsInfo?.jid || jid,
-      profilePictureUrl,
-      status: status?.status || null,
-      setAt: status?.setAt || null,
-    });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Failed to fetch profile' });
-  }
-});
-
-app.post('/presence', async (req, res) => {
-  const { sessionId = 'default', to, presence = 'available' } = req.body || {};
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(to);
-  if (!jid) {
-    return res.status(400).json({ success: false, error: 'Invalid recipient (to)' });
-  }
-
-  await session.sock.sendPresenceUpdate(String(presence), jid);
-  return res.json({ success: true });
-});
-
-app.post('/messages/read', async (req, res) => {
-  const { sessionId = 'default', keys = [] } = req.body || {};
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  if (!Array.isArray(keys) || keys.length === 0) {
-    return res.status(400).json({ success: false, error: 'keys array is required' });
-  }
-
-  await session.sock.readMessages(keys);
-  return res.json({ success: true });
-});
-
-app.get('/messages', async (req, res) => {
-  const sessionId = String(req.query.sessionId || 'default');
-  const rawTarget = String(req.query.phoneNumber || req.query.jid || req.query.to || '').trim();
-  const limit = Math.min(Math.max(Number(req.query.limit || 50), 1), 200);
-  const session = getSession(sessionId);
-
-  if (!rawTarget) {
-    return res.status(400).json({
-      success: false,
-      error: 'phoneNumber or jid is required',
-    });
-  }
-
-  const jid = resolveTargetJid(session, rawTarget);
-  if (!jid) {
-    return res.status(400).json({ success: false, error: 'Invalid phoneNumber/jid' });
-  }
-
-  let cached = Array.isArray(session.messageCache?.get(jid)) ? session.messageCache.get(jid) : [];
-
-  if (cached.length === 0 && session?.sock) {
-    const chats = getChatsArray(session.sock);
-    const chat = chats.find((item) => item.id === jid || item.jid === jid);
-
-    if (chat?.lastMessage) {
-      const preview = buildLastMessageFromChat(chat, jid);
-      cached = preview ? [preview] : [];
-    }
-  }
-
-  const messages = cached.slice(-limit).map((item) => ({
-    messageId: item.messageId,
-    jid: item.jid,
-    senderJid: item.senderJid,
-    participantJid: item.participantJid,
-    fromMe: Boolean(item.fromMe),
-    text: item.text || '',
-    messageType: item.messageType || 'unknown',
-    timestamp: item.timestamp ? new Date(item.timestamp).toISOString() : null,
-  }));
-
-  return res.json({
-    success: true,
-    sessionId,
-    jid,
-    count: messages.length,
-    messages,
-    source: (session.messageCache?.get(jid)?.length || 0) > 0 ? 'cache' : 'chat-preview',
-  });
-});
-
-app.post('/message/edit', async (req, res) => {
-  const { sessionId = 'default', to, messageId, text } = req.body || {};
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(to);
-  if (!jid || !messageId || !text) {
-    return res.status(400).json({ success: false, error: 'to, messageId and text are required' });
-  }
-
-  const response = await session.sock.sendMessage(jid, {
-    text: String(text),
-    edit: { id: String(messageId), remoteJid: jid, fromMe: true },
-  });
-
-  return res.json({ success: true, messageId: response?.key?.id || null });
-});
-
-app.post('/message/delete', async (req, res) => {
-  const { sessionId = 'default', to, messageId, fromMe = true, participant } = req.body || {};
-  const session = getSession(sessionId);
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(to);
-  if (!jid || !messageId) {
-    return res.status(400).json({ success: false, error: 'to and messageId are required' });
-  }
-
-  await session.sock.sendMessage(jid, {
-    delete: {
-      id: String(messageId),
-      remoteJid: jid,
-      fromMe: Boolean(fromMe),
-      participant: participant ? String(participant) : undefined,
-    },
-  });
-
-  return res.json({ success: true });
-});
-
-app.get('/chats', async (req, res) => {
-  const sessionId = String(req.query.sessionId || 'default');
-  const session = getSession(sessionId);
-
-  logSession(sessionId, 'api:chats', {
-    connected: session.connected,
-    hasSocket: Boolean(session.sock),
-  });
-
-  if (session.connected && session.sock) {
-    seedChatIndexFromChats(session);
-  }
-
-  const result = Array.from((session.chatIndex || new Map()).values())
-    .map((chat) => ({
-      jid: chat.jid,
-      name: chat.name || chat.jid.split('@')[0],
-      unreadCount: Number(chat.unreadCount || 0),
-      isGroup: Boolean(chat.isGroup),
-      lastMessage: chat.lastMessage
-        ? {
-            messageId: chat.lastMessage.key?.id || null,
-            fromMe: Boolean(chat.lastMessage.key?.fromMe),
-            text: getMessageText(chat.lastMessage) || '',
-            messageType: getMessageType(chat.lastMessage),
-            timestamp: chat.lastMessage.messageTimestamp ? new Date(normalizeMessageTimestamp(chat.lastMessage.messageTimestamp)).toISOString() : null,
-          }
-        : null,
-      sources: Array.from(chat.sources || []),
-      lastSeenAt: chat.lastSeenAt || null,
-    }))
-    .sort((a, b) => {
-      if (a.isGroup !== b.isGroup) {
-        return Number(a.isGroup) - Number(b.isGroup);
-      }
-
-      const aTime = a.lastMessage?.timestamp ? Date.parse(a.lastMessage.timestamp) : 0;
-      const bTime = b.lastMessage?.timestamp ? Date.parse(b.lastMessage.timestamp) : 0;
-      if (aTime !== bTime) {
-        return bTime - aTime;
-      }
-
-      return String(a.name || a.jid).localeCompare(String(b.name || b.jid));
-    });
-
-  logSession(sessionId, 'api:chats:success', { count: result.length });
-
-  return res.json({ success: true, chats: result });
-});
-
-app.get('/contacts/search', async (req, res) => {
-  const sessionId = String(req.query.sessionId || 'default');
-  const rawQuery = String(req.query.q || req.query.query || req.query.phoneNumber || '').trim();
-  const query = rawQuery.toLowerCase();
-  const digitsQuery = normalizePhoneNumber(rawQuery);
-  const limit = Math.min(Number(req.query.limit || 20), 100);
-  const includeGroups = String(req.query.includeGroups || 'true').toLowerCase() !== 'false';
-  const onlyWithNames = String(req.query.onlyWithNames || '').toLowerCase() === 'true';
-  const minScore = Math.min(Math.max(Number(req.query.minScore || 1), 1), 100);
-  const includeScore = String(req.query.includeScore || '').toLowerCase() === 'true';
-  const session = getSession(sessionId);
-
-  logSession(sessionId, 'api:contactsSearch', {
-    query,
-    limit,
-    includeGroups,
-    onlyWithNames,
-    minScore,
-    connected: session.connected,
-  });
-
-  if (!query) {
-    return res.status(400).json({
-      success: false,
-      error: 'Query parameter q is required',
-      hint: 'Use q, query, or phoneNumber. Example: /contacts/search?q=ritesh',
-    });
-  }
-
-  seedContactIndexFromChats(session);
-
-  if (digitsQuery && session.connected && session.sock) {
-    const probableJid = `${digitsQuery}@s.whatsapp.net`;
-    try {
-      const result = await session.sock.onWhatsApp(probableJid);
-      const record = Array.isArray(result) ? result[0] : null;
-      if (record?.exists) {
-        upsertContact(session, {
-          jid: record.jid || probableJid,
-          name: digitsQuery,
-          isGroup: false,
-          source: 'resolve',
-        });
-      }
-    } catch (error) {
-      logSession(sessionId, 'api:contactsSearch:resolveFailed', {
-        message: error instanceof Error ? error.message : 'unknown error',
-      });
-    }
-  }
-
-  const candidates = getKnownContacts(session)
-    .filter((item) => includeGroups || !item.isGroup)
-    .filter((item) => !onlyWithNames || (item.name && item.name !== item.short))
-    .map((item) => ({
-    ...item,
-    score: getSearchScore(item, query, digitsQuery),
-    }));
-
-  const matched = candidates
-    .filter((item) => item.score >= minScore)
-    .sort((a, b) => b.score - a.score || b.unreadCount - a.unreadCount)
-    .slice(0, limit)
-    .map((item) => {
-      if (includeScore) {
-        return item;
-      }
-
-      const { score, ...rest } = item;
-      return rest;
-    });
-
-  logSession(sessionId, 'api:contactsSearch:success', { count: matched.length });
-
-  return res.json({
-    success: true,
-    query,
-    count: matched.length,
-    contacts: matched,
-  });
-});
 
 app.get('/contacts/all', async (req, res) => {
   const sessionId = String(req.query.sessionId || 'default');
@@ -1696,189 +1124,176 @@ app.get('/contacts/all', async (req, res) => {
   });
 });
 
-app.get('/contacts/debug', async (req, res) => {
+app.get('/chats/recent', (req, res) => {
   const sessionId = String(req.query.sessionId || 'default');
+  const targetPhoneOrJid = String(req.query.phoneNumber || req.query.jid || '').trim();
+  const includeGroups = String(req.query.includeGroups || 'true').toLowerCase() !== 'false';
+  const includeEmpty = String(req.query.includeEmpty || '').toLowerCase() === 'true';
+  const limit = Math.min(Math.max(Number(req.query.limit || 20), 1), 200);
   const session = getSession(sessionId);
 
-  logSession(sessionId, 'api:contactsDebug', {
-    connected: session.connected,
-    hasSocket: Boolean(session.sock),
+  let chats = getRecentChats(session, {
+    limit,
+    includeGroups,
+    includeEmpty,
   });
 
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
+  // If specific contact requested, filter to that one chat
+  if (targetPhoneOrJid) {
+    const directJid = targetPhoneOrJid.includes('@') ? targetPhoneOrJid : resolveJid(targetPhoneOrJid);
+    if (!directJid) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid phoneNumber or jid',
+      });
+    }
 
-  seedContactIndexFromChats(session);
+    const digits = normalizePhoneNumber(targetPhoneOrJid);
+    const knownKeys = Array.from(session.incomingMessages?.keys?.() || []);
+    let resolvedJid = directJid;
 
-  const index = session.contactIndex || new Map();
-  const contacts = Array.from(index.values());
-  const sourceBreakdown = {};
+    // Fallback resolution similar to /messages/incoming
+    if (!session.incomingMessages?.has(resolvedJid) && digits) {
+      const byDigits = knownKeys.find((key) => key.includes(digits));
+      if (byDigits) {
+        resolvedJid = byDigits;
+      }
+    }
 
-  for (const contact of contacts) {
-    for (const source of contact.sources || []) {
-      sourceBreakdown[source] = (sourceBreakdown[source] || 0) + 1;
+    if (!session.incomingMessages?.has(resolvedJid) && digits && session.phoneNumber) {
+      const isSelfQuery = String(session.phoneNumber).replace(/\D/g, '') === digits;
+      if (isSelfQuery) {
+        const selfLid = knownKeys.find((key) => String(key).endsWith('@lid'));
+        if (selfLid) {
+          resolvedJid = selfLid;
+        }
+      }
+    }
+
+    chats = chats.filter((chat) => chat.jid === resolvedJid || chat.jid === directJid);
+
+    if (chats.length === 0) {
+      logSession(sessionId, 'api:recentChats:forContact:notFound', {
+        target: targetPhoneOrJid,
+        resolvedJid,
+        knownKeys: knownKeys.slice(0, 5),
+      });
     }
   }
 
-  const contactsWithMeta = contacts.map((item) => {
-    const names = Array.from(item.names || []);
-    return {
-      jid: item.jid,
-      short: item.short,
-      names: names.length > 0 ? names : ['<no-name>'],
-      unreadCount: item.unreadCount || 0,
-      isGroup: item.isGroup,
-      sources: Array.from(item.sources || []),
-      lastSeenAt: item.lastSeenAt,
-    };
+  logSession(sessionId, 'api:recentChats', {
+    limit,
+    includeGroups,
+    includeEmpty,
+    filterByContact: Boolean(targetPhoneOrJid),
+    returned: chats.length,
+    incomingBuckets: Array.from(session.incomingMessages?.keys?.() || []).length,
   });
 
   return res.json({
     success: true,
-    indexSize: contacts.length,
-    sourceBreakdown,
-    chatsArraySize: getChatsArray(session.sock).length,
-    sockChatsType: session.sock?.chats ? typeof session.sock.chats : 'none',
-    contacts: contactsWithMeta.slice(0, 100),
+    sessionId,
+    filterBy: targetPhoneOrJid || 'all',
+    count: chats.length,
+    chats,
   });
 });
 
-app.get('/contacts/resolve', async (req, res) => {
+app.get('/messages/incoming', async (req, res) => {
   const sessionId = String(req.query.sessionId || 'default');
-  const phoneNumber = String(req.query.phoneNumber || '');
+  const rawTarget = String(req.query.jid || req.query.phoneNumber || '').trim();
+  const limit = Math.min(Math.max(Number(req.query.limit || 20), 1), 100);
   const session = getSession(sessionId);
 
-  logSession(sessionId, 'api:contactsResolve', {
-    phoneNumber,
-    connected: session.connected,
-  });
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
-  }
-
-  const jid = resolveJid(phoneNumber);
-  if (!jid) {
-    return res.status(400).json({ 
-      success: false, 
-      error: 'Invalid phoneNumber', 
-      hint: 'Send in E.164 format (e.g., +1234567890) or at least 7 digits' 
+  if (!rawTarget) {
+    return res.status(400).json({
+      success: false,
+      error: 'jid or phoneNumber is required',
     });
   }
 
-  try {
-    const result = await session.sock.onWhatsApp(jid);
-    const record = Array.isArray(result) ? result[0] : null;
+  const directJid = rawTarget.includes('@') ? rawTarget : resolveJid(rawTarget);
+  if (!directJid) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid jid or phoneNumber',
+    });
+  }
 
-    if (record?.exists) {
-      upsertContact(session, {
-        jid: record.jid || jid,
-        name: phoneNumber,
-        isGroup: false,
-        source: 'resolve',
+  const digits = normalizePhoneNumber(rawTarget);
+  const knownKeys = Array.from(session.incomingMessages?.keys?.() || []);
+  let resolvedJid = directJid;
+
+  if (!session.incomingMessages?.has(resolvedJid) && digits) {
+    const byDigits = knownKeys.find((key) => key.includes(digits));
+    if (byDigits) {
+      resolvedJid = byDigits;
+    }
+  }
+
+  if (!session.incomingMessages?.has(resolvedJid) && digits) {
+    const contacts = getKnownContacts(session);
+    const contactMatch = contacts.find(
+      (contact) => contact.short === digits || contact.short.endsWith(digits) || contact.jid.includes(digits)
+    );
+
+    if (contactMatch?.jid && session.incomingMessages?.has(contactMatch.jid)) {
+      resolvedJid = contactMatch.jid;
+    }
+  }
+
+  if (!session.incomingMessages?.has(resolvedJid) && session.connected && session.sock) {
+    try {
+      const result = await session.sock.onWhatsApp(directJid);
+      const record = Array.isArray(result) ? result[0] : null;
+      const resolvedFromWhatsApp = record?.jid ? String(record.jid) : '';
+
+      if (resolvedFromWhatsApp && session.incomingMessages?.has(resolvedFromWhatsApp)) {
+        resolvedJid = resolvedFromWhatsApp;
+      }
+    } catch (error) {
+      logSession(sessionId, 'api:messagesIncoming:resolveFailed', {
+        message: error instanceof Error ? error.message : 'unknown error',
       });
     }
-
-    logSession(sessionId, 'api:contactsResolve:success', {
-      phoneNumber,
-      exists: Boolean(record?.exists),
-    });
-
-    return res.json({
-      success: true,
-      input: phoneNumber,
-      jid,
-      exists: Boolean(record?.exists),
-      resolvedJid: record?.jid || null,
-      added: Boolean(record?.exists),
-    });
-  } catch (error) {
-    logSession(sessionId, 'api:contactsResolve:error', {
-      message: error instanceof Error ? error.message : 'unknown error',
-    });
-    return res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to resolve number',
-    });
-  }
-});
-
-app.post('/contacts/lookup', async (req, res) => {
-  const { sessionId = 'default', phoneNumber = '' } = req.body || {};
-  const session = getSession(sessionId);
-
-  logSession(sessionId, 'api:contactsLookup', {
-    phoneNumber,
-    connected: session.connected,
-  });
-
-  if (!session.connected || !session.sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected' });
   }
 
-  if (!phoneNumber) {
-    return res.status(400).json({ 
-      success: false, 
-      error: 'phoneNumber is required',
-      hint: 'Send in E.164 format (e.g., +1234567890) or at least 7 digits'
-    });
-  }
-
-  const jid = resolveJid(phoneNumber);
-  if (!jid) {
-    return res.status(400).json({ 
-      success: false, 
-      error: 'Invalid phoneNumber format',
-      hint: 'Send in E.164 format (e.g., +1234567890) or at least 7 digits',
-      received: phoneNumber
-    });
-  }
-
-  try {
-    const result = await session.sock.onWhatsApp(jid);
-    const record = Array.isArray(result) ? result[0] : null;
-    const exists = Boolean(record?.exists);
-
-    if (exists) {
-      upsertContact(session, {
-        jid: record.jid || jid,
-        name: phoneNumber,
-        isGroup: false,
-        source: 'lookup',
-      });
-
-      logSession(sessionId, 'api:contactsLookup:added', {
-        jid: record.jid || jid,
-        phoneNumber,
-      });
-
-      return res.json({
-        success: true,
-        phoneNumber,
-        jid: record.jid || jid,
-        exists: true,
-        added: true,
-        message: 'Contact added to your index',
-      });
+  // When querying own phone number, incoming events can be keyed under LID JID.
+  if (!session.incomingMessages?.has(resolvedJid) && digits && session.phoneNumber) {
+    const isSelfQuery = String(session.phoneNumber).replace(/\D/g, '') === digits;
+    if (isSelfQuery) {
+      const selfLid = knownKeys.find((key) => String(key).endsWith('@lid'));
+      if (selfLid) {
+        resolvedJid = selfLid;
+      }
     }
-
-    logSession(sessionId, 'api:contactsLookup:notFound', { phoneNumber });
-    return res.status(404).json({
-      success: false,
-      error: 'Phone number is not on WhatsApp',
-      phoneNumber,
-      jid,
-    });
-  } catch (error) {
-    logSession(sessionId, 'api:contactsLookup:error', {
-      message: error instanceof Error ? error.message : 'unknown error',
-    });
-    return res.status(500).json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to lookup contact',
-    });
   }
+
+  const all = Array.isArray(session.incomingMessages?.get(resolvedJid))
+    ? session.incomingMessages.get(resolvedJid)
+    : [];
+  const messages = all.slice(-limit).map((item) => ({
+    messageId: item.messageId,
+    jid: item.jid,
+    senderJid: item.senderJid,
+    participantJid: item.participantJid,
+    fromMe: Boolean(item.fromMe),
+    text: item.text || '',
+    timestamp: item.timestamp ? new Date(item.timestamp).toISOString() : null,
+    capturedAt: item.capturedAt || null,
+  }));
+
+  return res.json({
+    success: true,
+    sessionId,
+    query: rawTarget,
+    jid: resolvedJid,
+    queriedJid: directJid,
+    count: messages.length,
+    messages,
+    cachedChats: knownKeys.length,
+    cachePreview: knownKeys.slice(0, 10),
+  });
 });
 
 app.post('/disconnect', async (req, res) => {

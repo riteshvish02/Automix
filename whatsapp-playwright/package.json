@@ -1,0 +1,15 @@
+{
+  "name": "whatsapp-playwright",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "WhatsApp automation via headless Playwright browser",
+  "scripts": {
+    "dev": "node src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "playwright": "^1.40.1"
+  }
+}
