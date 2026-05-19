@@ -13,22 +13,38 @@ createRoot(document.getElementById('root')!).render(
                 <Toaster
                     position="top-right"
                     toastOptions={{
-                        duration: 4500,
+                        duration: 4200,
+                        className: "",
                         style: {
-                            background: '#0f172a',
-                            color: '#e2e8f0',
-                            border: '1px solid #334155',
+                            background: '#171717',
+                            color: '#e5e5e5',
+                            border: '1px solid rgba(115,115,115,0.35)',
+                            borderRadius: '12px',
+                            boxShadow: '0 10px 28px rgba(0,0,0,0.42)',
+                            padding: '12px 14px',
+                            fontSize: '13px',
+                            maxWidth: '440px',
                         },
                         success: {
+                            style: {
+                                border: '1px solid rgba(34,197,94,0.35)',
+                                background: '#161c18',
+                                color: '#dcfce7',
+                            },
                             iconTheme: {
-                                primary: '#10b981',
-                                secondary: '#0f172a',
+                                primary: '#22c55e',
+                                secondary: '#0f1210',
                             },
                         },
                         error: {
+                            style: {
+                                border: '1px solid rgba(239,68,68,0.35)',
+                                background: '#1d1515',
+                                color: '#fee2e2',
+                            },
                             iconTheme: {
-                                primary: '#f43f5e',
-                                secondary: '#0f172a',
+                                primary: '#ef4444',
+                                secondary: '#140f0f',
                             },
                         },
                     }}

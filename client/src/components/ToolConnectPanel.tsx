@@ -21,78 +21,21 @@ const DEFAULT_CONNECTIONS: Record<ProviderKey, ProviderConnection> = {
   notion: { connected: false, isExpired: false, updatedAt: null },
 };
 
-/* ── Tool Icons with Actual Brand Logos ── */
-const ToolIcons: Record<ProviderKey, React.ReactNode> = {
-  gmail: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <path d="M21 4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z" fill="#EA4335" />
-      <path d="M3 6l9 7 9-7" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </svg>
-  ),
-  calendar: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <circle cx="12" cy="16" r="1.5" fill="currentColor" />
-    </svg>
-  ),
-  docs: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z" fill="#4285F4" />
-      <path d="M13 2v7h7M8 15h8M8 19h6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </svg>
-  ),
-  sheets: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <rect x="2" y="2" width="20" height="20" rx="2" fill="#34A853" />
-      <line x1="2" y1="8" x2="22" y2="8" stroke="white" strokeWidth="1.5" />
-      <line x1="2" y1="14" x2="22" y2="14" stroke="white" strokeWidth="1.5" />
-      <line x1="8" y1="2" x2="8" y2="22" stroke="white" strokeWidth="1.5" />
-      <line x1="14" y1="2" x2="14" y2="22" stroke="white" strokeWidth="1.5" />
-    </svg>
-  ),
-  drive: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <path d="M12 2l7.5 13H4.5L12 2z" fill="#FBBC04" strokeWidth="0" />
-      <path d="M4.5 15h15l-7.5 5-7.5-5z" fill="#34A853" strokeWidth="0" />
-      <path d="M9 8.5L4.5 15h9l-4.5-6.5z" fill="#EA4335" strokeWidth="0" />
-    </svg>
-  ),
-  slack: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <g>
-        <path d="M5 2c-1.66 0-3 1.34-3 3 0 1.66 1.34 3 3 3h3V5c0-1.66-1.34-3-3-3z" fill="#E01E5A" />
-        <path d="M5 8c-1.66 0-3 1.34-3 3 0 1.66 1.34 3 3 3h3v-6H5z" fill="#E01E5A" />
-        <path d="M8 14c0-1.66-1.34-3-3-3H2c0 1.66 1.34 3 3 3h3z" fill="#36C5F0" />
-        <path d="M14 14c0-1.66-1.34-3-3-3h-3v6h3c1.66 0 3-1.34 3-3z" fill="#2EB67D" />
-        <path d="M19 14c-1.66 0-3 1.34-3 3 0 1.66 1.34 3 3 3h3c0-1.66-1.34-3-3-3h-3z" fill="#ECB22E" />
-        <path d="M19 8c-1.66 0-3 1.34-3 3v3h6v-3c0-1.66-1.34-3-3-3z" fill="#36C5F0" />
-      </g>
-    </svg>
-  ),
-  notion: (
-    <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-      <path d="M3 4c0-1.1.9-2 2-2h14l4 4v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V4z" fill="white" />
-      <path d="M7 8h10M7 12h8M7 16h6" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  ),
-};
-
 const PROVIDERS: Array<{
-  key: Exclude<ProviderKey, "whatsapp">;
+  key: ProviderKey;
   label: string;
   description: string;
+  logo: string;
 }> = [
-  { key: "gmail", label: "Gmail", description: "Send and search emails" },
-  { key: "calendar", label: "Calendar", description: "Create and manage events" },
-  { key: "docs", label: "Docs", description: "Create and edit documents" },
-  { key: "sheets", label: "Sheets", description: "Store tabular workflow data" },
-  { key: "drive", label: "Drive", description: "Search and upload files" },
-  { key: "slack", label: "Slack", description: "Send messages to your workspace" },
-  { key: "notion", label: "Notion", description: "Connect pages and databases" },
+  { key: "gmail", label: "Gmail", description: "Send and search emails", logo: "/gmail.png" },
+  { key: "calendar", label: "Calendar", description: "Create and manage events", logo: "/calendar.png" },
+  { key: "docs", label: "Docs", description: "Create and edit documents", logo: "/docs.png" },
+  { key: "sheets", label: "Sheets", description: "Store tabular workflow data", logo: "/sheets.png" },
+  { key: "drive", label: "Drive", description: "Search and upload files", logo: "/drive.png" },
+  { key: "slack", label: "Slack", description: "Send messages to your workspace", logo: "/slack.png" },
+  { key: "notion", label: "Notion", description: "Connect pages and databases", logo: "/Notion_logo_PNG_(2).png" },
 ];
 
-/* ── Spinner matching chat page ── */
 const Spinner = ({ className = "" }: { className?: string }) => (
   <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.25" />
@@ -111,14 +54,11 @@ export const ToolConnectPanel = () => {
     [connections]
   );
 
-  const totalTools = PROVIDERS.length;
-
   const fetchConnections = async (silent = false) => {
     if (!token) return;
     if (!silent) setRefreshing(true);
 
     try {
-      // Fetch OAuth connections
       const response = (await api.getOAuthConnections(token)) as Record<string, unknown>;
       const data = (response.data || {}) as Record<string, unknown>;
       const providers = Array.isArray(data.providers)
@@ -152,7 +92,7 @@ export const ToolConnectPanel = () => {
 
   const connectProvider = async (provider: ProviderKey) => {
     if (!token) { toast.error("Please log in first."); return; }
-    
+
     setLoadingProvider(provider);
     try {
       const response = (await api.getOAuthUrl(provider, token)) as Record<string, unknown>;
@@ -169,18 +109,22 @@ export const ToolConnectPanel = () => {
 
   return (
     <div>
-      {/* Status bar */}
-      <div className="flex items-center gap-3 mb-6 px-1">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8 px-1">
+        <div>
+          <h2 className="text-lg font-semibold text-white">Integrations</h2>
+          <p className="text-sm text-neutral-500 mt-0.5">
+            {connectedCount} of {PROVIDERS.length} tools connected
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <div className={`w-2 h-2 rounded-full ${refreshing ? "bg-amber-400 animate-pulse" : "bg-emerald-400"}`} />
-          <span className="text-[13px] text-neutral-400">
-            {connectedCount}/{totalTools} connected
-          </span>
+          <span className="text-xs text-neutral-500">{refreshing ? "Syncing…" : "Live"}</span>
         </div>
       </div>
 
-      {/* Tool grid */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Tool list */}
+      <div className="space-y-2">
         {PROVIDERS.map((provider) => {
           const connection = connections[provider.key];
           const isConnected = connection?.connected;
@@ -188,95 +132,79 @@ export const ToolConnectPanel = () => {
           const isLoading = loadingProvider === provider.key;
 
           return (
-            <button
+            <div
               key={provider.key}
-              type="button"
-              onClick={() => connectProvider(provider.key)}
-              disabled={loadingProvider !== null}
-              className={`group relative flex items-start gap-4 rounded-2xl border p-5 text-left transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-all duration-150 ${
                 isConnected && !isExpired
-                  ? "border-neutral-700/60 bg-[#1e1e1e] hover:border-neutral-600"
-                  : "border-neutral-800/60 bg-[#1a1a1a] hover:border-neutral-700 hover:bg-[#1e1e1e]"
+                  ? "border-neutral-700/50 bg-[#1c1c1c]"
+                  : "border-neutral-800/50 bg-[#161616] hover:bg-[#1c1c1c] hover:border-neutral-700/50"
               }`}
             >
-              {/* Icon */}
-              <div
-                className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                  provider.key === "gmail" ? "bg-red-500/15 group-hover:bg-red-500/20" :
-                  provider.key === "calendar" ? "bg-blue-500/15 group-hover:bg-blue-500/20" :
-                  provider.key === "docs" ? "bg-blue-500/15 group-hover:bg-blue-500/20" :
-                  provider.key === "sheets" ? "bg-green-500/15 group-hover:bg-green-500/20" :
-                  provider.key === "drive" ? "bg-amber-500/15 group-hover:bg-amber-500/20" :
-                  provider.key === "slack" ? "bg-pink-500/15 group-hover:bg-pink-500/20" :
-                  "bg-white/10 group-hover:bg-white/15"
-                }`}
-              >
-                {ToolIcons[provider.key]}
+              {/* Logo */}
+              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-800/60 flex items-center justify-center overflow-hidden">
+                <img
+                  src={provider.logo}
+                  alt={provider.label}
+                  className="w-6 h-6 object-contain"
+                />
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-[15px] font-medium text-neutral-100">{provider.label}</h3>
+                  <h3 className="text-sm font-medium text-neutral-100">{provider.label}</h3>
                   {isConnected && !isExpired && (
-                    <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      Connected
+                    </span>
+                  )}
+                  {isExpired && (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      Expired
+                    </span>
                   )}
                 </div>
-                <p className="text-[13px] text-neutral-500 mt-0.5">{provider.description}</p>
-                <div className="mt-2.5">
-                  <span
-                    className={`inline-flex items-center gap-1.5 text-[12px] font-medium ${
-                      isConnected && !isExpired
-                        ? "text-emerald-400/80"
-                        : isExpired
-                        ? "text-amber-400/80"
-                        : "text-neutral-500"
-                    }`}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Spinner className="w-3 h-3" />
-                        Opening...
-                      </>
-                    ) : isConnected && !isExpired ? (
-                      "Connected · Reconnect"
-                    ) : isExpired ? (
-                      "Expired · Reconnect"
-                    ) : (
-                      "Connect"
-                    )}
-                  </span>
-                </div>
+                <p className="text-xs text-neutral-500 mt-0.5">{provider.description}</p>
               </div>
 
-              {/* Arrow */}
-              <svg
-                className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 transition-colors flex-shrink-0 mt-1"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              {/* Action button */}
+              <button
+                type="button"
+                onClick={() => connectProvider(provider.key)}
+                disabled={loadingProvider !== null}
+                className={`flex-shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
+                  isConnected && !isExpired
+                    ? "bg-transparent border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500"
+                    : "bg-white text-black hover:bg-neutral-200"
+                }`}
               >
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
+                {isLoading ? (
+                  <>
+                    <Spinner className="w-3.5 h-3.5" />
+                    <span>Connecting…</span>
+                  </>
+                ) : isConnected && !isExpired ? (
+                  "Reconnect"
+                ) : isExpired ? (
+                  "Reconnect"
+                ) : (
+                  "Connect"
+                )}
+              </button>
+            </div>
           );
         })}
       </div>
 
-      {/* Signed in */}
-      <div className="mt-6 flex items-center gap-3 px-1">
-        <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700/50 flex items-center justify-center">
-          <svg className="w-4 h-4 text-neutral-400" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-          </svg>
+      {/* Signed in footer */}
+      <div className="mt-8 flex items-center gap-3 px-1 pt-6 border-t border-neutral-800/50">
+        <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700/50 flex items-center justify-center text-xs font-medium text-neutral-300 uppercase">
+          {(user?.name?.[0] || user?.email?.[0] || "U")}
         </div>
         <div>
-          <p className="text-[13px] text-neutral-300">{user?.name || user?.email || "Unknown user"}</p>
+          <p className="text-sm text-neutral-300">{user?.name || user?.email || "Unknown user"}</p>
           <p className="text-[11px] text-neutral-600">Signed in</p>
         </div>
       </div>

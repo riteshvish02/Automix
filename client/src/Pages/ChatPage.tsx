@@ -265,13 +265,21 @@ export const ChatPage = () => {
       {/* ── Sidebar ── */}
       <aside
         className={`${
-          sidebarOpen ? "w-[260px]" : "w-0"
+          sidebarOpen ? "w-[290px]" : "w-0"
         } bg-[#181818] border-r border-neutral-800/60 flex flex-col overflow-hidden transition-all duration-200 flex-shrink-0`}
       >
         <div className="flex flex-col h-full p-4">
           {/* Brand */}
-          <div className="flex items-center justify-between mb-8 px-1">
-            <h1 className="text-base font-semibold tracking-tight text-neutral-100">use.ai</h1>
+          <div className="mb-8 px-1">
+            <div className="flex items-center">
+              <div className="h-16 w-32 overflow-hidden flex-shrink-0">
+                <img
+                  src="/final-logo.png"
+                  alt="Automix logo"
+                  className="h-full w-full object-cover object-center scale-[1.2]"
+                />
+              </div>
+            </div>
           </div>
 
           {/* New Chat */}
@@ -297,7 +305,7 @@ export const ChatPage = () => {
 
             {conversationsLoading ? (
               <div className="flex items-center justify-center py-8">
-                <IconSpinner className="w-4 h-4 text-neutral-300" />
+                <IconSpinner className="w-6 h-6 text-neutral-300" />
               </div>
             ) : conversations.length === 0 ? (
               <div className="text-[12px] text-neutral-400 text-center py-8 px-4">
@@ -309,14 +317,13 @@ export const ChatPage = () => {
                   <button
                     key={conv.id}
                     onClick={() => selectConversation(conv)}
-                    className={`group flex items-center gap-2.5 px-3 py-2 text-left rounded-lg transition-all duration-150 ${
+                    className={`group flex items-center gap-2.5 px-3 py-3 text-left rounded-lg transition-all duration-150 ${
                       currentConversation?.id === conv.id
                         ? "bg-neutral-800/70 text-neutral-100"
                         : "text-neutral-300 hover:text-neutral-300 hover:bg-neutral-800/30"
                     }`}
                   >
-                    <IconChat className="w-4 h-4 flex-shrink-0 opacity-40" />
-                    <span className="truncate text-[14px]">
+                    <span className="truncate text-[16px]">
                       {conv.firstMessage || conv.title || conv.summary || "Conversation"}
                     </span>
                   </button>

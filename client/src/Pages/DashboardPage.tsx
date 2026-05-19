@@ -37,12 +37,17 @@ export const DashboardPage = () => {
         <div className="mx-auto max-w-5xl flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             {/* Logo */}
-            <div className="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700/50 flex items-center justify-center">
-              <svg className="w-4 h-4 text-neutral-300" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-              </svg>
+             <div className="">
+            <div className="flex items-center">
+              <div className="h-16 w-32 overflow-hidden flex-shrink-0">
+                <img
+                  src="/final-logo.png"
+                  alt="Automix logo"
+                  className="h-full w-full object-cover object-center scale-[1.18]"
+                />
+              </div>
             </div>
-            <h1 className="text-base font-semibold tracking-tight text-neutral-100">use.ai</h1>
+          </div>
           </div>
 
           <button
