@@ -1,0 +1,70 @@
+name: "Deploying the production react app"
+
+on:
+  workflow_run:
+    workflows: ["React CI/CD Pipeline"]
+    types:
+      - completed
+
+# Never let two production deploys race
+concurrency:
+  group: client-cd
+  cancel-in-progress: false
+
+# actions: read is required to pull an artifact from a *different* workflow run
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  cd-react-job:
+    runs-on: ubuntu-latest
+    environment: Production
+
+    # `types: [completed]` fires even when CI failed, and also for pull_request runs.
+    # Only deploy a green master build.
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event != 'pull_request' &&
+      github.event.workflow_run.head_branch == 'master'
+
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - name: "Set up Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: "Setup vercel cli"
+        run: npm install -g vercel@latest
+
+      - name: "Download Build Artifacts"
+        uses: actions/download-artifact@v4
+        with:
+          name: vite-build
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          repository: ${{ github.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Assemble Vercel Build Output (API v3)"
+        # Deploy the artifact CI already built instead of rebuilding on the runner.
+        # The filesystem/index.html routes are what make react-router deep links work.
+        run: |
+          mkdir -p .vercel/output/static
+          cp -r dist/. .vercel/output/static/
+          cat > .vercel/output/config.json <<'JSON'
+          {
+            "version": 3,
+            "routes": [
+              { "handle": "filesystem" },
+              { "src": "/.*", "dest": "/index.html" }
+            ]
+          }
+          JSON
+
+      - name: "Deploy to Vercel"
+        run: vercel deploy --prebuilt --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"

@@ -48,11 +48,6 @@ export type ToolMetric = $Result.DefaultSelection<Prisma.$ToolMetricPayload>
  * 
  */
 export type ConversationSummary = $Result.DefaultSelection<Prisma.$ConversationSummaryPayload>
-/**
- * Model WhatsAppCredentials
- * 
- */
-export type WhatsAppCredentials = $Result.DefaultSelection<Prisma.$WhatsAppCredentialsPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -244,16 +239,6 @@ export class PrismaClient<
     * ```
     */
   get conversationSummary(): Prisma.ConversationSummaryDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.whatsAppCredentials`: Exposes CRUD operations for the **WhatsAppCredentials** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more WhatsAppCredentials
-    * const whatsAppCredentials = await prisma.whatsAppCredentials.findMany()
-    * ```
-    */
-  get whatsAppCredentials(): Prisma.WhatsAppCredentialsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -694,8 +679,7 @@ export namespace Prisma {
     Message: 'Message',
     OAuthToken: 'OAuthToken',
     ToolMetric: 'ToolMetric',
-    ConversationSummary: 'ConversationSummary',
-    WhatsAppCredentials: 'WhatsAppCredentials'
+    ConversationSummary: 'ConversationSummary'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -711,7 +695,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "artifact" | "user" | "conversation" | "message" | "oAuthToken" | "toolMetric" | "conversationSummary" | "whatsAppCredentials"
+      modelProps: "artifact" | "user" | "conversation" | "message" | "oAuthToken" | "toolMetric" | "conversationSummary"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1233,80 +1217,6 @@ export namespace Prisma {
           }
         }
       }
-      WhatsAppCredentials: {
-        payload: Prisma.$WhatsAppCredentialsPayload<ExtArgs>
-        fields: Prisma.WhatsAppCredentialsFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.WhatsAppCredentialsFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.WhatsAppCredentialsFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>
-          }
-          findFirst: {
-            args: Prisma.WhatsAppCredentialsFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.WhatsAppCredentialsFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>
-          }
-          findMany: {
-            args: Prisma.WhatsAppCredentialsFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>[]
-          }
-          create: {
-            args: Prisma.WhatsAppCredentialsCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>
-          }
-          createMany: {
-            args: Prisma.WhatsAppCredentialsCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.WhatsAppCredentialsCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>[]
-          }
-          delete: {
-            args: Prisma.WhatsAppCredentialsDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>
-          }
-          update: {
-            args: Prisma.WhatsAppCredentialsUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>
-          }
-          deleteMany: {
-            args: Prisma.WhatsAppCredentialsDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.WhatsAppCredentialsUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.WhatsAppCredentialsUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>[]
-          }
-          upsert: {
-            args: Prisma.WhatsAppCredentialsUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WhatsAppCredentialsPayload>
-          }
-          aggregate: {
-            args: Prisma.WhatsAppCredentialsAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateWhatsAppCredentials>
-          }
-          groupBy: {
-            args: Prisma.WhatsAppCredentialsGroupByArgs<ExtArgs>
-            result: $Utils.Optional<WhatsAppCredentialsGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.WhatsAppCredentialsCountArgs<ExtArgs>
-            result: $Utils.Optional<WhatsAppCredentialsCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1422,7 +1332,6 @@ export namespace Prisma {
     oAuthToken?: OAuthTokenOmit
     toolMetric?: ToolMetricOmit
     conversationSummary?: ConversationSummaryOmit
-    whatsAppCredentials?: WhatsAppCredentialsOmit
   }
 
   /* Types for Logging */
@@ -2909,7 +2818,6 @@ export namespace Prisma {
     oauthTokens?: boolean | User$oauthTokensArgs<ExtArgs>
     artifacts?: boolean | User$artifactsArgs<ExtArgs>
     toolMetrics?: boolean | User$toolMetricsArgs<ExtArgs>
-    whatsappCredentials?: boolean | User$whatsappCredentialsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2946,7 +2854,6 @@ export namespace Prisma {
     oauthTokens?: boolean | User$oauthTokensArgs<ExtArgs>
     artifacts?: boolean | User$artifactsArgs<ExtArgs>
     toolMetrics?: boolean | User$toolMetricsArgs<ExtArgs>
-    whatsappCredentials?: boolean | User$whatsappCredentialsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2959,7 +2866,6 @@ export namespace Prisma {
       oauthTokens: Prisma.$OAuthTokenPayload<ExtArgs>[]
       artifacts: Prisma.$ArtifactPayload<ExtArgs>[]
       toolMetrics: Prisma.$ToolMetricPayload<ExtArgs>[]
-      whatsappCredentials: Prisma.$WhatsAppCredentialsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3366,7 +3272,6 @@ export namespace Prisma {
     oauthTokens<T extends User$oauthTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$oauthTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     artifacts<T extends User$artifactsArgs<ExtArgs> = {}>(args?: Subset<T, User$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     toolMetrics<T extends User$toolMetricsArgs<ExtArgs> = {}>(args?: Subset<T, User$toolMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ToolMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    whatsappCredentials<T extends User$whatsappCredentialsArgs<ExtArgs> = {}>(args?: Subset<T, User$whatsappCredentialsArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3888,25 +3793,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ToolMetricScalarFieldEnum | ToolMetricScalarFieldEnum[]
-  }
-
-  /**
-   * User.whatsappCredentials
-   */
-  export type User$whatsappCredentialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    where?: WhatsAppCredentialsWhereInput
   }
 
   /**
@@ -9538,1104 +9424,6 @@ export namespace Prisma {
 
 
   /**
-   * Model WhatsAppCredentials
-   */
-
-  export type AggregateWhatsAppCredentials = {
-    _count: WhatsAppCredentialsCountAggregateOutputType | null
-    _min: WhatsAppCredentialsMinAggregateOutputType | null
-    _max: WhatsAppCredentialsMaxAggregateOutputType | null
-  }
-
-  export type WhatsAppCredentialsMinAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    phoneNumber: string | null
-    isConnected: boolean | null
-    connectionQR: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type WhatsAppCredentialsMaxAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    phoneNumber: string | null
-    isConnected: boolean | null
-    connectionQR: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type WhatsAppCredentialsCountAggregateOutputType = {
-    id: number
-    userId: number
-    phoneNumber: number
-    authState: number
-    isConnected: number
-    connectionQR: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type WhatsAppCredentialsMinAggregateInputType = {
-    id?: true
-    userId?: true
-    phoneNumber?: true
-    isConnected?: true
-    connectionQR?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type WhatsAppCredentialsMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    phoneNumber?: true
-    isConnected?: true
-    connectionQR?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type WhatsAppCredentialsCountAggregateInputType = {
-    id?: true
-    userId?: true
-    phoneNumber?: true
-    authState?: true
-    isConnected?: true
-    connectionQR?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type WhatsAppCredentialsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which WhatsAppCredentials to aggregate.
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WhatsAppCredentials to fetch.
-     */
-    orderBy?: WhatsAppCredentialsOrderByWithRelationInput | WhatsAppCredentialsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: WhatsAppCredentialsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WhatsAppCredentials from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WhatsAppCredentials.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned WhatsAppCredentials
-    **/
-    _count?: true | WhatsAppCredentialsCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: WhatsAppCredentialsMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: WhatsAppCredentialsMaxAggregateInputType
-  }
-
-  export type GetWhatsAppCredentialsAggregateType<T extends WhatsAppCredentialsAggregateArgs> = {
-        [P in keyof T & keyof AggregateWhatsAppCredentials]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateWhatsAppCredentials[P]>
-      : GetScalarType<T[P], AggregateWhatsAppCredentials[P]>
-  }
-
-
-
-
-  export type WhatsAppCredentialsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: WhatsAppCredentialsWhereInput
-    orderBy?: WhatsAppCredentialsOrderByWithAggregationInput | WhatsAppCredentialsOrderByWithAggregationInput[]
-    by: WhatsAppCredentialsScalarFieldEnum[] | WhatsAppCredentialsScalarFieldEnum
-    having?: WhatsAppCredentialsScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: WhatsAppCredentialsCountAggregateInputType | true
-    _min?: WhatsAppCredentialsMinAggregateInputType
-    _max?: WhatsAppCredentialsMaxAggregateInputType
-  }
-
-  export type WhatsAppCredentialsGroupByOutputType = {
-    id: string
-    userId: string
-    phoneNumber: string | null
-    authState: JsonValue
-    isConnected: boolean
-    connectionQR: string | null
-    createdAt: Date
-    updatedAt: Date
-    _count: WhatsAppCredentialsCountAggregateOutputType | null
-    _min: WhatsAppCredentialsMinAggregateOutputType | null
-    _max: WhatsAppCredentialsMaxAggregateOutputType | null
-  }
-
-  type GetWhatsAppCredentialsGroupByPayload<T extends WhatsAppCredentialsGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<WhatsAppCredentialsGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof WhatsAppCredentialsGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], WhatsAppCredentialsGroupByOutputType[P]>
-            : GetScalarType<T[P], WhatsAppCredentialsGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type WhatsAppCredentialsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    phoneNumber?: boolean
-    authState?: boolean
-    isConnected?: boolean
-    connectionQR?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["whatsAppCredentials"]>
-
-  export type WhatsAppCredentialsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    phoneNumber?: boolean
-    authState?: boolean
-    isConnected?: boolean
-    connectionQR?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["whatsAppCredentials"]>
-
-  export type WhatsAppCredentialsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    phoneNumber?: boolean
-    authState?: boolean
-    isConnected?: boolean
-    connectionQR?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["whatsAppCredentials"]>
-
-  export type WhatsAppCredentialsSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    phoneNumber?: boolean
-    authState?: boolean
-    isConnected?: boolean
-    connectionQR?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type WhatsAppCredentialsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "phoneNumber" | "authState" | "isConnected" | "connectionQR" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppCredentials"]>
-  export type WhatsAppCredentialsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type WhatsAppCredentialsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type WhatsAppCredentialsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $WhatsAppCredentialsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "WhatsAppCredentials"
-    objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      userId: string
-      phoneNumber: string | null
-      authState: Prisma.JsonValue
-      isConnected: boolean
-      connectionQR: string | null
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["whatsAppCredentials"]>
-    composites: {}
-  }
-
-  type WhatsAppCredentialsGetPayload<S extends boolean | null | undefined | WhatsAppCredentialsDefaultArgs> = $Result.GetResult<Prisma.$WhatsAppCredentialsPayload, S>
-
-  type WhatsAppCredentialsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<WhatsAppCredentialsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: WhatsAppCredentialsCountAggregateInputType | true
-    }
-
-  export interface WhatsAppCredentialsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WhatsAppCredentials'], meta: { name: 'WhatsAppCredentials' } }
-    /**
-     * Find zero or one WhatsAppCredentials that matches the filter.
-     * @param {WhatsAppCredentialsFindUniqueArgs} args - Arguments to find a WhatsAppCredentials
-     * @example
-     * // Get one WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends WhatsAppCredentialsFindUniqueArgs>(args: SelectSubset<T, WhatsAppCredentialsFindUniqueArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one WhatsAppCredentials that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {WhatsAppCredentialsFindUniqueOrThrowArgs} args - Arguments to find a WhatsAppCredentials
-     * @example
-     * // Get one WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends WhatsAppCredentialsFindUniqueOrThrowArgs>(args: SelectSubset<T, WhatsAppCredentialsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first WhatsAppCredentials that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsFindFirstArgs} args - Arguments to find a WhatsAppCredentials
-     * @example
-     * // Get one WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends WhatsAppCredentialsFindFirstArgs>(args?: SelectSubset<T, WhatsAppCredentialsFindFirstArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first WhatsAppCredentials that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsFindFirstOrThrowArgs} args - Arguments to find a WhatsAppCredentials
-     * @example
-     * // Get one WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends WhatsAppCredentialsFindFirstOrThrowArgs>(args?: SelectSubset<T, WhatsAppCredentialsFindFirstOrThrowArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more WhatsAppCredentials that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.findMany()
-     * 
-     * // Get first 10 WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const whatsAppCredentialsWithIdOnly = await prisma.whatsAppCredentials.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends WhatsAppCredentialsFindManyArgs>(args?: SelectSubset<T, WhatsAppCredentialsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a WhatsAppCredentials.
-     * @param {WhatsAppCredentialsCreateArgs} args - Arguments to create a WhatsAppCredentials.
-     * @example
-     * // Create one WhatsAppCredentials
-     * const WhatsAppCredentials = await prisma.whatsAppCredentials.create({
-     *   data: {
-     *     // ... data to create a WhatsAppCredentials
-     *   }
-     * })
-     * 
-     */
-    create<T extends WhatsAppCredentialsCreateArgs>(args: SelectSubset<T, WhatsAppCredentialsCreateArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many WhatsAppCredentials.
-     * @param {WhatsAppCredentialsCreateManyArgs} args - Arguments to create many WhatsAppCredentials.
-     * @example
-     * // Create many WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends WhatsAppCredentialsCreateManyArgs>(args?: SelectSubset<T, WhatsAppCredentialsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many WhatsAppCredentials and returns the data saved in the database.
-     * @param {WhatsAppCredentialsCreateManyAndReturnArgs} args - Arguments to create many WhatsAppCredentials.
-     * @example
-     * // Create many WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many WhatsAppCredentials and only return the `id`
-     * const whatsAppCredentialsWithIdOnly = await prisma.whatsAppCredentials.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends WhatsAppCredentialsCreateManyAndReturnArgs>(args?: SelectSubset<T, WhatsAppCredentialsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a WhatsAppCredentials.
-     * @param {WhatsAppCredentialsDeleteArgs} args - Arguments to delete one WhatsAppCredentials.
-     * @example
-     * // Delete one WhatsAppCredentials
-     * const WhatsAppCredentials = await prisma.whatsAppCredentials.delete({
-     *   where: {
-     *     // ... filter to delete one WhatsAppCredentials
-     *   }
-     * })
-     * 
-     */
-    delete<T extends WhatsAppCredentialsDeleteArgs>(args: SelectSubset<T, WhatsAppCredentialsDeleteArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one WhatsAppCredentials.
-     * @param {WhatsAppCredentialsUpdateArgs} args - Arguments to update one WhatsAppCredentials.
-     * @example
-     * // Update one WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends WhatsAppCredentialsUpdateArgs>(args: SelectSubset<T, WhatsAppCredentialsUpdateArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more WhatsAppCredentials.
-     * @param {WhatsAppCredentialsDeleteManyArgs} args - Arguments to filter WhatsAppCredentials to delete.
-     * @example
-     * // Delete a few WhatsAppCredentials
-     * const { count } = await prisma.whatsAppCredentials.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends WhatsAppCredentialsDeleteManyArgs>(args?: SelectSubset<T, WhatsAppCredentialsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more WhatsAppCredentials.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends WhatsAppCredentialsUpdateManyArgs>(args: SelectSubset<T, WhatsAppCredentialsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more WhatsAppCredentials and returns the data updated in the database.
-     * @param {WhatsAppCredentialsUpdateManyAndReturnArgs} args - Arguments to update many WhatsAppCredentials.
-     * @example
-     * // Update many WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more WhatsAppCredentials and only return the `id`
-     * const whatsAppCredentialsWithIdOnly = await prisma.whatsAppCredentials.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends WhatsAppCredentialsUpdateManyAndReturnArgs>(args: SelectSubset<T, WhatsAppCredentialsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one WhatsAppCredentials.
-     * @param {WhatsAppCredentialsUpsertArgs} args - Arguments to update or create a WhatsAppCredentials.
-     * @example
-     * // Update or create a WhatsAppCredentials
-     * const whatsAppCredentials = await prisma.whatsAppCredentials.upsert({
-     *   create: {
-     *     // ... data to create a WhatsAppCredentials
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the WhatsAppCredentials we want to update
-     *   }
-     * })
-     */
-    upsert<T extends WhatsAppCredentialsUpsertArgs>(args: SelectSubset<T, WhatsAppCredentialsUpsertArgs<ExtArgs>>): Prisma__WhatsAppCredentialsClient<$Result.GetResult<Prisma.$WhatsAppCredentialsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of WhatsAppCredentials.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsCountArgs} args - Arguments to filter WhatsAppCredentials to count.
-     * @example
-     * // Count the number of WhatsAppCredentials
-     * const count = await prisma.whatsAppCredentials.count({
-     *   where: {
-     *     // ... the filter for the WhatsAppCredentials we want to count
-     *   }
-     * })
-    **/
-    count<T extends WhatsAppCredentialsCountArgs>(
-      args?: Subset<T, WhatsAppCredentialsCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], WhatsAppCredentialsCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a WhatsAppCredentials.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends WhatsAppCredentialsAggregateArgs>(args: Subset<T, WhatsAppCredentialsAggregateArgs>): Prisma.PrismaPromise<GetWhatsAppCredentialsAggregateType<T>>
-
-    /**
-     * Group by WhatsAppCredentials.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {WhatsAppCredentialsGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends WhatsAppCredentialsGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: WhatsAppCredentialsGroupByArgs['orderBy'] }
-        : { orderBy?: WhatsAppCredentialsGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, WhatsAppCredentialsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWhatsAppCredentialsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the WhatsAppCredentials model
-   */
-  readonly fields: WhatsAppCredentialsFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for WhatsAppCredentials.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__WhatsAppCredentialsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the WhatsAppCredentials model
-   */
-  interface WhatsAppCredentialsFieldRefs {
-    readonly id: FieldRef<"WhatsAppCredentials", 'String'>
-    readonly userId: FieldRef<"WhatsAppCredentials", 'String'>
-    readonly phoneNumber: FieldRef<"WhatsAppCredentials", 'String'>
-    readonly authState: FieldRef<"WhatsAppCredentials", 'Json'>
-    readonly isConnected: FieldRef<"WhatsAppCredentials", 'Boolean'>
-    readonly connectionQR: FieldRef<"WhatsAppCredentials", 'String'>
-    readonly createdAt: FieldRef<"WhatsAppCredentials", 'DateTime'>
-    readonly updatedAt: FieldRef<"WhatsAppCredentials", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * WhatsAppCredentials findUnique
-   */
-  export type WhatsAppCredentialsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * Filter, which WhatsAppCredentials to fetch.
-     */
-    where: WhatsAppCredentialsWhereUniqueInput
-  }
-
-  /**
-   * WhatsAppCredentials findUniqueOrThrow
-   */
-  export type WhatsAppCredentialsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * Filter, which WhatsAppCredentials to fetch.
-     */
-    where: WhatsAppCredentialsWhereUniqueInput
-  }
-
-  /**
-   * WhatsAppCredentials findFirst
-   */
-  export type WhatsAppCredentialsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * Filter, which WhatsAppCredentials to fetch.
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WhatsAppCredentials to fetch.
-     */
-    orderBy?: WhatsAppCredentialsOrderByWithRelationInput | WhatsAppCredentialsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for WhatsAppCredentials.
-     */
-    cursor?: WhatsAppCredentialsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WhatsAppCredentials from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WhatsAppCredentials.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of WhatsAppCredentials.
-     */
-    distinct?: WhatsAppCredentialsScalarFieldEnum | WhatsAppCredentialsScalarFieldEnum[]
-  }
-
-  /**
-   * WhatsAppCredentials findFirstOrThrow
-   */
-  export type WhatsAppCredentialsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * Filter, which WhatsAppCredentials to fetch.
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WhatsAppCredentials to fetch.
-     */
-    orderBy?: WhatsAppCredentialsOrderByWithRelationInput | WhatsAppCredentialsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for WhatsAppCredentials.
-     */
-    cursor?: WhatsAppCredentialsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WhatsAppCredentials from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WhatsAppCredentials.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of WhatsAppCredentials.
-     */
-    distinct?: WhatsAppCredentialsScalarFieldEnum | WhatsAppCredentialsScalarFieldEnum[]
-  }
-
-  /**
-   * WhatsAppCredentials findMany
-   */
-  export type WhatsAppCredentialsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * Filter, which WhatsAppCredentials to fetch.
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of WhatsAppCredentials to fetch.
-     */
-    orderBy?: WhatsAppCredentialsOrderByWithRelationInput | WhatsAppCredentialsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing WhatsAppCredentials.
-     */
-    cursor?: WhatsAppCredentialsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` WhatsAppCredentials from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` WhatsAppCredentials.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of WhatsAppCredentials.
-     */
-    distinct?: WhatsAppCredentialsScalarFieldEnum | WhatsAppCredentialsScalarFieldEnum[]
-  }
-
-  /**
-   * WhatsAppCredentials create
-   */
-  export type WhatsAppCredentialsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * The data needed to create a WhatsAppCredentials.
-     */
-    data: XOR<WhatsAppCredentialsCreateInput, WhatsAppCredentialsUncheckedCreateInput>
-  }
-
-  /**
-   * WhatsAppCredentials createMany
-   */
-  export type WhatsAppCredentialsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many WhatsAppCredentials.
-     */
-    data: WhatsAppCredentialsCreateManyInput | WhatsAppCredentialsCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * WhatsAppCredentials createManyAndReturn
-   */
-  export type WhatsAppCredentialsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * The data used to create many WhatsAppCredentials.
-     */
-    data: WhatsAppCredentialsCreateManyInput | WhatsAppCredentialsCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * WhatsAppCredentials update
-   */
-  export type WhatsAppCredentialsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * The data needed to update a WhatsAppCredentials.
-     */
-    data: XOR<WhatsAppCredentialsUpdateInput, WhatsAppCredentialsUncheckedUpdateInput>
-    /**
-     * Choose, which WhatsAppCredentials to update.
-     */
-    where: WhatsAppCredentialsWhereUniqueInput
-  }
-
-  /**
-   * WhatsAppCredentials updateMany
-   */
-  export type WhatsAppCredentialsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update WhatsAppCredentials.
-     */
-    data: XOR<WhatsAppCredentialsUpdateManyMutationInput, WhatsAppCredentialsUncheckedUpdateManyInput>
-    /**
-     * Filter which WhatsAppCredentials to update
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * Limit how many WhatsAppCredentials to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * WhatsAppCredentials updateManyAndReturn
-   */
-  export type WhatsAppCredentialsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * The data used to update WhatsAppCredentials.
-     */
-    data: XOR<WhatsAppCredentialsUpdateManyMutationInput, WhatsAppCredentialsUncheckedUpdateManyInput>
-    /**
-     * Filter which WhatsAppCredentials to update
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * Limit how many WhatsAppCredentials to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * WhatsAppCredentials upsert
-   */
-  export type WhatsAppCredentialsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * The filter to search for the WhatsAppCredentials to update in case it exists.
-     */
-    where: WhatsAppCredentialsWhereUniqueInput
-    /**
-     * In case the WhatsAppCredentials found by the `where` argument doesn't exist, create a new WhatsAppCredentials with this data.
-     */
-    create: XOR<WhatsAppCredentialsCreateInput, WhatsAppCredentialsUncheckedCreateInput>
-    /**
-     * In case the WhatsAppCredentials was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<WhatsAppCredentialsUpdateInput, WhatsAppCredentialsUncheckedUpdateInput>
-  }
-
-  /**
-   * WhatsAppCredentials delete
-   */
-  export type WhatsAppCredentialsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-    /**
-     * Filter which WhatsAppCredentials to delete.
-     */
-    where: WhatsAppCredentialsWhereUniqueInput
-  }
-
-  /**
-   * WhatsAppCredentials deleteMany
-   */
-  export type WhatsAppCredentialsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which WhatsAppCredentials to delete
-     */
-    where?: WhatsAppCredentialsWhereInput
-    /**
-     * Limit how many WhatsAppCredentials to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * WhatsAppCredentials without action
-   */
-  export type WhatsAppCredentialsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WhatsAppCredentials
-     */
-    select?: WhatsAppCredentialsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WhatsAppCredentials
-     */
-    omit?: WhatsAppCredentialsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WhatsAppCredentialsInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -10745,20 +9533,6 @@ export namespace Prisma {
   export type ConversationSummaryScalarFieldEnum = (typeof ConversationSummaryScalarFieldEnum)[keyof typeof ConversationSummaryScalarFieldEnum]
 
 
-  export const WhatsAppCredentialsScalarFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    phoneNumber: 'phoneNumber',
-    authState: 'authState',
-    isConnected: 'isConnected',
-    connectionQR: 'connectionQR',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type WhatsAppCredentialsScalarFieldEnum = (typeof WhatsAppCredentialsScalarFieldEnum)[keyof typeof WhatsAppCredentialsScalarFieldEnum]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -10773,13 +9547,6 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -10879,13 +9646,6 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
   /**
    * Deep Input Types
@@ -10991,7 +9751,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenListRelationFilter
     artifacts?: ArtifactListRelationFilter
     toolMetrics?: ToolMetricListRelationFilter
-    whatsappCredentials?: XOR<WhatsAppCredentialsNullableScalarRelationFilter, WhatsAppCredentialsWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11005,7 +9764,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenOrderByRelationAggregateInput
     artifacts?: ArtifactOrderByRelationAggregateInput
     toolMetrics?: ToolMetricOrderByRelationAggregateInput
-    whatsappCredentials?: WhatsAppCredentialsOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11022,7 +9780,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenListRelationFilter
     artifacts?: ArtifactListRelationFilter
     toolMetrics?: ToolMetricListRelationFilter
-    whatsappCredentials?: XOR<WhatsAppCredentialsNullableScalarRelationFilter, WhatsAppCredentialsWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -11396,76 +10153,6 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ConversationSummary"> | Date | string
   }
 
-  export type WhatsAppCredentialsWhereInput = {
-    AND?: WhatsAppCredentialsWhereInput | WhatsAppCredentialsWhereInput[]
-    OR?: WhatsAppCredentialsWhereInput[]
-    NOT?: WhatsAppCredentialsWhereInput | WhatsAppCredentialsWhereInput[]
-    id?: StringFilter<"WhatsAppCredentials"> | string
-    userId?: StringFilter<"WhatsAppCredentials"> | string
-    phoneNumber?: StringNullableFilter<"WhatsAppCredentials"> | string | null
-    authState?: JsonFilter<"WhatsAppCredentials">
-    isConnected?: BoolFilter<"WhatsAppCredentials"> | boolean
-    connectionQR?: StringNullableFilter<"WhatsAppCredentials"> | string | null
-    createdAt?: DateTimeFilter<"WhatsAppCredentials"> | Date | string
-    updatedAt?: DateTimeFilter<"WhatsAppCredentials"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }
-
-  export type WhatsAppCredentialsOrderByWithRelationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    phoneNumber?: SortOrderInput | SortOrder
-    authState?: SortOrder
-    isConnected?: SortOrder
-    connectionQR?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type WhatsAppCredentialsWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    userId?: string
-    AND?: WhatsAppCredentialsWhereInput | WhatsAppCredentialsWhereInput[]
-    OR?: WhatsAppCredentialsWhereInput[]
-    NOT?: WhatsAppCredentialsWhereInput | WhatsAppCredentialsWhereInput[]
-    phoneNumber?: StringNullableFilter<"WhatsAppCredentials"> | string | null
-    authState?: JsonFilter<"WhatsAppCredentials">
-    isConnected?: BoolFilter<"WhatsAppCredentials"> | boolean
-    connectionQR?: StringNullableFilter<"WhatsAppCredentials"> | string | null
-    createdAt?: DateTimeFilter<"WhatsAppCredentials"> | Date | string
-    updatedAt?: DateTimeFilter<"WhatsAppCredentials"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "userId">
-
-  export type WhatsAppCredentialsOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    phoneNumber?: SortOrderInput | SortOrder
-    authState?: SortOrder
-    isConnected?: SortOrder
-    connectionQR?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: WhatsAppCredentialsCountOrderByAggregateInput
-    _max?: WhatsAppCredentialsMaxOrderByAggregateInput
-    _min?: WhatsAppCredentialsMinOrderByAggregateInput
-  }
-
-  export type WhatsAppCredentialsScalarWhereWithAggregatesInput = {
-    AND?: WhatsAppCredentialsScalarWhereWithAggregatesInput | WhatsAppCredentialsScalarWhereWithAggregatesInput[]
-    OR?: WhatsAppCredentialsScalarWhereWithAggregatesInput[]
-    NOT?: WhatsAppCredentialsScalarWhereWithAggregatesInput | WhatsAppCredentialsScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"WhatsAppCredentials"> | string
-    userId?: StringWithAggregatesFilter<"WhatsAppCredentials"> | string
-    phoneNumber?: StringNullableWithAggregatesFilter<"WhatsAppCredentials"> | string | null
-    authState?: JsonWithAggregatesFilter<"WhatsAppCredentials">
-    isConnected?: BoolWithAggregatesFilter<"WhatsAppCredentials"> | boolean
-    connectionQR?: StringNullableWithAggregatesFilter<"WhatsAppCredentials"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"WhatsAppCredentials"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"WhatsAppCredentials"> | Date | string
-  }
-
   export type ArtifactCreateInput = {
     id?: string
     type: string
@@ -11574,7 +10261,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -11588,7 +10274,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -11602,7 +10287,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -11616,7 +10300,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12013,82 +10696,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type WhatsAppCredentialsCreateInput = {
-    id?: string
-    phoneNumber?: string | null
-    authState: JsonNullValueInput | InputJsonValue
-    isConnected?: boolean
-    connectionQR?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutWhatsappCredentialsInput
-  }
-
-  export type WhatsAppCredentialsUncheckedCreateInput = {
-    id?: string
-    userId: string
-    phoneNumber?: string | null
-    authState: JsonNullValueInput | InputJsonValue
-    isConnected?: boolean
-    connectionQR?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WhatsAppCredentialsUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    authState?: JsonNullValueInput | InputJsonValue
-    isConnected?: BoolFieldUpdateOperationsInput | boolean
-    connectionQR?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutWhatsappCredentialsNestedInput
-  }
-
-  export type WhatsAppCredentialsUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    authState?: JsonNullValueInput | InputJsonValue
-    isConnected?: BoolFieldUpdateOperationsInput | boolean
-    connectionQR?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WhatsAppCredentialsCreateManyInput = {
-    id?: string
-    userId: string
-    phoneNumber?: string | null
-    authState: JsonNullValueInput | InputJsonValue
-    isConnected?: boolean
-    connectionQR?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WhatsAppCredentialsUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    authState?: JsonNullValueInput | InputJsonValue
-    isConnected?: BoolFieldUpdateOperationsInput | boolean
-    connectionQR?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WhatsAppCredentialsUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    authState?: JsonNullValueInput | InputJsonValue
-    isConnected?: BoolFieldUpdateOperationsInput | boolean
-    connectionQR?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12299,11 +10906,6 @@ export namespace Prisma {
     every?: ToolMetricWhereInput
     some?: ToolMetricWhereInput
     none?: ToolMetricWhereInput
-  }
-
-  export type WhatsAppCredentialsNullableScalarRelationFilter = {
-    is?: WhatsAppCredentialsWhereInput | null
-    isNot?: WhatsAppCredentialsWhereInput | null
   }
 
   export type ConversationOrderByRelationAggregateInput = {
@@ -12640,99 +11242,6 @@ export namespace Prisma {
   export type ConversationSummarySumOrderByAggregateInput = {
     messageCount?: SortOrder
   }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type WhatsAppCredentialsCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    phoneNumber?: SortOrder
-    authState?: SortOrder
-    isConnected?: SortOrder
-    connectionQR?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type WhatsAppCredentialsMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    phoneNumber?: SortOrder
-    isConnected?: SortOrder
-    connectionQR?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type WhatsAppCredentialsMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    phoneNumber?: SortOrder
-    isConnected?: SortOrder
-    connectionQR?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
 
   export type UserCreateNestedOneWithoutArtifactsInput = {
     create?: XOR<UserCreateWithoutArtifactsInput, UserUncheckedCreateWithoutArtifactsInput>
@@ -12788,12 +11297,6 @@ export namespace Prisma {
     connect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
   }
 
-  export type WhatsAppCredentialsCreateNestedOneWithoutUserInput = {
-    create?: XOR<WhatsAppCredentialsCreateWithoutUserInput, WhatsAppCredentialsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: WhatsAppCredentialsCreateOrConnectWithoutUserInput
-    connect?: WhatsAppCredentialsWhereUniqueInput
-  }
-
   export type ConversationUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
@@ -12820,12 +11323,6 @@ export namespace Prisma {
     connectOrCreate?: ToolMetricCreateOrConnectWithoutUserInput | ToolMetricCreateOrConnectWithoutUserInput[]
     createMany?: ToolMetricCreateManyUserInputEnvelope
     connect?: ToolMetricWhereUniqueInput | ToolMetricWhereUniqueInput[]
-  }
-
-  export type WhatsAppCredentialsUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<WhatsAppCredentialsCreateWithoutUserInput, WhatsAppCredentialsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: WhatsAppCredentialsCreateOrConnectWithoutUserInput
-    connect?: WhatsAppCredentialsWhereUniqueInput
   }
 
   export type ConversationUpdateManyWithoutUserNestedInput = {
@@ -12884,16 +11381,6 @@ export namespace Prisma {
     deleteMany?: ToolMetricScalarWhereInput | ToolMetricScalarWhereInput[]
   }
 
-  export type WhatsAppCredentialsUpdateOneWithoutUserNestedInput = {
-    create?: XOR<WhatsAppCredentialsCreateWithoutUserInput, WhatsAppCredentialsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: WhatsAppCredentialsCreateOrConnectWithoutUserInput
-    upsert?: WhatsAppCredentialsUpsertWithoutUserInput
-    disconnect?: WhatsAppCredentialsWhereInput | boolean
-    delete?: WhatsAppCredentialsWhereInput | boolean
-    connect?: WhatsAppCredentialsWhereUniqueInput
-    update?: XOR<XOR<WhatsAppCredentialsUpdateToOneWithWhereWithoutUserInput, WhatsAppCredentialsUpdateWithoutUserInput>, WhatsAppCredentialsUncheckedUpdateWithoutUserInput>
-  }
-
   export type ConversationUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
@@ -12948,16 +11435,6 @@ export namespace Prisma {
     update?: ToolMetricUpdateWithWhereUniqueWithoutUserInput | ToolMetricUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ToolMetricUpdateManyWithWhereWithoutUserInput | ToolMetricUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ToolMetricScalarWhereInput | ToolMetricScalarWhereInput[]
-  }
-
-  export type WhatsAppCredentialsUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<WhatsAppCredentialsCreateWithoutUserInput, WhatsAppCredentialsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: WhatsAppCredentialsCreateOrConnectWithoutUserInput
-    upsert?: WhatsAppCredentialsUpsertWithoutUserInput
-    disconnect?: WhatsAppCredentialsWhereInput | boolean
-    delete?: WhatsAppCredentialsWhereInput | boolean
-    connect?: WhatsAppCredentialsWhereUniqueInput
-    update?: XOR<XOR<WhatsAppCredentialsUpdateToOneWithWhereWithoutUserInput, WhatsAppCredentialsUpdateWithoutUserInput>, WhatsAppCredentialsUncheckedUpdateWithoutUserInput>
   }
 
   export type UserCreateNestedOneWithoutConversationsInput = {
@@ -13132,24 +11609,6 @@ export namespace Prisma {
     upsert?: ConversationUpsertWithoutSummariesInput
     connect?: ConversationWhereUniqueInput
     update?: XOR<XOR<ConversationUpdateToOneWithWhereWithoutSummariesInput, ConversationUpdateWithoutSummariesInput>, ConversationUncheckedUpdateWithoutSummariesInput>
-  }
-
-  export type UserCreateNestedOneWithoutWhatsappCredentialsInput = {
-    create?: XOR<UserCreateWithoutWhatsappCredentialsInput, UserUncheckedCreateWithoutWhatsappCredentialsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutWhatsappCredentialsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type UserUpdateOneRequiredWithoutWhatsappCredentialsNestedInput = {
-    create?: XOR<UserCreateWithoutWhatsappCredentialsInput, UserUncheckedCreateWithoutWhatsappCredentialsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutWhatsappCredentialsInput
-    upsert?: UserUpsertWithoutWhatsappCredentialsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWhatsappCredentialsInput, UserUpdateWithoutWhatsappCredentialsInput>, UserUncheckedUpdateWithoutWhatsappCredentialsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13352,42 +11811,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type UserCreateWithoutArtifactsInput = {
     id?: string
     email: string
@@ -13398,7 +11821,6 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutArtifactsInput = {
@@ -13411,7 +11833,6 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutArtifactsInput = {
@@ -13440,7 +11861,6 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutArtifactsInput = {
@@ -13453,7 +11873,6 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ConversationCreateWithoutUserInput = {
@@ -13588,31 +12007,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type WhatsAppCredentialsCreateWithoutUserInput = {
-    id?: string
-    phoneNumber?: string | null
-    authState: JsonNullValueInput | InputJsonValue
-    isConnected?: boolean
-    connectionQR?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WhatsAppCredentialsUncheckedCreateWithoutUserInput = {
-    id?: string
-    phoneNumber?: string | null
-    authState: JsonNullValueInput | InputJsonValue
-    isConnected?: boolean
-    connectionQR?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WhatsAppCredentialsCreateOrConnectWithoutUserInput = {
-    where: WhatsAppCredentialsWhereUniqueInput
-    create: XOR<WhatsAppCredentialsCreateWithoutUserInput, WhatsAppCredentialsUncheckedCreateWithoutUserInput>
-  }
-
   export type ConversationUpsertWithWhereUniqueWithoutUserInput = {
     where: ConversationWhereUniqueInput
     update: XOR<ConversationUpdateWithoutUserInput, ConversationUncheckedUpdateWithoutUserInput>
@@ -13737,37 +12131,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ToolMetric"> | Date | string
   }
 
-  export type WhatsAppCredentialsUpsertWithoutUserInput = {
-    update: XOR<WhatsAppCredentialsUpdateWithoutUserInput, WhatsAppCredentialsUncheckedUpdateWithoutUserInput>
-    create: XOR<WhatsAppCredentialsCreateWithoutUserInput, WhatsAppCredentialsUncheckedCreateWithoutUserInput>
-    where?: WhatsAppCredentialsWhereInput
-  }
-
-  export type WhatsAppCredentialsUpdateToOneWithWhereWithoutUserInput = {
-    where?: WhatsAppCredentialsWhereInput
-    data: XOR<WhatsAppCredentialsUpdateWithoutUserInput, WhatsAppCredentialsUncheckedUpdateWithoutUserInput>
-  }
-
-  export type WhatsAppCredentialsUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    authState?: JsonNullValueInput | InputJsonValue
-    isConnected?: BoolFieldUpdateOperationsInput | boolean
-    connectionQR?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WhatsAppCredentialsUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    authState?: JsonNullValueInput | InputJsonValue
-    isConnected?: BoolFieldUpdateOperationsInput | boolean
-    connectionQR?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type UserCreateWithoutConversationsInput = {
     id?: string
     email: string
@@ -13778,7 +12141,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationsInput = {
@@ -13791,7 +12153,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationsInput = {
@@ -13872,7 +12233,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationsInput = {
@@ -13885,7 +12245,6 @@ export namespace Prisma {
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -14010,7 +12369,6 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOauthTokensInput = {
@@ -14023,7 +12381,6 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
     toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOauthTokensInput = {
@@ -14052,7 +12409,6 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOauthTokensInput = {
@@ -14065,7 +12421,6 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
     toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutToolMetricsInput = {
@@ -14078,7 +12433,6 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
     artifacts?: ArtifactCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutToolMetricsInput = {
@@ -14091,7 +12445,6 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
     artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutToolMetricsInput = {
@@ -14120,7 +12473,6 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutToolMetricsInput = {
@@ -14133,7 +12485,6 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
     artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
-    whatsappCredentials?: WhatsAppCredentialsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ConversationCreateWithoutSummariesInput = {
@@ -14190,74 +12541,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
-  }
-
-  export type UserCreateWithoutWhatsappCredentialsInput = {
-    id?: string
-    email: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    password: string
-    conversations?: ConversationCreateNestedManyWithoutUserInput
-    oauthTokens?: OAuthTokenCreateNestedManyWithoutUserInput
-    artifacts?: ArtifactCreateNestedManyWithoutUserInput
-    toolMetrics?: ToolMetricCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutWhatsappCredentialsInput = {
-    id?: string
-    email: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    password: string
-    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    oauthTokens?: OAuthTokenUncheckedCreateNestedManyWithoutUserInput
-    artifacts?: ArtifactUncheckedCreateNestedManyWithoutUserInput
-    toolMetrics?: ToolMetricUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutWhatsappCredentialsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutWhatsappCredentialsInput, UserUncheckedCreateWithoutWhatsappCredentialsInput>
-  }
-
-  export type UserUpsertWithoutWhatsappCredentialsInput = {
-    update: XOR<UserUpdateWithoutWhatsappCredentialsInput, UserUncheckedUpdateWithoutWhatsappCredentialsInput>
-    create: XOR<UserCreateWithoutWhatsappCredentialsInput, UserUncheckedCreateWithoutWhatsappCredentialsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutWhatsappCredentialsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutWhatsappCredentialsInput, UserUncheckedUpdateWithoutWhatsappCredentialsInput>
-  }
-
-  export type UserUpdateWithoutWhatsappCredentialsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    password?: StringFieldUpdateOperationsInput | string
-    conversations?: ConversationUpdateManyWithoutUserNestedInput
-    oauthTokens?: OAuthTokenUpdateManyWithoutUserNestedInput
-    artifacts?: ArtifactUpdateManyWithoutUserNestedInput
-    toolMetrics?: ToolMetricUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutWhatsappCredentialsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    password?: StringFieldUpdateOperationsInput | string
-    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    oauthTokens?: OAuthTokenUncheckedUpdateManyWithoutUserNestedInput
-    artifacts?: ArtifactUncheckedUpdateManyWithoutUserNestedInput
-    toolMetrics?: ToolMetricUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationCreateManyUserInput = {

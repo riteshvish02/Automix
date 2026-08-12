@@ -1,6 +1,0 @@
-{
-  "watch": ["src"],
-  "ignore": ["auth/**", "logs/**", "node_modules/**"],
-  "ext": "js,mjs,cjs,json",
-  "exec": "node src/index.js"
-}
