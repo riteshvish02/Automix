@@ -15,10 +15,21 @@ const allowedOrigins = (process.env.CLIENT_URLS || 'http://localhost:5173')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const allowAll = allowedOrigins.includes('*');
+
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow server-to-server or curl
+      if (allowAll) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
+    exposedHeaders: ['Content-Range', 'X-Total-Count'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   })
 );
 

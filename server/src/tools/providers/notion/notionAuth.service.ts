@@ -2,9 +2,10 @@ import { prisma } from "../../../config/prisma";
 import { ErrorHandler } from "../../../utils/ErrorHandler";
 
 const getNotionEnv = () => {
+  const BASE_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 4000}`;
   const clientId = process.env.NOTION_CLIENT_ID;
   const clientSecret = process.env.NOTION_CLIENT_SECRET;
-  const redirectUri = process.env.NOTION_REDIRECT_URI;
+  const redirectUri = process.env.NOTION_REDIRECT_URI || `${BASE_URL}/api/v1/tool/notion/oauth/callback`;
 
   if (!clientId || !clientSecret || !redirectUri) {
     throw new ErrorHandler("Notion OAuth environment variables missing", 500);

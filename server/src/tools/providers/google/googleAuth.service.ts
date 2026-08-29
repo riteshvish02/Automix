@@ -9,7 +9,8 @@ const getGoogleEnv = (provider: Provider) => {
     return {
       clientId: process.env.GOOGLE_DRIVE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_DRIVE_CLIENT_SECRET!,
-      redirectUri: process.env.GOOGLE_DRIVE_REDIRECT_URI!,
+      redirectUri:
+        process.env.GOOGLE_DRIVE_REDIRECT_URI || process.env.BACKEND_URL + "/api/v1/tool/drive/oauth/callback",
     };
   }
 
@@ -17,7 +18,8 @@ const getGoogleEnv = (provider: Provider) => {
     return {
       clientId: process.env.GOOGLE_GMAIL_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_GMAIL_CLIENT_SECRET!,
-      redirectUri: process.env.GOOGLE_GMAIL_REDIRECT_URI!,
+      redirectUri:
+        process.env.GOOGLE_GMAIL_REDIRECT_URI || process.env.BACKEND_URL + "/api/v1/tool/gmail/oauth/callback",
     };
   }
 
@@ -25,7 +27,8 @@ const getGoogleEnv = (provider: Provider) => {
     return {
       clientId: process.env.GOOGLE_CALENDAR_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CALENDAR_CLIENT_SECRET!,
-      redirectUri: process.env.GOOGLE_CALENDAR_REDIRECT_URI!,
+      redirectUri:
+        process.env.GOOGLE_CALENDAR_REDIRECT_URI || process.env.BACKEND_URL + "/api/v1/tool/calendar/oauth/callback",
     };
   }
 
@@ -33,14 +36,16 @@ const getGoogleEnv = (provider: Provider) => {
     return {
       clientId: process.env.GOOGLE_DOCS_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_DOCS_CLIENT_SECRET!,
-      redirectUri: process.env.GOOGLE_DOCS_REDIRECT_URI!,
+      redirectUri:
+        process.env.GOOGLE_DOCS_REDIRECT_URI || process.env.BACKEND_URL + "/api/v1/tool/docs/oauth/callback",
     };
   }
   if (provider === "gsheets") {
     return {
       clientId: process.env.GOOGLE_SHEETS_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_SHEETS_CLIENT_SECRET!,
-      redirectUri: process.env.GOOGLE_SHEETS_REDIRECT_URI!,
+      redirectUri:
+        process.env.GOOGLE_SHEETS_REDIRECT_URI || process.env.BACKEND_URL + "/api/v1/tool/sheets/oauth/callback",
     };
   }
 

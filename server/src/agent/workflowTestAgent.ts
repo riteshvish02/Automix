@@ -62,18 +62,34 @@ const getOrCreateAgent = (modelName: string) => {
     return cachedAgent;
   }
 
-  const model = new ChatOpenAI({
+  // Prefer Gemini when available; fall back to OpenAI.
+  // Commented original OpenAI instantiation as requested:
+  // const model = new ChatOpenAI({
+  //   model: modelName,
+  //   temperature: 0,
+  //   apiKey: process.env.OPENAI_API_KEY,
+  // });
+
+  let model: any;
+  if (process.env.GEMINI_API_KEY) {
+    // Create agent directly using Gemini model name string
+    cachedAgent = createAgent({
+      model: "google-genai:gemini-3.6-flash",
+      tools: LANGCHAIN_TOOLS,
+      systemPrompt: SYSTEM_PROMPT,
+    });
+    console.info("Created agent with Gemini model string: google-genai:gemini-3.6-flash");
+    return cachedAgent;
+  }
+
+  // Fallback: use OpenAI ChatOpenAI model instance
+  model = new ChatOpenAI({
     model: modelName,
     temperature: 0,
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  cachedAgent = createAgent({
-    model,
-    tools: LANGCHAIN_TOOLS,
-    systemPrompt: SYSTEM_PROMPT,
-  });
-
+  cachedAgent = createAgent({ model, tools: LANGCHAIN_TOOLS, systemPrompt: SYSTEM_PROMPT });
   return cachedAgent;
 };
 

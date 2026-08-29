@@ -13,11 +13,13 @@ const PROVIDER_CATALOG: Array<{ key: string; label: string; dbProviders: string[
     { key: 'notion', label: 'Notion', dbProviders: ['notion'] },
 ];
 
+const BASE_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 4000}`;
+
 const getGoogleDriveAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.GOOGLE_DRIVE_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_DRIVE_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI || `${BASE_URL}/api/v1/tool/drive/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
@@ -42,7 +44,7 @@ const googleDriveOAuthCallback = async (data: { code: string; userId: string }) 
     if (!code) throw new ErrorHandler('Missing code', 400);
     const client_id = process.env.GOOGLE_DRIVE_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_DRIVE_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_DRIVE_REDIRECT_URI || `${BASE_URL}/api/v1/tool/drive/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
@@ -72,7 +74,7 @@ const getGoogleGmailAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.GOOGLE_GMAIL_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_GMAIL_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_GMAIL_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_GMAIL_REDIRECT_URI || `${BASE_URL}/api/v1/tool/gmail/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Gmail OAuth2 environment variables missing', 500);
     }
@@ -100,7 +102,7 @@ const googleGmailOAuthCallback = async (data: { code: string; userId: string }) 
     if (!code) throw new ErrorHandler('Missing code', 400);
     const client_id = process.env.GOOGLE_GMAIL_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_GMAIL_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_GMAIL_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_GMAIL_REDIRECT_URI || `${BASE_URL}/api/v1/tool/gmail/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Gmail OAuth2 environment variables missing', 500);
     }
@@ -130,7 +132,7 @@ const getGoogleCalendarAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.GOOGLE_CALENDAR_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_CALENDAR_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_CALENDAR_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_CALENDAR_REDIRECT_URI || `${BASE_URL}/api/v1/tool/calendar/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
@@ -155,7 +157,7 @@ const googleCalendarOAuthCallback = async (data: { code: string; userId: string 
     if (!code) throw new ErrorHandler('Missing code', 400);
     const client_id = process.env.GOOGLE_CALENDAR_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_CALENDAR_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_CALENDAR_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_CALENDAR_REDIRECT_URI || `${BASE_URL}/api/v1/tool/calendar/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google OAuth2 environment variables missing', 500);
     }
@@ -185,7 +187,7 @@ const getGoogleDocsAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.GOOGLE_DOCS_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_DOCS_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI || `${BASE_URL}/api/v1/tool/docs/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Docs OAuth2 environment variables missing', 500);
     }
@@ -210,7 +212,7 @@ const googleDocsOAuthCallback = async (data: { code: string; userId: string }) =
     if (!code) throw new ErrorHandler('Missing code', 400);
     const client_id = process.env.GOOGLE_DOCS_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_DOCS_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_DOCS_REDIRECT_URI || `${BASE_URL}/api/v1/tool/docs/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Docs OAuth2 environment variables missing', 500);
     }
@@ -241,7 +243,7 @@ const getGoogleSheetsAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.GOOGLE_SHEETS_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_SHEETS_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_SHEETS_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_SHEETS_REDIRECT_URI || `${BASE_URL}/api/v1/tool/sheets/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Sheets OAuth2 environment variables missing', 500);
     }
@@ -266,7 +268,7 @@ const googleSheetsOAuthCallback = async (data: { code: string; userId: string })
     if (!code) throw new ErrorHandler('Missing code', 400);
     const client_id = process.env.GOOGLE_SHEETS_CLIENT_ID!;
     const client_secret = process.env.GOOGLE_SHEETS_CLIENT_SECRET!;
-    const redirect_uri = process.env.GOOGLE_SHEETS_REDIRECT_URI!;
+    const redirect_uri = process.env.GOOGLE_SHEETS_REDIRECT_URI || `${BASE_URL}/api/v1/tool/sheets/oauth/callback`;
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Google Sheets OAuth2 environment variables missing', 500);
     }
@@ -295,7 +297,7 @@ const googleSheetsOAuthCallback = async (data: { code: string; userId: string })
 const getSlackAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.SLACK_CLIENT_ID!;
-    const redirect_uri = process.env.SLACK_REDIRECT_URI!;
+    const redirect_uri = process.env.SLACK_REDIRECT_URI || `${BASE_URL}/api/v1/tool/slack/oauth/callback`;
 
     if (!userId) {
         throw new ErrorHandler('Missing userId', 400);
@@ -324,7 +326,7 @@ const slackOAuthCallback = async (data: { code: string; userId: string }) => {
 
     const client_id = process.env.SLACK_CLIENT_ID!;
     const client_secret = process.env.SLACK_CLIENT_SECRET!;
-    const redirect_uri = process.env.SLACK_REDIRECT_URI!;
+    const redirect_uri = process.env.SLACK_REDIRECT_URI || `${BASE_URL}/api/v1/tool/slack/oauth/callback`;
 
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Slack OAuth environment variables missing', 500);
@@ -401,7 +403,7 @@ const slackOAuthCallback = async (data: { code: string; userId: string }) => {
 const getNotionAuthUrl = async (data: { userId: string }) => {
     const { userId } = data;
     const client_id = process.env.NOTION_CLIENT_ID!;
-    const redirect_uri = process.env.NOTION_REDIRECT_URI!;
+    const redirect_uri = process.env.NOTION_REDIRECT_URI || `${BASE_URL}/api/v1/tool/notion/oauth/callback`;
 
     if (!userId) {
         throw new ErrorHandler('Missing userId', 400);
@@ -422,7 +424,7 @@ const notionOAuthCallback = async (data: { code: string; userId: string }) => {
 
     const client_id = process.env.NOTION_CLIENT_ID!;
     const client_secret = process.env.NOTION_CLIENT_SECRET!;
-    const redirect_uri = process.env.NOTION_REDIRECT_URI!;
+    const redirect_uri = process.env.NOTION_REDIRECT_URI || `${BASE_URL}/api/v1/tool/notion/oauth/callback`;
 
     if (!client_id || !client_secret || !redirect_uri) {
         throw new ErrorHandler('Notion OAuth environment variables missing', 500);

@@ -23,6 +23,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@langchain/google-genai": "^2.3.0",
     "@langchain/openai": "^1.4.1",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
