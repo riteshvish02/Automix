@@ -37,8 +37,9 @@ export const api = {
     request("/auth/login", "POST", input),
   getOAuthUrl: (
     provider: "gmail" | "calendar" | "docs" | "sheets" | "drive" | "slack" | "notion",
-    token: string
-  ) => request(`/tool/${provider}/oauth`, "GET", undefined, token),
+    token: string,
+    returnTo?: string
+  ) => request(`/tool/${provider}/oauth${returnTo ? `?return_to=${encodeURIComponent(returnTo)}` : ''}`, "GET", undefined, token),
   getOAuthConnections: (token: string) =>
     request("/tool/oauth-tokens", "GET", undefined, token),
   

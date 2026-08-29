@@ -95,7 +95,7 @@ export const ToolConnectPanel = () => {
 
     setLoadingProvider(provider);
     try {
-      const response = (await api.getOAuthUrl(provider, token)) as Record<string, unknown>;
+      const response = (await api.getOAuthUrl(provider, token, window.location.origin)) as Record<string, unknown>;
       const data = (response.data || {}) as Record<string, unknown>;
       const url = data.url as string | undefined;
       if (!url) { toast.error(`No OAuth URL returned for ${provider}.`); return; }
