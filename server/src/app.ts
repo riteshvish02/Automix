@@ -10,7 +10,7 @@ import {generatedError} from "./utils/error";
 
 const app = express();
 
-const allowedOrigins = (process.env.CLIENT_URLS || 'http://localhost:5173')
+const allowedOrigins = (process.env.CLIENT_URLS || 'https://automix-vert.vercel.app')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
