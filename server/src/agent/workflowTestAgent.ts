@@ -62,34 +62,59 @@ const getOrCreateAgent = (modelName: string) => {
     return cachedAgent;
   }
 
-  // Prefer Gemini when available; fall back to OpenAI.
-  // Commented original OpenAI instantiation as requested:
-  // const model = new ChatOpenAI({
-  //   model: modelName,
-  //   temperature: 0,
-  //   apiKey: process.env.OPENAI_API_KEY,
-  // });
+  // 1. Primary: OpenRouter
+  const openRouterKey =
+    process.env.OPENROUTER_API_KEY ||
+    (process.env.OPENAI_API_KEY?.startsWith("sk-or-") ? process.env.OPENAI_API_KEY : undefined);
 
-  let model: any;
-  if (process.env.GEMINI_API_KEY) {
-    // Create agent directly using Gemini model name string
+  if (openRouterKey) {
+    const selectedModel = process.env.OPENROUTER_MODEL || modelName || "openai/gpt-4o-mini";
+    const model = new ChatOpenAI({
+      model: selectedModel,
+      temperature: 0,
+      apiKey: openRouterKey,
+      configuration: {
+        baseURL: "https://openrouter.ai/api/v1",
+        defaultHeaders: {
+          "HTTP-Referer": "http://localhost:4000",
+          "X-Title": "Automix Agent",
+        },
+      },
+    });
+
     cachedAgent = createAgent({
-      model: "google-genai:gemini-3.6-flash",
+      model,
       tools: LANGCHAIN_TOOLS,
       systemPrompt: SYSTEM_PROMPT,
     });
-    console.info("Created agent with Gemini model string: google-genai:gemini-3.6-flash");
+    console.info(`Created agent with OpenRouter model: ${selectedModel}`);
     return cachedAgent;
   }
 
-  // Fallback: use OpenAI ChatOpenAI model instance
-  model = new ChatOpenAI({
-    model: modelName,
+  // 2. Secondary fallback: Gemini
+  if (process.env.GEMINI_API_KEY) {
+    cachedAgent = createAgent({
+      model: "google-genai:gemini-2.5-flash",
+      tools: LANGCHAIN_TOOLS,
+      systemPrompt: SYSTEM_PROMPT,
+    });
+    console.info("Created agent with fallback Gemini model: google-genai:gemini-2.5-flash");
+    return cachedAgent;
+  }
+
+  // 3. Fallback: Standard OpenAI
+  const fallbackModel = new ChatOpenAI({
+    model: modelName || "gpt-4.1-mini",
     temperature: 0,
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  cachedAgent = createAgent({ model, tools: LANGCHAIN_TOOLS, systemPrompt: SYSTEM_PROMPT });
+  cachedAgent = createAgent({
+    model: fallbackModel,
+    tools: LANGCHAIN_TOOLS,
+    systemPrompt: SYSTEM_PROMPT,
+  });
+  console.info("Created agent with fallback OpenAI model");
   return cachedAgent;
 };
 
@@ -100,8 +125,16 @@ export const runWorkflowTestAgent = async ({
   maxSteps = 20,
   includeTrace = false,
 }: AgentRunInput) => {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new ErrorHandler("OPENAI_API_KEY is missing in environment", 500);
+  const hasKey =
+    process.env.OPENROUTER_API_KEY ||
+    process.env.OPENAI_API_KEY ||
+    process.env.GEMINI_API_KEY;
+
+  if (!hasKey) {
+    throw new ErrorHandler(
+      "API key (OPENROUTER_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY) is missing in environment",
+      500
+    );
   }
 
   if (!prompt?.trim()) {
@@ -131,7 +164,8 @@ export const runWorkflowTestAgent = async ({
     content: prompt,
   });
 
-  const modelName = process.env.OPENAI_MODEL || "gpt-4.1-mini";
+  const modelName =
+    process.env.OPENROUTER_MODEL || process.env.OPENAI_MODEL || "openai/gpt-4o-mini";
   const today = new Date();
   const currentDate = today.toISOString().slice(0, 10);
 
