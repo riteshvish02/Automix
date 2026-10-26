@@ -27,3 +27,7 @@ coverage/
 # Ignore IDE settings
 .vscode/
 .idea/
+
+# Ignore uploads and artifacts temp files
+server/tmp/uploads/
+

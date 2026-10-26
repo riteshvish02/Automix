@@ -8,14 +8,25 @@ import routes from './routes';
 import {generatedError} from "./utils/error";
 
 
+import { initializeQdrantCollections } from './rag/clients/qdrantClient';
+import { setupNeo4jSchema } from './rag/clients/neo4jClient';
+
 const app = express();
 
-const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || 'https://automix-vert.vercel.app')
+const defaultAllowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:4000',
+  'https://automix-vert.vercel.app',
+];
+
+const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || '')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const allowAll = allowedOrigins.includes('*');
+const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...configuredOrigins])];
+const allowAll = allowedOrigins.includes('*') || process.env.NODE_ENV !== 'production';
 
 app.use(
   cors({
@@ -44,8 +55,16 @@ app.use('/api', routes);
 // });
 app.use(generatedError)
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   logger.info(`Server running on port ${PORT}`);
+  
+  // Safely warm up and initialize RAG stores in background
+  initializeQdrantCollections().catch((err) => {
+    logger.warn(`Qdrant initialization note: ${err.message || err}`);
+  });
+  setupNeo4jSchema().catch((err) => {
+    logger.warn(`Neo4j initialization note: ${err.message || err}`);
+  });
 });
 
 export default app;

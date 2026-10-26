@@ -143,4 +143,38 @@ export const api = {
       }
     };
   },
+
+  // ── Advanced RAG APIs ──
+  uploadRAGDocument: async (file: File, token: string, title?: string) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (title) formData.append("title", title);
+
+    const response = await fetch(`${API_BASE_URL}/rag/upload`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error((payload as any)?.message || `Upload failed with status ${response.status}`);
+    }
+    return payload;
+  },
+
+  askRAG: (question: string, token: string, chatHistory: any[] = [], documentId?: string) =>
+    request("/rag/ask", "POST", { question, chatHistory, documentId }, token),
+
+  deleteRAGDocument: async (documentId: string, token: string) => {
+    const response = await fetch(`${API_BASE_URL}/rag/${documentId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json().catch(() => ({}));
+  },
 };

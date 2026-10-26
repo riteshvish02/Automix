@@ -13,6 +13,7 @@ import {
   IconBack,
   IconSpinner,
   IconChat,
+  IconAttach,
 } from "../components/chat/ChatIcons";
 
 interface Message {
@@ -117,8 +118,39 @@ export const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const [conversationsLoading, setConversationsLoading] = useState(true);
   const [sidebarOpen] = useState(true);
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const [activeDocName, setActiveDocName] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !token) return;
+
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+      toast.error("Please upload a PDF document (.pdf)");
+      return;
+    }
+
+    setUploadingDoc(true);
+    const toastId = toast.loading(`Indexing "${file.name}" into Knowledge Base...`);
+
+    try {
+      const res = (await api.uploadRAGDocument(file, token)) as Record<string, any>;
+      const details = res?.data || {};
+      setActiveDocName(file.name);
+      toast.success(
+        `Indexed "${file.name}" (${details.chunksCreated || 0} chunks, ${details.entitiesCreated || 0} entities)!`,
+        { id: toastId }
+      );
+    } catch (error: any) {
+      toast.error(error.message || "Failed to index document", { id: toastId });
+    } finally {
+      setUploadingDoc(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   // Auto-resize textarea
   useEffect(() => {
@@ -411,13 +443,53 @@ export const ChatPage = () => {
 
         {/* ── Input area ── */}
         <div className="border-t border-neutral-800/60 bg-[#212121] px-6 py-8">
+          {activeDocName && (
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700/60 shadow-sm">
+                <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+                <span className="truncate max-w-[260px] font-mono">{activeDocName} (Indexed)</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveDocName(null)}
+                  className="text-neutral-500 hover:text-neutral-300 ml-1 font-bold"
+                >
+                  ×
+                </button>
+              </span>
+            </div>
+          )}
+
           <form
             onSubmit={handleSendMessage}
             className="max-w-[620px] mx-auto"
           >
             <div className="relative flex items-end bg-[#181818] border border-neutral-800 rounded-3xl focus-within:border-neutral-700 transition-colors py-6 px-4">
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,application/pdf"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+
               {/* Attach button */}
-              
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingDoc || loading}
+                title="Upload PDF to Knowledge Base"
+                className="flex-shrink-0 p-3 text-neutral-400 hover:text-neutral-200 transition-colors disabled:opacity-40"
+              >
+                {uploadingDoc ? (
+                  <IconSpinner className="w-5 h-5 text-neutral-300 animate-spin" />
+                ) : (
+                  <IconAttach className="w-5 h-5" />
+                )}
+              </button>
 
               {/* Textarea */}
               <textarea
