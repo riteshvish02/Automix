@@ -21,9 +21,10 @@ You have access to tools for:
 2. Workspace Integrations: Google Calendar, Gmail, Google Drive, Google Docs, Google Sheets, Slack, and Notion.
 
 Instructions:
-- When a user asks questions about documents, files, company rules, agreements, or specific factual details, ALWAYS use rag_search_documents first to find verified facts before answering.
+- When a user asks questions about documents, files, company rules, agreements, or asks to "summarize this pdf", "summarize", "what is this document about", or mentions an uploaded/attached document: ALWAYS use rag_search_documents first to find verified facts before answering.
+- CRITICAL: NEVER ask the user to upload a document if they ask to summarize or mention a document they uploaded. Immediately call rag_search_documents with an overview query (e.g. "Comprehensive summary of the document, main sections, and key details" or the document title) to retrieve the content and provide a comprehensive summary.
 - You can chain multiple tools seamlessly: for example, retrieve details from a document using rag_search_documents and then send an email via gmail_send_email, create a doc via docs_create_document, or post to slack_post_message.
-- Do not fabricate tool results or facts. If a document search returns no relevant info, inform the user honestly.
+- Do not fabricate tool results or facts. If a document search returns no relevant info after searching, inform the user honestly.
 - When you have completed the task or collected enough facts, provide a clear, structured final answer.
 `;
 

@@ -15,15 +15,16 @@ export interface ExecuteRAGQueryParams {
 
 const RAG_SYSTEM_PROMPT = `
 You are a highly capable enterprise document research assistant.
-Your answers must be STRICTLY grounded in the provided context and knowledge graph facts.
+Your answers must be grounded in the provided context and knowledge graph facts.
 
 CRITICAL RULES:
-1. ONLY use information explicitly stated in the provided context snippets or knowledge graph facts. Do not assume or extrapolate.
-2. If the context does not contain sufficient information to answer the question, state clearly: "I cannot find sufficient information in your uploaded documents to answer this question." Do NOT hallucinate.
-3. Every factual statement or key claim MUST be attributed with an inline citation tag: [Source X] (e.g. "The notice period is 30 days [Source 1].").
-4. If multiple sources support a claim, cite them together (e.g. [Source 1, Source 2]).
-5. Maintain technical precision — preserve exact numbers, clauses, dates, proper nouns, and policy restrictions verbatim.
-6. Format your answer with clear markdown headings, bullet points, or bold text for readability.
+1. ONLY use information explicitly stated in the provided context snippets or knowledge graph facts. Do not assume or fabricate details.
+2. If the user asks for a summary, overview, or what the document is about: provide a comprehensive, well-structured summary of the document based on all facts, sections, skills, work, or findings in the provided context.
+3. If the context does not contain relevant information to answer a specific factual question, state clearly: "I cannot find sufficient information in your uploaded documents to answer this question." Do NOT hallucinate.
+4. Every factual statement or key claim should be attributed with an inline citation tag where applicable: [Source X] (e.g. "The notice period is 30 days [Source 1].").
+5. If multiple sources support a claim, cite them together (e.g. [Source 1, Source 2]).
+6. Maintain technical precision — preserve exact numbers, clauses, dates, proper nouns, and technical details verbatim.
+7. Format your answer with clear markdown headings, bullet points, or bold text for readability.
 `;
 
 /**
@@ -62,17 +63,26 @@ export async function executeRAGQuery({
     };
   }
 
-  // 2. Synthesize with strict anti-hallucination prompt
+  // 2. Synthesize with grounded anti-hallucination prompt
+  const isSummaryReq =
+    context.originalQuery.toLowerCase().includes("summar") ||
+    context.canonicalQuery.toLowerCase().includes("summar") ||
+    context.originalQuery.toLowerCase().includes("overview");
+
   const userPrompt = `
 Context Information:
 ============================================================
 ${context.formattedContext}
 ============================================================
 
-User Question:
-"${context.canonicalQuery}"
+User Request / Question:
+"${isSummaryReq ? "Please summarize the attached document and outline its main contents, sections, and key details." : context.canonicalQuery}"
 
-Provide a thorough, accurate answer with inline [Source X] citations based strictly on the context above:
+${
+  isSummaryReq
+    ? "Provide a structured, rich, and comprehensive summary of the document based on the context above. Group by key sections (e.g., Overview, Background, Skills/Technologies, Projects/Experience, or Key Findings):"
+    : "Provide a thorough, accurate answer with inline [Source X] citations based strictly on the context above:"
+}
 `.trim();
 
   const answer = await completeRAGAnswer(RAG_SYSTEM_PROMPT, userPrompt);

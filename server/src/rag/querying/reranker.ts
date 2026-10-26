@@ -112,8 +112,16 @@ Score all ${candidates.length} passages strictly on relevance to the query:
   // Sort descending by rerank score
   rerankedList.sort((a, b) => b.rerankScore - a.rerankScore);
 
-  // Filter by minimum threshold (keep at least top 1 even if low)
-  const filtered = rerankedList.filter((c, idx) => c.rerankScore >= minThreshold || idx === 0);
+  // Filter by minimum threshold: for small candidate sets (<= 5) or summarization queries, retain all chunks
+  const isBroadQuery =
+    query.toLowerCase().includes("summar") ||
+    query.toLowerCase().includes("overview") ||
+    query.toLowerCase().includes("document");
+
+  const filtered =
+    candidates.length <= 5 || isBroadQuery
+      ? rerankedList
+      : rerankedList.filter((c, idx) => c.rerankScore >= minThreshold || idx === 0);
   const topResults = filtered.slice(0, topK);
 
   // Production-grade debug logging as requested

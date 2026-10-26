@@ -5,6 +5,7 @@ import { searchHybridVectors } from "./vectorSearch";
 import { searchKnowledgeGraph } from "./graphSearch";
 import { deduplicateChunks, rerankCandidates } from "./reranker";
 import { compressContextChunks } from "./contextCompressor";
+import { getDocumentChunks } from "../clients/qdrantClient";
 import {
   ChatMessageContext,
   CompressedChunk,
@@ -114,15 +115,25 @@ export async function retrieveHybridContext({
   }
 
   // Deduplicate candidates by chunkId
-  const uniqueCandidates = deduplicateChunks(allCandidates);
+  let uniqueCandidates = deduplicateChunks(allCandidates);
   console.log(`[Retrieval Pipeline] ${uniqueCandidates.length} unique candidates found across all variations`);
+
+  // Fallback: If vector search found 0 candidates (e.g. "summarize this pdf" or non-keyword query),
+  // retrieve the user's indexed document chunks directly so summarization never fails
+  if (uniqueCandidates.length === 0) {
+    const directChunks = await getDocumentChunks(userId, documentId, limitChunks);
+    if (directChunks.length > 0) {
+      console.log(`[Retrieval Pipeline] Fallback: fetched ${directChunks.length} document chunks for user ${userId}`);
+      uniqueCandidates = directChunks;
+    }
+  }
 
   // Step 4: Topic 4 — Cross-Encoder Reranking
   const rerankedChunks = await rerankCandidates(
     rewriteResult.canonicalQuery,
     uniqueCandidates,
     limitChunks,
-    0.20
+    uniqueCandidates.length <= 3 ? 0.05 : 0.15
   );
 
   // Step 5: Topic 5 — Context Compression

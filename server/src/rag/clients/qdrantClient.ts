@@ -18,10 +18,14 @@ let clientInstance: any = null;
 export async function getQdrantClient() {
   if (clientInstance) return clientInstance;
 
+  const url = (process.env.QDRANT_URL || "http://127.0.0.1:6333").replace("localhost", "127.0.0.1");
+  const apiKey = process.env.QDRANT_API_KEY || undefined;
+
   const { QdrantClient } = await import("@qdrant/js-client-rest");
   clientInstance = new QdrantClient({
-    url: QDRANT_URL,
-    apiKey: QDRANT_API_KEY,
+    url,
+    apiKey,
+    checkCompatibility: false,
   });
   return clientInstance;
 }
@@ -41,7 +45,7 @@ export function generatePointId(documentId: string, chunkId: string, type: "dens
 }
 
 /**
- * Initialize Qdrant collections if they don't already exist
+ * Initialize Qdrant collections and payload indexes if they don't already exist
  */
 export async function initializeQdrantCollections(): Promise<void> {
   try {
@@ -69,7 +73,22 @@ export async function initializeQdrantCollections(): Promise<void> {
       });
     }
 
-    console.log("✓ Qdrant collections initialized");
+    // Ensure required filtering payload indexes exist on both collections (required by Qdrant Cloud)
+    const collectionsToEnsure = [DENSE_COLLECTION, SPARSE_COLLECTION];
+    const fieldsToEnsure = ["userId", "documentId", "documentTitle"];
+
+    for (const col of collectionsToEnsure) {
+      for (const field of fieldsToEnsure) {
+        await client
+          .createPayloadIndex(col, {
+            field_name: field,
+            field_schema: "keyword",
+          })
+          .catch(() => {});
+      }
+    }
+
+    console.log("✓ Qdrant collections & payload indexes initialized");
   } catch (error: any) {
     console.warn(`[Qdrant] Warning initializing collections: ${error?.message || error}`);
   }
@@ -173,16 +192,27 @@ export async function searchDenseVectors(
     must: [{ key: "userId", match: { value: userId } }],
   };
 
-  if (documentId) {
+  const isDocId = documentId && documentId.startsWith("doc_");
+  if (isDocId) {
     filter.must.push({ key: "documentId", match: { value: documentId } });
   }
 
-  const response = await client.query(DENSE_COLLECTION, {
+  let response = await client.query(DENSE_COLLECTION, {
     query: queryVector,
     limit,
     filter,
     with_payload: true,
   });
+
+  // Fallback: If filtered by documentId and 0 points found, retry across all user docs
+  if (isDocId && (!response.points || response.points.length === 0)) {
+    response = await client.query(DENSE_COLLECTION, {
+      query: queryVector,
+      limit,
+      filter: { must: [{ key: "userId", match: { value: userId } }] },
+      with_payload: true,
+    });
+  }
 
   const points = response.points || [];
   return points.map((r: any) => ({
@@ -210,16 +240,26 @@ export async function searchSparseVectors(
     must: [{ key: "userId", match: { value: userId } }],
   };
 
-  if (documentId) {
+  const isDocId = documentId && documentId.startsWith("doc_");
+  if (isDocId) {
     filter.must.push({ key: "documentId", match: { value: documentId } });
   }
 
-  const response = await client.query(SPARSE_COLLECTION, {
+  let response = await client.query(SPARSE_COLLECTION, {
     query: sparseVectorArray,
     limit,
     filter,
     with_payload: true,
   });
+
+  if (isDocId && (!response.points || response.points.length === 0)) {
+    response = await client.query(SPARSE_COLLECTION, {
+      query: sparseVectorArray,
+      limit,
+      filter: { must: [{ key: "userId", match: { value: userId } }] },
+      with_payload: true,
+    });
+  }
 
   const points = response.points || [];
   return points.map((r: any) => ({
@@ -231,6 +271,55 @@ export async function searchSparseVectors(
     score: r.score || 0,
     source: "sparse",
   }));
+}
+
+/**
+ * Retrieve document chunks directly by filter (for summarization, overview, or fallback)
+ */
+export async function getDocumentChunks(
+  userId: string,
+  documentId?: string,
+  limit: number = 6
+): Promise<ScoredChunk[]> {
+  try {
+    const client = await getQdrantClient();
+    const filter: any = {
+      must: [{ key: "userId", match: { value: userId } }],
+    };
+
+    const isDocId = documentId && documentId.startsWith("doc_");
+    if (isDocId) {
+      filter.must.push({ key: "documentId", match: { value: documentId } });
+    }
+
+    let response = await client.scroll(DENSE_COLLECTION, {
+      filter,
+      limit,
+      with_payload: true,
+    });
+
+    if (isDocId && (!response.points || response.points.length === 0)) {
+      response = await client.scroll(DENSE_COLLECTION, {
+        filter: { must: [{ key: "userId", match: { value: userId } }] },
+        limit,
+        with_payload: true,
+      });
+    }
+
+    const points = response.points || [];
+    return points.map((r: any) => ({
+      chunkId: r.payload?.chunkId || "",
+      documentId: r.payload?.documentId || "",
+      text: r.payload?.text || "",
+      pageNum: r.payload?.pageNum || 1,
+      sectionTitle: r.payload?.sectionTitle || undefined,
+      score: 0.85,
+      source: "dense",
+    }));
+  } catch (err: any) {
+    console.warn(`[Qdrant] getDocumentChunks error: ${err.message || err}`);
+    return [];
+  }
 }
 
 /**

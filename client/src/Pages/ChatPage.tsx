@@ -120,6 +120,7 @@ export const ChatPage = () => {
   const [sidebarOpen] = useState(true);
   const [uploadingDoc, setUploadingDoc] = useState(false);
   const [activeDocName, setActiveDocName] = useState<string | null>(null);
+  const [activeDocId, setActiveDocId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -140,6 +141,7 @@ export const ChatPage = () => {
       const res = (await api.uploadRAGDocument(file, token)) as Record<string, any>;
       const details = res?.data || {};
       setActiveDocName(file.name);
+      setActiveDocId(details.documentId || null);
       toast.success(
         `Indexed "${file.name}" (${details.chunksCreated || 0} chunks, ${details.entitiesCreated || 0} entities)!`,
         { id: toastId }
@@ -213,9 +215,13 @@ export const ChatPage = () => {
     e.preventDefault();
     if (!input.trim() || !token) return;
 
+    const promptToSend = activeDocName
+      ? `${input}\n\n[Attached Context: Document "${activeDocName}" (ID: ${activeDocId || "active"}) is uploaded and active. Use rag_search_documents to search and summarize its contents directly.]`
+      : input;
+
     if (!currentConversation) {
       setLoading(true);
-      const userPrompt = input;
+      const userPrompt = promptToSend;
       setInput("");
       try {
         await api.queryAgent(userPrompt, token, undefined);
@@ -249,7 +255,7 @@ export const ChatPage = () => {
       createdAt: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, userMessage]);
-    const currentInput = input;
+    const currentInput = promptToSend;
     setInput("");
     setLoading(true);
 
@@ -453,7 +459,10 @@ export const ChatPage = () => {
                 <span className="truncate max-w-[260px] font-mono">{activeDocName} (Indexed)</span>
                 <button
                   type="button"
-                  onClick={() => setActiveDocName(null)}
+                  onClick={() => {
+                    setActiveDocName(null);
+                    setActiveDocId(null);
+                  }}
                   className="text-neutral-500 hover:text-neutral-300 ml-1 font-bold"
                 >
                   ×
