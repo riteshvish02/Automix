@@ -31,6 +31,7 @@ import { notionGetPage } from "../implementations/notion/notion.getPage";
 import { notionCreatePage } from "../implementations/notion/notion.createPage";
 import { notionQueryDatabase } from "../implementations/notion/notion.queryDatabase";
 import { notionAppendBlockChildren } from "../implementations/notion/notion.appendBlockChildren";
+import { executeRAGQuery } from "../../rag";
 
 export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     drive_create_file: {
@@ -581,6 +582,23 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         blockId: args.blockId,
         pageName: args.pageName,
         content: args.content,
+      });
+    },
+  },
+  rag_search_documents: {
+    name: "rag_search_documents",
+    description: "Search user's indexed PDF documents, contracts, policies, and knowledge base using advanced hybrid search (dense semantic + keyword BM25 + knowledge graph).",
+    inputSchema: {
+      query: { type: "string", description: "The specific question or search query to look up in the documents" },
+      documentId: { type: "string", description: "Optional specific document ID to filter search within", nullable: true },
+      limit: { type: "integer", description: "Optional max number of relevant passages to retrieve (default: 5)", nullable: true }
+    },
+    execute: async (args, ctx) => {
+      return executeRAGQuery({
+        query: args.query,
+        userId: ctx.userId,
+        documentId: args.documentId,
+        maxChunks: args.limit || 5,
       });
     },
   },

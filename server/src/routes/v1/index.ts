@@ -6,9 +6,8 @@ import observability from './observability.route';
 import conversations from './conversations.route';
 import metrics from './metrics.route';
 import messages from './messages.route';
+import rag from './rag.route';
 const router = Router();
-
-
 
 router.use('/auth', auth);
 router.use('/tool', tool);
@@ -17,6 +16,7 @@ router.use('/observability', observability);
 router.use('/conversations', conversations);
 router.use('/metrics', metrics);
 router.use('/messages', messages);
+router.use('/rag', rag);
 
 
 export default router;

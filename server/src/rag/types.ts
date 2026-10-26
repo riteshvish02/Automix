@@ -73,14 +73,36 @@ export interface IndexingResult {
 
 // ── Querying Types ──
 
+export interface ChatMessageContext {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+export interface QueryRewriteResult {
+  originalQuery: string;
+  canonicalQuery: string; // Disambiguated standalone query
+  rewrittenQueries: string[]; // Multi-query variations for recall
+  extractedEntities: string[]; // Named entities for Knowledge Graph
+}
+
 export interface ScoredChunk {
   chunkId: string;
   documentId: string;
+  documentName?: string;
   text: string;
   pageNum: number;
   sectionTitle?: string;
   score: number;
   source: "dense" | "sparse" | "hybrid";
+}
+
+export interface RerankedChunk extends ScoredChunk {
+  rerankScore: number;
+  relevanceReasoning?: string;
+}
+
+export interface CompressedChunk extends RerankedChunk {
+  compressedText: string;
 }
 
 export interface GraphEntityResult {
@@ -96,22 +118,32 @@ export interface GraphEntityResult {
 }
 
 export interface RAGContext {
-  chunks: ScoredChunk[];
+  originalQuery: string;
+  canonicalQuery: string;
+  rewrittenQueries: string[];
+  chunks: CompressedChunk[];
   graphEntities: GraphEntityResult[];
   formattedContext: string;
 }
 
+export interface RAGSourceCitation {
+  sourceNumber: number;
+  chunkId: string;
+  documentId: string;
+  documentName?: string;
+  pageNum: number;
+  sectionTitle?: string;
+  relevanceScore: number;
+  excerpt: string;
+}
+
 export interface RAGQueryResult {
   answer: string;
-  query: string;
-  sources: Array<{
-    chunkId: string;
-    documentId: string;
-    pageNum: number;
-    sectionTitle?: string;
-    snippet: string;
-    relevanceScore: number;
-  }>;
+  originalQuery: string;
+  canonicalQuery: string;
+  rewrittenQueries: string[];
+  sources: RAGSourceCitation[];
+  graphFacts: string[];
   entitiesUsed: string[];
   model: string;
 }

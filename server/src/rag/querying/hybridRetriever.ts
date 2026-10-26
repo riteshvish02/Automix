@@ -1,31 +1,43 @@
-// server/src/rag/querying/hybridRetriever.ts — Unified Hybrid Vector + Graph Retriever
+// server/src/rag/querying/hybridRetriever.ts — Advanced Orchestrator: Rewrite -> Multi-Query Hybrid Search -> Deduplicate -> Rerank -> Compress
 
+import { smartQueryRewrite } from "./queryRewriter";
 import { searchHybridVectors } from "./vectorSearch";
 import { searchKnowledgeGraph } from "./graphSearch";
-import { GraphEntityResult, RAGContext, ScoredChunk } from "../types";
+import { deduplicateChunks, rerankCandidates } from "./reranker";
+import { compressContextChunks } from "./contextCompressor";
+import {
+  ChatMessageContext,
+  CompressedChunk,
+  GraphEntityResult,
+  RAGContext,
+  ScoredChunk,
+} from "../types";
 
 export interface RetrieveContextParams {
   query: string;
   userId: string;
+  chatHistory?: ChatMessageContext[];
   limitChunks?: number;
   limitGraph?: number;
   documentId?: string;
+  enableCompression?: boolean;
 }
 
 /**
- * Formats retrieved chunks and graph facts into a structured string for the LLM
+ * Formats compressed chunks and graph facts into a structured string for the LLM
  */
 export function formatRAGContext(
-  chunks: ScoredChunk[],
+  chunks: CompressedChunk[],
   graphEntities: GraphEntityResult[]
 ): string {
   const sections: string[] = [];
 
-  // 1. Chunks context
+  // 1. Chunks context with clean source references
   if (chunks.length > 0) {
     const chunkSnippets = chunks.map((c, i) => {
       const heading = c.sectionTitle ? ` (Section: "${c.sectionTitle}")` : "";
-      return `[Source ${i + 1} | Page ${c.pageNum}${heading}]:\n${c.text}`;
+      const docLabel = c.documentName ? `Doc: "${c.documentName}" | ` : "";
+      return `[Source ${i + 1} | ${docLabel}Page ${c.pageNum}${heading} | Relevance: ${(c.rerankScore * 100).toFixed(0)}%]:\n${c.compressedText}`;
     });
     sections.push(`### Relevant Document Excerpts:\n${chunkSnippets.join("\n\n")}`);
   }
@@ -41,7 +53,7 @@ export function formatRAGContext(
 
     if (facts.length > 0) {
       sections.push(
-        `### Knowledge Graph Facts & Relationships:\n${facts.join("\n")}`
+        `### Knowledge Graph Facts & Verified Relationships:\n${facts.join("\n")}`
       );
     }
   }
@@ -50,29 +62,87 @@ export function formatRAGContext(
 }
 
 /**
- * Retrieve hybrid context from both Vector DB and Graph DB
+ * Production Advanced Hybrid Retriever:
+ * 1. Query Rewrite (de-reference + multi-query expansion)
+ * 2. Parallel Hybrid Search (Dense + BM25) for all query variations
+ * 3. Neo4j Graph Search for extracted entities
+ * 4. Deduplication
+ * 5. Cross-Encoder Reranking (top 20 candidates -> top 5)
+ * 6. Context Compression
  */
 export async function retrieveHybridContext({
   query,
   userId,
+  chatHistory = [],
   limitChunks = 5,
   limitGraph = 6,
   documentId,
+  enableCompression = true,
 }: RetrieveContextParams): Promise<RAGContext> {
-  // Execute Vector Search and Graph Search in parallel
-  const [chunksResult, graphResult] = await Promise.allSettled([
-    searchHybridVectors({ query, userId, limit: limitChunks, documentId }),
-    searchKnowledgeGraph(query, limitGraph),
+  const startTime = Date.now();
+
+  // Step 1: Topic 2 — Query Rewriting & Expansion
+  const rewriteResult = await smartQueryRewrite(query, chatHistory);
+  console.log(`[Retrieval Pipeline] Original query: "${rewriteResult.originalQuery}"`);
+  console.log(`[Retrieval Pipeline] Rewritten queries:`, rewriteResult.rewrittenQueries);
+
+  // Step 2 & 3: Topic 3 — Parallel Hybrid Vector Searches + Graph Search
+  const vectorSearchPromises = rewriteResult.rewrittenQueries.map((q) =>
+    searchHybridVectors({
+      query: q,
+      userId,
+      limit: 6, // pool candidates
+      documentId,
+    })
+  );
+
+  const graphSearchPromise = rewriteResult.extractedEntities.length > 0
+    ? searchKnowledgeGraph(rewriteResult.extractedEntities.join(" "), limitGraph)
+    : Promise.resolve<GraphEntityResult[]>([]);
+
+  const [vectorSearchSettled, graphResult] = await Promise.all([
+    Promise.allSettled(vectorSearchPromises),
+    graphSearchPromise,
   ]);
 
-  const chunks = chunksResult.status === "fulfilled" ? chunksResult.value : [];
-  const graphEntities = graphResult.status === "fulfilled" ? graphResult.value : [];
+  // Flatten candidates
+  const allCandidates: ScoredChunk[] = [];
+  for (const res of vectorSearchSettled) {
+    if (res.status === "fulfilled") {
+      allCandidates.push(...res.value);
+    }
+  }
 
-  const formattedContext = formatRAGContext(chunks, graphEntities);
+  // Deduplicate candidates by chunkId
+  const uniqueCandidates = deduplicateChunks(allCandidates);
+  console.log(`[Retrieval Pipeline] ${uniqueCandidates.length} unique candidates found across all variations`);
+
+  // Step 4: Topic 4 — Cross-Encoder Reranking
+  const rerankedChunks = await rerankCandidates(
+    rewriteResult.canonicalQuery,
+    uniqueCandidates,
+    limitChunks,
+    0.20
+  );
+
+  // Step 5: Topic 5 — Context Compression
+  const compressedChunks = enableCompression
+    ? await compressContextChunks(rewriteResult.canonicalQuery, rerankedChunks)
+    : rerankedChunks.map((c) => ({ ...c, compressedText: c.text }));
+
+  // Step 6: Format Context
+  const formattedContext = formatRAGContext(compressedChunks, graphResult);
+
+  console.log(
+    `[Retrieval Pipeline] Completed in ${Date.now() - startTime}ms — ${compressedChunks.length} final chunks selected`
+  );
 
   return {
-    chunks,
-    graphEntities,
+    originalQuery: rewriteResult.originalQuery,
+    canonicalQuery: rewriteResult.canonicalQuery,
+    rewrittenQueries: rewriteResult.rewrittenQueries,
+    chunks: compressedChunks,
+    graphEntities: graphResult,
     formattedContext,
   };
 }

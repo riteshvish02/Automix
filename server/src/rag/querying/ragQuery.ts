@@ -1,84 +1,107 @@
-// server/src/rag/querying/ragQuery.ts — End-to-End RAG Query Answering
+// server/src/rag/querying/ragQuery.ts — Topics 6 & 7: Grounded Answering, Hallucination Reduction & Source Citations
 
 import { retrieveHybridContext } from "./hybridRetriever";
 import { completeRAGAnswer, OPENROUTER_CONFIG } from "../config/openrouter";
-import { RAGQueryResult } from "../types";
+import { ChatMessageContext, RAGQueryResult, RAGSourceCitation } from "../types";
 
 export interface ExecuteRAGQueryParams {
   query: string;
   userId: string;
+  chatHistory?: ChatMessageContext[];
   documentId?: string;
   maxChunks?: number;
+  enableCompression?: boolean;
 }
 
 const RAG_SYSTEM_PROMPT = `
-You are an intelligent knowledge assistant answering questions based strictly on the user's uploaded documents and knowledge graph.
+You are a highly capable enterprise document research assistant.
+Your answers must be STRICTLY grounded in the provided context and knowledge graph facts.
 
-Guidelines:
-1. Answer the question accurately using ONLY the provided context snippets and knowledge graph facts.
-2. If the context does not contain the answer, say clearly: "I cannot find sufficient information in your uploaded documents to answer this question." Do not make up facts.
-3. Cite your sources inline where appropriate using [Source X, Page Y].
-4. Be concise, structured, and helpful. Use markdown bullet points or bold text where appropriate.
+CRITICAL RULES:
+1. ONLY use information explicitly stated in the provided context snippets or knowledge graph facts. Do not assume or extrapolate.
+2. If the context does not contain sufficient information to answer the question, state clearly: "I cannot find sufficient information in your uploaded documents to answer this question." Do NOT hallucinate.
+3. Every factual statement or key claim MUST be attributed with an inline citation tag: [Source X] (e.g. "The notice period is 30 days [Source 1].").
+4. If multiple sources support a claim, cite them together (e.g. [Source 1, Source 2]).
+5. Maintain technical precision — preserve exact numbers, clauses, dates, proper nouns, and policy restrictions verbatim.
+6. Format your answer with clear markdown headings, bullet points, or bold text for readability.
 `;
 
 /**
- * Executes a full RAG query: retrieves relevant context and synthesizes grounded answer
+ * End-to-end Advanced RAG Query Engine:
+ * Rewrite -> Multi-Query Search -> Rerank -> Compress -> Strict Grounded Generation -> Structured Citations
  */
 export async function executeRAGQuery({
   query,
   userId,
+  chatHistory = [],
   documentId,
   maxChunks = 5,
+  enableCompression = true,
 }: ExecuteRAGQueryParams): Promise<RAGQueryResult> {
-  // 1. Retrieve hybrid context
+  // 1. Execute full retrieval pipeline
   const context = await retrieveHybridContext({
     query,
     userId,
+    chatHistory,
     documentId,
     limitChunks: maxChunks,
+    enableCompression,
   });
 
+  // Zero-candidates guard
   if (!context.formattedContext || context.chunks.length === 0) {
     return {
-      answer: "No relevant documents or facts were found matching your query.",
-      query,
+      answer: "No relevant information found in your documents for this question.",
+      originalQuery: context.originalQuery,
+      canonicalQuery: context.canonicalQuery,
+      rewrittenQueries: context.rewrittenQueries,
       sources: [],
+      graphFacts: [],
       entitiesUsed: [],
       model: OPENROUTER_CONFIG.chatModel,
     };
   }
 
-  // 2. Synthesize answer with OpenRouter LLM
+  // 2. Synthesize with strict anti-hallucination prompt
   const userPrompt = `
 Context Information:
----------------------
+============================================================
 ${context.formattedContext}
----------------------
+============================================================
 
 User Question:
-${query}
+"${context.canonicalQuery}"
 
-Answer the question based strictly on the context above:
+Provide a thorough, accurate answer with inline [Source X] citations based strictly on the context above:
 `.trim();
 
   const answer = await completeRAGAnswer(RAG_SYSTEM_PROMPT, userPrompt);
 
-  // 3. Structure return result with sources
-  const sources = context.chunks.map((c) => ({
+  // 3. Topic 7 — Format detailed citations with relevance scores & snippets
+  const sources: RAGSourceCitation[] = context.chunks.map((c, idx) => ({
+    sourceNumber: idx + 1,
     chunkId: c.chunkId,
     documentId: c.documentId,
+    documentName: c.documentName || `Document ${c.documentId.substring(0, 8)}`,
     pageNum: c.pageNum,
     sectionTitle: c.sectionTitle,
-    snippet: c.text.length > 200 ? `${c.text.substring(0, 200)}...` : c.text,
-    relevanceScore: c.score,
+    relevanceScore: c.rerankScore,
+    excerpt: c.compressedText.length > 180 ? `${c.compressedText.slice(0, 180)}...` : c.compressedText,
   }));
+
+  const graphFacts = context.graphEntities.flatMap((e) =>
+    e.relatedEntities.map((r) => `${e.name} ${r.relationType} ${r.targetName}`)
+  );
 
   const entitiesUsed = context.graphEntities.map((e) => e.name);
 
   return {
     answer,
-    query,
+    originalQuery: context.originalQuery,
+    canonicalQuery: context.canonicalQuery,
+    rewrittenQueries: context.rewrittenQueries,
     sources,
+    graphFacts,
     entitiesUsed,
     model: OPENROUTER_CONFIG.chatModel,
   };
