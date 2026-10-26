@@ -165,10 +165,11 @@ export const runWorkflowTestAgent = async ({
   // Create or use existing conversation
   let convoId: string = conversationId || "";
   if (!convoId) {
+    const cleanTitle = prompt.replace(/\n\n\[Attached Context:[\s\S]*?\]$/i, "").trim();
     const newConversation = await (prisma as any).conversation.create({
       data: {
         userId,
-        title: prompt.substring(0, 100),
+        title: (cleanTitle || prompt).substring(0, 100),
       },
     });
     convoId = newConversation.id;

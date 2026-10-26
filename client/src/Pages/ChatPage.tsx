@@ -28,6 +28,23 @@ interface Message {
 const visibleMessages = (items: Message[]) =>
   items.filter((message) => message.role === "user" || message.role === "assistant");
 
+const parseUserMessage = (rawContent: string) => {
+  const match = rawContent.match(/\n\n\[Attached Context: ([\s\S]*?)\]$/);
+  if (!match) {
+    return { text: rawContent, attachments: [] };
+  }
+  const text = rawContent.replace(/\n\n\[Attached Context: ([\s\S]*?)\]$/, "").trim();
+  const contextBlock = match[1];
+  const found = Array.from(contextBlock.matchAll(/"([^"]+\.pdf)"/gi)).map((m) => m[1]);
+  const unique = Array.from(new Set(found));
+  return { text, attachments: unique };
+};
+
+const cleanConvTitle = (raw?: string | null) => {
+  if (!raw) return "Conversation";
+  return raw.replace(/\n\n\[Attached Context:[\s\S]*?\]$/i, "").trim() || "Conversation";
+};
+
 interface Conversation {
   id: string;
   userId: string;
@@ -40,7 +57,7 @@ interface Conversation {
 }
 
 const AssistantMessage = ({ content }: { content: string }) => (
-  <div className="whitespace-pre-wrap text-[15px] leading-[1.75] text-neutral-200">
+  <div className="text-[15px] leading-[1.75] text-neutral-200">
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeSanitize]}
@@ -53,10 +70,19 @@ const AssistantMessage = ({ content }: { content: string }) => (
             rel="noreferrer"
           />
         ),
-        p: (props: any) => <p {...props} className="mb-3 last:mb-0 text-[16px]" />,
+        p: (props: any) => <p {...props} className="mb-3 last:mb-0 text-[16px] whitespace-pre-wrap" />,
         ul: (props: any) => <ul {...props} className="mb-3 list-disc pl-5 space-y-1" />,
         ol: (props: any) => <ol {...props} className="mb-3 list-decimal pl-5 space-y-1" />,
         li: (props: any) => <li {...props} className="text-neutral-300" />,
+        strong: (props: any) => <strong {...props} className="font-semibold text-neutral-100" />,
+        table: (props: any) => (
+          <div className="overflow-x-auto my-3 border border-neutral-700/60 rounded-lg">
+            <table {...props} className="w-full text-left text-sm text-neutral-300 divide-y divide-neutral-700/60" />
+          </div>
+        ),
+        thead: (props: any) => <thead {...props} className="bg-neutral-800/80 font-semibold text-neutral-200" />,
+        th: (props: any) => <th {...props} className="px-3 py-2 border-b border-neutral-700/60 font-medium" />,
+        td: (props: any) => <td {...props} className="px-3 py-2 border-b border-neutral-800/60" />,
         code: ({ inline, children, ...props }: any) => {
           if (inline) {
             return (
@@ -236,6 +262,7 @@ export const ChatPage = () => {
       setLoading(true);
       const userPrompt = promptToSend;
       setInput("");
+      setAttachedDocs([]);
       try {
         await api.queryAgent(userPrompt, token, undefined);
         const convResponse = (await api.getConversations(token)) as Record<string, unknown>;
@@ -264,12 +291,13 @@ export const ChatPage = () => {
       id: `temp-${Date.now()}`,
       conversationId: currentConversation.id,
       role: "user",
-      content: input,
+      content: promptToSend,
       createdAt: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, userMessage]);
     const currentInput = promptToSend;
     setInput("");
+    setAttachedDocs([]);
     setLoading(true);
 
     try {
@@ -375,7 +403,7 @@ export const ChatPage = () => {
                     }`}
                   >
                     <span className="truncate text-[16px]">
-                      {conv.firstMessage || conv.title || conv.summary || "Conversation"}
+                      {cleanConvTitle(conv.firstMessage || conv.title || conv.summary)}
                     </span>
                   </button>
                 ))}
@@ -430,13 +458,34 @@ export const ChatPage = () => {
                         <AssistantMessage content={msg.content} />
                       </div>
                     </div>
-                  ) : (
-                    <div className="max-w-[75%] bg-[#181818] border border-neutral-700/30 rounded-2xl rounded-br-md px-4 py-2.5">
-                      <p className="whitespace-pre-wrap text-[16px] leading-[1.65] text-neutral-100">
-                        {msg.content}
-                      </p>
-                    </div>
-                  )}
+                  ) : (() => {
+                    const { text, attachments } = parseUserMessage(msg.content);
+                    return (
+                      <div className="max-w-[75%] flex flex-col items-end">
+                        {attachments.length > 0 && (
+                          <div className="flex flex-wrap justify-end gap-1.5 mb-1.5">
+                            {attachments.map((docName, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-[#2a2a2a] text-neutral-300 border border-neutral-700/60 shadow-sm"
+                              >
+                                <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                  <polyline points="14 2 14 8 20 8" />
+                                </svg>
+                                <span className="truncate max-w-[200px] font-mono">{docName}</span>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="bg-[#181818] border border-neutral-700/30 rounded-2xl rounded-br-md px-4 py-2.5">
+                          <p className="whitespace-pre-wrap text-[16px] leading-[1.65] text-neutral-100">
+                            {text}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               ))}
 
