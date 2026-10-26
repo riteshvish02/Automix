@@ -47,6 +47,9 @@ const upload = multer({
 // Ask question with full rewrite, hybrid search, rerank, and citations pipeline
 router.post("/ask", authMiddleware.checkAuth, catchAsyncError(ragController.ask));
 
+// List all indexed documents for user
+router.get("/documents", authMiddleware.checkAuth, catchAsyncError(ragController.listDocuments));
+
 // Ingest and index PDF document into Qdrant & Neo4j
 router.post("/upload", authMiddleware.checkAuth, upload.single("file"), catchAsyncError(ragController.upload));
 

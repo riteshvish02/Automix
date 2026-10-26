@@ -9,6 +9,7 @@ export interface ExecuteRAGQueryParams {
   userId: string;
   chatHistory?: ChatMessageContext[];
   documentId?: string;
+  documentIds?: string[];
   maxChunks?: number;
   enableCompression?: boolean;
 }
@@ -36,6 +37,7 @@ export async function executeRAGQuery({
   userId,
   chatHistory = [],
   documentId,
+  documentIds,
   maxChunks = 5,
   enableCompression = true,
 }: ExecuteRAGQueryParams): Promise<RAGQueryResult> {
@@ -45,6 +47,7 @@ export async function executeRAGQuery({
     userId,
     chatHistory,
     documentId,
+    documentIds,
     limitChunks: maxChunks,
     enableCompression,
   });

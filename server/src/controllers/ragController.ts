@@ -93,6 +93,41 @@ export const ragController = {
   },
 
   /**
+   * GET /api/v1/rag/documents — List all indexed documents for authenticated user
+   */
+  async listDocuments(req: Request, res: Response): Promise<void> {
+    const userId = (req as any).user?.userId || (req.headers["user-id"] as string);
+    if (!userId) {
+      throw new ErrorHandler("Unauthorized: userId is required", 401);
+    }
+
+    const artifacts = await (prisma as any).artifact.findMany({
+      where: {
+        userId,
+        type: "file",
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const documents = artifacts.map((a: any) => ({
+      id: a.id,
+      documentId: a.metadata?.documentId || a.id,
+      title: a.name || "Untitled Document",
+      mimeType: a.mimeType,
+      chunks: a.metadata?.chunks || 0,
+      entities: a.metadata?.entities || 0,
+      createdAt: a.createdAt,
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        documents,
+      },
+    });
+  },
+
+  /**
    * DELETE /api/v1/rag/:documentId — Delete document vectors and graph nodes
    */
   async deleteDoc(req: Request, res: Response): Promise<void> {

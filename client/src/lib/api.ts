@@ -165,6 +165,16 @@ export const api = {
     return payload;
   },
 
+  listRAGDocuments: async (token: string) => {
+    const response = await fetch(`${API_BASE_URL}/rag/documents`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json().catch(() => ({ success: false, data: { documents: [] } }));
+  },
+
   askRAG: (question: string, token: string, chatHistory: any[] = [], documentId?: string) =>
     request("/rag/ask", "POST", { question, chatHistory, documentId }, token),
 

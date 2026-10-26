@@ -179,23 +179,61 @@ export async function storeSparseVectors(
 }
 
 /**
+ * Build flexible Qdrant filter supporting single documentId, documentTitle, or array of documentIds/titles
+ */
+export function buildDocFilter(
+  userId: string,
+  documentId?: string,
+  documentIds?: string[]
+): { filter: any; hasDocFilter: boolean } {
+  const filter: any = {
+    must: [{ key: "userId", match: { value: userId } }],
+  };
+
+  const targets: string[] = [];
+  if (Array.isArray(documentIds)) {
+    for (const d of documentIds) {
+      if (typeof d === "string" && d.trim()) targets.push(d.trim());
+    }
+  }
+  if (documentId && typeof documentId === "string" && documentId.trim()) {
+    if (!targets.includes(documentId.trim())) targets.push(documentId.trim());
+  }
+
+  if (targets.length === 1) {
+    const t = targets[0];
+    if (t.startsWith("doc_")) {
+      filter.must.push({ key: "documentId", match: { value: t } });
+    } else {
+      filter.should = [
+        { key: "documentId", match: { value: t } },
+        { key: "documentTitle", match: { value: t } },
+      ];
+    }
+  } else if (targets.length > 1) {
+    const shouldClauses: any[] = [];
+    for (const t of targets) {
+      shouldClauses.push({ key: "documentId", match: { value: t } });
+      shouldClauses.push({ key: "documentTitle", match: { value: t } });
+    }
+    filter.should = shouldClauses;
+  }
+
+  return { filter, hasDocFilter: targets.length > 0 };
+}
+
+/**
  * Search dense vectors by query embedding using client.query
  */
 export async function searchDenseVectors(
   queryVector: number[],
   userId: string,
   limit: number = 5,
-  documentId?: string
+  documentId?: string,
+  documentIds?: string[]
 ): Promise<ScoredChunk[]> {
   const client = await getQdrantClient();
-  const filter: any = {
-    must: [{ key: "userId", match: { value: userId } }],
-  };
-
-  const isDocId = documentId && documentId.startsWith("doc_");
-  if (isDocId) {
-    filter.must.push({ key: "documentId", match: { value: documentId } });
-  }
+  const { filter, hasDocFilter } = buildDocFilter(userId, documentId, documentIds);
 
   let response = await client.query(DENSE_COLLECTION, {
     query: queryVector,
@@ -205,7 +243,7 @@ export async function searchDenseVectors(
   });
 
   // Fallback: If filtered by documentId and 0 points found, retry across all user docs
-  if (isDocId && (!response.points || response.points.length === 0)) {
+  if (hasDocFilter && (!response.points || response.points.length === 0)) {
     response = await client.query(DENSE_COLLECTION, {
       query: queryVector,
       limit,
@@ -216,8 +254,9 @@ export async function searchDenseVectors(
 
   const points = response.points || [];
   return points.map((r: any) => ({
-    chunkId: r.payload?.chunkId || "",
+    chunkId: r.payload?.chunkId || String(r.id),
     documentId: r.payload?.documentId || "",
+    documentName: r.payload?.documentTitle,
     text: r.payload?.text || "",
     pageNum: r.payload?.pageNum || 1,
     sectionTitle: r.payload?.sectionTitle || undefined,
@@ -233,17 +272,11 @@ export async function searchSparseVectors(
   sparseVectorArray: number[],
   userId: string,
   limit: number = 5,
-  documentId?: string
+  documentId?: string,
+  documentIds?: string[]
 ): Promise<ScoredChunk[]> {
   const client = await getQdrantClient();
-  const filter: any = {
-    must: [{ key: "userId", match: { value: userId } }],
-  };
-
-  const isDocId = documentId && documentId.startsWith("doc_");
-  if (isDocId) {
-    filter.must.push({ key: "documentId", match: { value: documentId } });
-  }
+  const { filter, hasDocFilter } = buildDocFilter(userId, documentId, documentIds);
 
   let response = await client.query(SPARSE_COLLECTION, {
     query: sparseVectorArray,
@@ -252,7 +285,7 @@ export async function searchSparseVectors(
     with_payload: true,
   });
 
-  if (isDocId && (!response.points || response.points.length === 0)) {
+  if (hasDocFilter && (!response.points || response.points.length === 0)) {
     response = await client.query(SPARSE_COLLECTION, {
       query: sparseVectorArray,
       limit,
@@ -263,8 +296,9 @@ export async function searchSparseVectors(
 
   const points = response.points || [];
   return points.map((r: any) => ({
-    chunkId: r.payload?.chunkId || "",
+    chunkId: r.payload?.chunkId || String(r.id),
     documentId: r.payload?.documentId || "",
+    documentName: r.payload?.documentTitle,
     text: r.payload?.text || "",
     pageNum: r.payload?.pageNum || 1,
     sectionTitle: r.payload?.sectionTitle || undefined,
@@ -279,18 +313,12 @@ export async function searchSparseVectors(
 export async function getDocumentChunks(
   userId: string,
   documentId?: string,
-  limit: number = 6
+  limit: number = 8,
+  documentIds?: string[]
 ): Promise<ScoredChunk[]> {
   try {
     const client = await getQdrantClient();
-    const filter: any = {
-      must: [{ key: "userId", match: { value: userId } }],
-    };
-
-    const isDocId = documentId && documentId.startsWith("doc_");
-    if (isDocId) {
-      filter.must.push({ key: "documentId", match: { value: documentId } });
-    }
+    const { filter, hasDocFilter } = buildDocFilter(userId, documentId, documentIds);
 
     let response = await client.scroll(DENSE_COLLECTION, {
       filter,
@@ -298,7 +326,7 @@ export async function getDocumentChunks(
       with_payload: true,
     });
 
-    if (isDocId && (!response.points || response.points.length === 0)) {
+    if (hasDocFilter && (!response.points || response.points.length === 0)) {
       response = await client.scroll(DENSE_COLLECTION, {
         filter: { must: [{ key: "userId", match: { value: userId } }] },
         limit,
@@ -308,8 +336,9 @@ export async function getDocumentChunks(
 
     const points = response.points || [];
     return points.map((r: any) => ({
-      chunkId: r.payload?.chunkId || "",
+      chunkId: r.payload?.chunkId || String(r.id),
       documentId: r.payload?.documentId || "",
+      documentName: r.payload?.documentTitle,
       text: r.payload?.text || "",
       pageNum: r.payload?.pageNum || 1,
       sectionTitle: r.payload?.sectionTitle || undefined,

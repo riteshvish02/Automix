@@ -118,40 +118,49 @@ export const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const [conversationsLoading, setConversationsLoading] = useState(true);
   const [sidebarOpen] = useState(true);
+  interface AttachedDoc {
+    id: string;
+    name: string;
+  }
   const [uploadingDoc, setUploadingDoc] = useState(false);
-  const [activeDocName, setActiveDocName] = useState<string | null>(null);
-  const [activeDocId, setActiveDocId] = useState<string | null>(null);
+  const [attachedDocs, setAttachedDocs] = useState<AttachedDoc[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !token) return;
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    if (files.length === 0 || !token) return;
 
-    if (!file.name.toLowerCase().endsWith(".pdf")) {
-      toast.error("Please upload a PDF document (.pdf)");
+    const validPdfs = files.filter((f) => f.name.toLowerCase().endsWith(".pdf"));
+    if (validPdfs.length === 0) {
+      toast.error("Please upload PDF documents (.pdf)");
       return;
     }
 
     setUploadingDoc(true);
-    const toastId = toast.loading(`Indexing "${file.name}" into Knowledge Base...`);
-
-    try {
-      const res = (await api.uploadRAGDocument(file, token)) as Record<string, any>;
-      const details = res?.data || {};
-      setActiveDocName(file.name);
-      setActiveDocId(details.documentId || null);
-      toast.success(
-        `Indexed "${file.name}" (${details.chunksCreated || 0} chunks, ${details.entitiesCreated || 0} entities)!`,
-        { id: toastId }
-      );
-    } catch (error: any) {
-      toast.error(error.message || "Failed to index document", { id: toastId });
-    } finally {
-      setUploadingDoc(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+    for (const file of validPdfs) {
+      const toastId = toast.loading(`Indexing "${file.name}" into Knowledge Base...`);
+      try {
+        const res = (await api.uploadRAGDocument(file, token)) as Record<string, any>;
+        const details = res?.data || {};
+        const docId = details.documentId || details.id;
+        if (docId) {
+          setAttachedDocs((prev) => {
+            if (prev.some((d) => d.id === docId || d.name === file.name)) return prev;
+            return [...prev, { id: docId, name: file.name }];
+          });
+        }
+        toast.success(
+          `Indexed "${file.name}" (${details.chunksCreated || 0} chunks, ${details.entitiesCreated || 0} entities)!`,
+          { id: toastId }
+        );
+      } catch (error: any) {
+        toast.error(error.message || `Failed to index ${file.name}`, { id: toastId });
+      }
     }
+    setUploadingDoc(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   // Auto-resize textarea
@@ -215,9 +224,13 @@ export const ChatPage = () => {
     e.preventDefault();
     if (!input.trim() || !token) return;
 
-    const promptToSend = activeDocName
-      ? `${input}\n\n[Attached Context: Document "${activeDocName}" (ID: ${activeDocId || "active"}) is uploaded and active. Use rag_search_documents to search and summarize its contents directly.]`
-      : input;
+    let promptToSend = input;
+    if (attachedDocs.length === 1) {
+      promptToSend = `${input}\n\n[Attached Context: Document "${attachedDocs[0].name}" (ID: ${attachedDocs[0].id}) is uploaded and active. Use rag_search_documents to search and summarize its contents directly.]`;
+    } else if (attachedDocs.length > 1) {
+      const docList = attachedDocs.map((d) => `- "${d.name}" (ID: ${d.id})`).join("\n");
+      promptToSend = `${input}\n\n[Attached Context: The following ${attachedDocs.length} documents are uploaded and active for this request:\n${docList}\nUse rag_search_documents with documentIds to search, compare, or summarize across these documents.]`;
+    }
 
     if (!currentConversation) {
       setLoading(true);
@@ -449,25 +462,36 @@ export const ChatPage = () => {
 
         {/* ── Input area ── */}
         <div className="border-t border-neutral-800/60 bg-[#212121] px-6 py-8">
-          {activeDocName && (
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700/60 shadow-sm">
-                <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                <span className="truncate max-w-[260px] font-mono">{activeDocName} (Indexed)</span>
+          {attachedDocs.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-3 max-w-[620px] mx-auto px-1">
+              {attachedDocs.map((doc) => (
+                <span
+                  key={doc.id}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700/60 shadow-sm"
+                >
+                  <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                  <span className="truncate max-w-[200px] font-mono">{doc.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setAttachedDocs((prev) => prev.filter((d) => d.id !== doc.id))}
+                    className="text-neutral-500 hover:text-neutral-200 ml-1 font-bold transition-colors"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              {attachedDocs.length > 1 && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setActiveDocName(null);
-                    setActiveDocId(null);
-                  }}
-                  className="text-neutral-500 hover:text-neutral-300 ml-1 font-bold"
+                  onClick={() => setAttachedDocs([])}
+                  className="text-xs text-neutral-500 hover:text-neutral-300 underline underline-offset-2 ml-1"
                 >
-                  ×
+                  Clear all ({attachedDocs.length})
                 </button>
-              </span>
+              )}
             </div>
           )}
 
@@ -481,6 +505,7 @@ export const ChatPage = () => {
                 ref={fileInputRef}
                 type="file"
                 accept=".pdf,application/pdf"
+                multiple
                 onChange={handleFileUpload}
                 className="hidden"
               />

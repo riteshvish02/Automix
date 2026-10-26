@@ -9,6 +9,7 @@ export interface VectorSearchParams {
   userId: string;
   limit?: number;
   documentId?: string;
+  documentIds?: string[];
   denseWeight?: number; // 0 to 1, default: 0.75
 }
 
@@ -69,6 +70,7 @@ export async function searchHybridVectors({
   userId,
   limit = 5,
   documentId,
+  documentIds,
 }: VectorSearchParams): Promise<ScoredChunk[]> {
   try {
     // 1. Generate query embeddings in parallel
@@ -87,8 +89,8 @@ export async function searchHybridVectors({
 
     // 2. Query Qdrant for dense and sparse results
     const [denseResults, sparseResults] = await Promise.allSettled([
-      searchDenseVectors(rawDense, userId, limit * 2, documentId),
-      searchSparseVectors(denseFromSparse, userId, limit * 2, documentId),
+      searchDenseVectors(rawDense, userId, limit * 2, documentId, documentIds),
+      searchSparseVectors(denseFromSparse, userId, limit * 2, documentId, documentIds),
     ]);
 
     const denseHits = denseResults.status === "fulfilled" ? denseResults.value : [];

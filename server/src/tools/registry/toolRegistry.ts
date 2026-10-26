@@ -32,6 +32,7 @@ import { notionCreatePage } from "../implementations/notion/notion.createPage";
 import { notionQueryDatabase } from "../implementations/notion/notion.queryDatabase";
 import { notionAppendBlockChildren } from "../implementations/notion/notion.appendBlockChildren";
 import { executeRAGQuery } from "../../rag";
+import { prisma } from "../../config/prisma";
 
 export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     drive_create_file: {
@@ -585,12 +586,48 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
       });
     },
   },
+  rag_list_documents: {
+    name: "rag_list_documents",
+    description: "List all documents and PDFs uploaded by the user in their knowledge base. Use this when the user asks what documents they have uploaded, asks to compare documents, or asks about a file without specifying an ID.",
+    inputSchema: {},
+    execute: async (_args, ctx) => {
+      try {
+        const artifacts = await (prisma as any).artifact.findMany({
+          where: {
+            userId: ctx.userId,
+            type: "file",
+          },
+          orderBy: { createdAt: "desc" },
+          take: 20,
+        });
+
+        const documents = artifacts.map((a: any) => ({
+          documentId: a.metadata?.documentId || a.id,
+          title: a.name || "Untitled Document",
+          chunks: a.metadata?.chunks || 0,
+          uploadedAt: a.createdAt,
+        }));
+
+        return {
+          totalDocuments: documents.length,
+          documents,
+        };
+      } catch (err: any) {
+        return {
+          totalDocuments: 0,
+          documents: [],
+          notice: err.message || "Failed to list documents",
+        };
+      }
+    },
+  },
   rag_search_documents: {
     name: "rag_search_documents",
-    description: "Search user's indexed PDF documents, contracts, policies, and knowledge base using advanced hybrid search (dense semantic + keyword BM25 + knowledge graph).",
+    description: "Search user's indexed PDF documents, contracts, policies, and knowledge base using advanced hybrid search (dense semantic + keyword BM25 + knowledge graph). Can search a single document, multiple documents, or across all user documents.",
     inputSchema: {
       query: { type: "string", description: "The specific question or search query to look up in the documents" },
-      documentId: { type: "string", description: "Optional specific document ID to filter search within", nullable: true },
+      documentId: { type: "string", description: "Optional specific document ID or title to filter search within", nullable: true },
+      documentIds: { type: "array", items: { type: "string" }, description: "Optional list of document IDs or titles to search across (e.g. for comparing multiple PDFs)", nullable: true },
       limit: { type: "integer", description: "Optional max number of relevant passages to retrieve (default: 5)", nullable: true }
     },
     execute: async (args, ctx) => {
@@ -598,6 +635,7 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         query: args.query,
         userId: ctx.userId,
         documentId: args.documentId,
+        documentIds: args.documentIds,
         maxChunks: args.limit || 5,
       });
     },

@@ -21,6 +21,7 @@ export interface RetrieveContextParams {
   limitChunks?: number;
   limitGraph?: number;
   documentId?: string;
+  documentIds?: string[];
   enableCompression?: boolean;
 }
 
@@ -78,6 +79,7 @@ export async function retrieveHybridContext({
   limitChunks = 5,
   limitGraph = 6,
   documentId,
+  documentIds,
   enableCompression = true,
 }: RetrieveContextParams): Promise<RAGContext> {
   const startTime = Date.now();
@@ -94,6 +96,7 @@ export async function retrieveHybridContext({
       userId,
       limit: 6, // pool candidates
       documentId,
+      documentIds,
     })
   );
 
@@ -121,7 +124,7 @@ export async function retrieveHybridContext({
   // Fallback: If vector search found 0 candidates (e.g. "summarize this pdf" or non-keyword query),
   // retrieve the user's indexed document chunks directly so summarization never fails
   if (uniqueCandidates.length === 0) {
-    const directChunks = await getDocumentChunks(userId, documentId, limitChunks);
+    const directChunks = await getDocumentChunks(userId, documentId, limitChunks, documentIds);
     if (directChunks.length > 0) {
       console.log(`[Retrieval Pipeline] Fallback: fetched ${directChunks.length} document chunks for user ${userId}`);
       uniqueCandidates = directChunks;
